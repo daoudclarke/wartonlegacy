@@ -1,0 +1,59 @@
+   10   'BERNOULL v1.0
+   20   '
+   30   'This program finds Bernoulli numbers
+   40   '
+   50   'using method by Knuth & Buckholtz, Math. Comp. 21 (1967)
+   60   '
+   70   word 510
+   80   NX=1000
+   90   NH=(NX+3)\4*2:dim T(NH\2+1)
+  100   open "BERNTBL" for output as #1
+  110   '
+  120   '1st half
+  130   '
+  140   T(0)=1
+  150   N=1:Q=1:KX=0
+  160   repeat
+  170    'for odd n
+  180    T1=T(0)
+  190    for K=1 to KX
+  200       T2=T(K):T(K)=(2*K-1)*T1+(2*K+1)*T(K):T1=T2
+  210    next
+  220    T(K)=(2*K-1)*T1
+  230    T=T(0)
+  240    inc N
+  250    'for even n
+  260    for K=0 to KX
+  270       T(K)=2*K*T(K)+2*(K+1)*T(K+1)
+  280    next
+  290    T(K)=2*K*T(K)
+  300    Q=Q*4
+  310    B1=N*T:B2=Q*(Q-1)
+  320    reduce B1,B2:print using(7),N;
+  330    print #1,B1:print #1,B2
+  340    inc N
+  350    inc KX
+  360   until N>NH
+  370   '
+  380   '2nd half
+  390   '
+  400   repeat
+  410    dec KX
+  420    'for odd n
+  430    T1=T(0)
+  440    for K=1 to KX
+  450       T2=T(K):T(K)=(2*K-1)*T1+(2*K+1)*T(K):T1=T2
+  460    next
+  470    T=T(0)
+  480    inc N
+  490    'for even n
+  500    for K=0 to KX
+  510       T(K)=2*K*T(K)+2*(K+1)*T(K+1)
+  520    next
+  530    Q=Q*4
+  540    B1=N*T:B2=Q*(Q-1)
+  550    reduce B1,B2:print using(7),N;
+  560    print #1,B1:print #1,B2
+  570    inc N
+  580   until N>NX
+  590   end

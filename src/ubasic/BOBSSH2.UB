@@ -1,0 +1,137 @@
+    1   dim Mat1(5,5),Irhs1(5),Jmark(5),Markr(5),Jx(5),Isol(5)
+    2   A=A
+    3   A=A
+    4   input "no. of secret sharers";Idd2
+    5   input "modulus";Ipd
+    6   input "sharer 1,key 1";Mat1(1,Idd2-1)
+    7   input "sharer 1,key 2";Irhs1(1)
+    8   input "sharer 2,key 1";Mat1(2,Idd2-1)
+    9   A=A
+   10   input "sharer 2,key 2";Irhs1(2)
+   11   input "sharer 3,key 1";Mat1(3,Idd2-1)
+   12   input "sharer 3,key 2";Irhs1(3)
+   13   input "sharer 4,key1";Mat1(4,Idd2-1)
+   14   input "sharer 4,key2";Irhs1(4)
+   16   for I=1 to Idd2
+   17   Mat1(I,Idd2)=1
+   18   J=Idd2-1
+   20   Jbeg=Idd2-1
+   22   Itemp=Mat1(I,J)*Mat1(I,Jbeg)
+   24   Itemp2=int(Itemp/Ipd)
+   26   Mat1(I,J-1)=Itemp-Itemp2*Ipd
+   28   if J=2 then goto 34
+   30   J=J-1
+   32   goto 22
+   34   next I
+   36   for J=1 to Idd2
+   38   Jmark(J)=0
+   40   Markr(J)=0
+   41   Jx(J)=0
+   42   next J
+   44   J=1
+   46   for I=1 to Idd2
+   48   if Mat1(I,J)=0 then goto 108
+   50   if Markr(I)=1 then goto 108
+   52   Jmark(J)=I
+   54   Markr(I)=1
+   56   A=Ipd
+   58   B=Mat1(I,J)
+   60   gosub 800
+   62   Mul=V
+   64   for J1=J to Idd2
+   66   Itt=Mat1(I,J1)*Mul
+   68   Itt2=int(Itt/Ipd)
+   70   Mat1(I,J1)=Itt-Itt2*Ipd
+   72   next J1
+   74   Itt=Irhs1(I)*Mul
+   76   Itt2=int(Itt/Ipd)
+   78   Irhs1(I)=Itt-Itt2*Ipd
+   80   for Ik=I+1 to Idd2
+   82   if Markr(Ik)=1 then goto 104
+   84   if Mat1(Ik,J)=0 then goto 104
+   86   Mul=Mat1(Ik,J)
+   88   for Jj=J to Idd2
+   90   Itt=Mat1(Ik,Jj)-Mat1(I,Jj)*Mul
+   92   Itt2=int(Itt/Ipd)
+   94   Mat1(Ik,Jj)=Itt-Itt2*Ipd
+   96   next Jj
+   98   Itt=Irhs1(Ik)-Mul*Irhs1(I)
+  100   Itt2=int(Itt/Ipd)
+  102   Irhs1(Ik)=Itt-Itt2*Ipd
+  104   next Ik
+  106   goto 148
+  108   next I
+  110   Jx(J)=1
+  148   print "j",J
+  150   if J=Idd2 then goto 154
+  151   J=J+1
+  152   goto 46
+  154   for I=1 to Idd2
+  156   print "matrix",Mat1(I,1),Mat1(I,2),Mat1(I,3),Mat1(I,4),Irhs1(I)
+  157   print "marks",Jmark(I),Markr(I)
+  158   next I
+  160   for I=1 to Idd2
+  162   print "jx",Jx(I)
+  164   next I
+  166   for I=1 to Idd2
+  168   if Jx(I)=0 then goto 176
+  170   print "matrix singular"
+  172   goto 300
+  176   next I
+  178   Isol(Idd2)=Irhs1(Idd2)
+  180   for J=1 to Idd2-1
+  182   Ind=Idd2-J+1
+  184   Ind2=Ind-1
+  186   Im=Jmark(Ind2)
+  188   Isol(Ind2)=Irhs1(Im)
+  190   for Jj=Ind to Idd2
+  192   Itt=Isol(Ind2)-Isol(Jj)*Mat1(Im,Jj)
+  194   Itt2=int(Itt/Ipd)
+  196   Isol(Ind2)=Itt-Itt2*Ipd
+  198   next Jj
+  200   next J
+  202   print "solutions",Isol(1),Isol(2),Isol(3),Isol(4)
+  300   end
+  800   if B<0 then goto 804
+  802   goto 810
+  804   B=B+A
+  810   U=1
+  811   D=A
+  812   if B=0 then goto 888
+  813   V1=0
+  814   V3=B
+  815   if V3=0 then goto 830
+  816   Qq=int(D/V3)
+  817   T3=D-Qq*V3
+  818   T1=U-Qq*V1
+  819   U=V1
+  820   D=V3
+  821   V1=T1
+  822   V3=T3
+  823   goto 815
+  830   V=(D-A*U)/B
+  831   goto 860
+  840   V=0
+  850   A=A
+  860   if U=0 then goto 870
+  862   if U<0 then goto 870
+  863   V=V*(1-A)
+  864   V=int(V)
+  865   A=A
+  866   Temp=int(V/A)
+  869   V=V-Temp*A
+  870   A=A
+  872   goto 890
+  888   V=B
+  890   return
+  917   Big=N
+  918   Little=int(Little)
+  919   Temp=Big\Little
+  920   Rem1=Big-Little*Temp
+  922   if Rem1=0 then goto 940
+  924   Big=Little
+  926   Little=Rem1
+  928   goto 918
+  940   Gcd2=Little
+  942   A=A
+  950   return

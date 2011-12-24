@@ -1,0 +1,7 @@
+   10   *Tau(&M(),K,&Ta)
+   20   ' Modeled on the Pascal version. M() is an input parameter.
+   30   ' 8 May 1990
+   50   local I
+   60   Ta=1
+   70   for I=1 to K:Ta=Ta*(M(I)+1):next I
+   80   return ' End of subroutine Tau.

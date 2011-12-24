@@ -1,0 +1,22 @@
+   10   'GENSHI version 1.4
+   20   print "primitive root modulo P "
+   30   '
+   40   print:input "Input a prime = ";Prm
+   50   if Prm=0 then end
+   60   Genshi=fnGenshi(Prm)
+   70   if Genshi=0 then print "Sorry, we cannot answer":goto 40
+   80   print Genshi;"is the smallest primitive root MOD";Prm
+   90   goto 40
+  100   '
+  110   fnGenshi(P)
+  120      local Gen=1,N=P-1,Nw,Div,Sw%
+  130   if or{P<3,len(P)>32,prmdiv(P)<P} then Gen=0:goto 220
+  140   repeat
+  150      inc Gen:Nw=N:Sw%=1
+  160      repeat
+  170         Div=prmdiv(Nw)
+  180         repeat:Nw=Nw\Div:until res:Nw=Nw*Div+res
+  190         if modpow(Gen,N\Div,P)=1 then Sw%=0:Nw=1
+  200      until Nw=1
+  210   until Sw%
+  220   return(Gen)

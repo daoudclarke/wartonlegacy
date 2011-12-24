@@ -1,0 +1,14 @@
+   10   'ZETA3   version 1.2
+   20   point 22
+   30   print:print "Calculates ZETA(3) to 100 places by APERY's formula"
+   40   clr time
+   50   ZT=0:C5=5:CB=1:N=0
+   60   repeat
+   70    inc N
+   80    CB=CB*2*(2*N-1)\N:W=C5/(2*CB*N^3):ZT=ZT+W
+   90    inc N
+  100    CB=CB*2*(2*N-1)\N:W=C5/(2*CB*N^3):ZT=ZT-W
+  110   until W=0
+  120   '
+  130   print:print using(,100),ZT
+  140   print time:end

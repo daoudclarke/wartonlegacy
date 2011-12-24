@@ -1,0 +1,92 @@
+   10   'PPMP1 (for 32bit CPU) version 2.0
+   20   '
+   30   '  Factorization by PPMPQS
+   40   '        1991/92 by Yuji KIDA
+   50   '
+   60   'References
+   70   'R.Silverman: The multiple polynomial quadratic sieve.,
+   80   '    Mathematics of Computation 48
+   90   'A.Lenstra and M.Manasse: Factoring with two large primes.,
+  100   '    Springer Lecture Notes in Computer Science 347
+  110   '
+  120   word -23:point -2
+  130   width 80:console 0,*
+  140   print "PPMPQS v2.0(386CPU, 1MB extended memory, HDD is needed)"
+  150   N=(96^23+1)\(97):if res then stop
+  151   MSG$="C"+cutspc(str(alen(N)))
+  152   '
+  153   PC$=version
+  154   if instr(PC$,"PC9801") then PC=0
+  155   :elseif instr(PC$,"IBM-PC") then PC=1
+  156   :elseif instr(PC$,"FMR") then PC=2
+  157   :else PC=10
+  158   '
+  159   'enable 20-31 bit address lines
+  160   if PC=0 then
+  161     :out 0xf2,0
+  162     :out 0xf2,0
+  163   :elseif PC=1 then
+  164     :out 0x64,0xd1:while bit(1,inp(0x64)) wend
+  165     :out 0x60,0xdf:while bit(1,inp(0x64)) wend
+  166     :out 0x64,0xff:while bit(1,inp(0x64)) wend
+  167   :elseif PC=2 then
+  168     :out 0x24,1
+  169     :out 0x24,1
+  170   :else
+  171     :print "not yet supported":end
+  172   :endif
+  173   '
+  174   dim Ppmp%(200):bload "ppmp1",Ppmp%()
+  175   call Ppmp%()
+  176   if Ppmp%(0)=1 then print "Sorry this machine is not supported.":end
+  177   :elseif Ppmp%(0)=2 then print "Virtual 86 mode is not supported.":end
+  178   '
+  180   MinSize=0x0400
+  190   MaxSize=0xf000:'                = maxprimes      in MPQSHD.H
+  200   MaxWidth=0x400000:'             = maximum sieve width
+  210   '
+  220   kill "PPMPCONT.UBD":kill "PPMPDAT1.UBD":kill "PPMPDAT2.UBD"
+  230   open "PPMPDAT1" for output as #1
+  240   print:print "1. decide parameters";:locate 56:print date
+  250   print MSG$:print #1,MSG$:'                      *file*
+  260   print "target    ";N:print #1,N:'               *file*
+  270   LogN=log(N):LoglogN=log(LogN)
+  280   SZ=int(1.78*exp(sqrt(LogN*LoglogN/12)))\32*32
+  290   SZ=max(MinSize,SZ)
+  300   SZ=min(MaxSize,SZ)
+  310   print "size of FB";SZ:print #1,SZ:'             *file*
+  320   P=int(2.2*SZ*log(2*SZ))
+  330   Crit=int(P^(0.7075+0.0108*log(N)))
+  340   print "permission";using(2,4),log(Crit)/log(P)
+  350   SieveWidth=min(MaxWidth,(int(LogN^0.66*20000)\0x8000+1)*0x8000)
+  360   print "sievewidth 2 *";SieveWidth:print #1,SieveWidth:' *file*
+  370   '
+  380   ' maximize probability
+  390   '
+  400   print "computing multiplier";
+  410   K=1:KX=K:FX=0
+  420   '
+  430   WN=K*N:if WN@8<>1 then K=nxtprm(K):goto 430
+  440   F=2*log(2)-log(K)/2
+  450   NP=1
+  460   for I=2 to 6542:P=prm(I)
+  470      if kro(WN,P)<>-1 then
+  480      :inc NP:F=F+(kro(WN,P)+1)*log(P)/P
+  490      :if NP>=SZ then cancel for:goto 510
+  500   next
+  510   if F>FX then FX=F:KX=K
+  520   if K<min(40,len(N)) then K=nxtprm(K):goto 430
+  530   '
+  540   WN=KX*N
+  550   print chr(13);chr(25);
+  560   print "multiplier";KX:print #1,KX:'             *file*
+  570   'print "Knu-Sch   ";FX
+  580   IniLog=255:print #1,IniLog:'                    *file*
+  590   Scale=IniLog*2/log(SieveWidth^2*WN\2):print #1,Scale:'*file*
+  600   CutLog=int(log(Crit)*Scale):print #1,CutLog:'   *file*
+  610   if alen(N)<80 then Success=0.15600-0.00036*log(WN)
+  620                :else Success=0.22900-0.00076*log(WN)
+  630   print #1,Success
+  640   close #1
+  650   run "ppmp2"
+  660   end

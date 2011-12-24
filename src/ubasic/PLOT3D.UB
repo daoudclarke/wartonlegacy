@@ -1,0 +1,143 @@
+   10   'plot3D
+   20   '3dimesional funtion plotting
+   30   'draw a graph of z = f(x,y)
+   40   '
+   50   ' on error goto *Error
+   60   word -10:point -2
+   70   console 0,*,0:cls
+   80   if #sys(0)=81 then print "* z=f(x,y) のグラフ"
+   90   :else print "* draw a graph of z=f(x,y)"
+  100   AmiX=50:AmiY=50
+  110   dim Memo%(AmiX,AmiY)
+  120   dim AmiDraw%(1800+AmiX+XmiY)
+  130   Gxsize=640
+  140   if #sys(1)=2 then bload "PLOT3D98",AmiDraw%():Gysize=400
+  150   :elseif #sys(1)=1 or #sys(1)=7 then bload "PLOT3DI",AmiDraw%():Gysize=480
+  160   :elseif #sys(0)=81 then print "この機械では使えません。":end
+  170   :else print "This machine is not supported.":end
+  180   AmiDraw%(1)=AmiX:AmiDraw%(2)=AmiY
+  190   goto *Input
+  200   *Error
+  210   console
+  220   if #sys(0)=81 then print "入力し直してください"
+  230   :else print "Input again."
+  240   *Input
+  250   print
+  260   if #sys(0)=81 then print "x, y の関数を入力してください(例 sin(x)*cos(y))"
+  270   :else print "Input a function of x and y such as sin(x)*cos(y)"
+  280   strinput Func#
+  290   Func#=encode(Func#)
+  300   locate 0,posy-2:print chr(25);"f(x,y): ";decode(Func#)
+  310   if #sys(0)=81 then print "x の範囲を開始,終了の順に入力してください(例 -5,5)"
+  320   :else print "Input the range of x such as -5,5"
+  330   input X1,X2
+  340   locate 0,posy-2:print chr(25);"     x: ";X1;"->";X2
+  350   if #sys(0)=81 then print "y の範囲を開始,終了の順に入力してください(例 -5,5)"
+  360   :else print "Input the range of y such as -5,5"
+  370   input Y1,Y2
+  380   locate 0,posy-2:print chr(25);"     y: ";Y1;"->";Y2
+  390   if #sys(0)=81 then print "z の範囲を開始,終了の順に入力してください(例 -1,1)"
+  400   :else print "Input the range of z such as -1,1"
+  410   input Z1,Z2
+  420   locate 0,posy-2:print chr(25);"     z: ";Z1;"->";Z2
+  430   '
+  440   if #sys(1)=1 or #sys(1)=7 then screen 23 else screen 3:cls 3
+  450   glocate 0,0:gprint chr(25);"f(x,y): ";decode(Func#)
+  460   glocate 0,20:gprint chr(25);"     x: ";X1;"->";X2
+  470   glocate 0,40:gprint chr(25);"     y: ";Y1;"->";Y2
+  480   glocate 0,60:gprint chr(25);"     z: ";Z1;"->";Z2
+  490   if #sys(1)=1 or #sys(1)=7 then screen 20,1,1 else screen 0,1,1
+  500   '
+  510   Kaku1=pi(0):Kaku2=pi(1/4):KakuStep=pi(1/40)
+  520   gosub *Plot3D(X1,X2,Y1,Y2,Z1,Z2,Kaku1,Kaku2,AmiX,AmiY,&Memo%())
+  530   '
+  540   I=1
+  550   loop
+  560     glocate 0,Gysize-16*2
+  570     if #sys(0)=81 then gprint "カーソルキーを押すとグラフが動きます。";
+  580     :else gprint "Push cursor keys to move the graph.";
+  590     screen ,2-(I+1)@2,2-I@2+4:cls 2:AmiDraw%(3)=2-(I+1)@2
+  600     A=asc(input$(0)+input$(-1))
+  610     if A=CursR then Kaku1-=KakuStep
+  620     :elseif A=#left then Kaku1+=KakuStep
+  630     :elseif A=#right then Kaku1-=KakuStep
+  640     :elseif A=#up then Kaku2-=KakuStep
+  650     :elseif A=#down then Kaku2+=KakuStep
+  660     :elseif A=3 then 730
+  670     :elseif A=13 then 730
+  680     :else goto 600
+  690     gosub *Turn3D(&Memo%(),-3,3,-3,3,0,1,Kaku1,Kaku2,AmiX,AmiY)
+  700     screen ,,2-(I+1)@2+4
+  710     inc I
+  720   endloop
+  730   locate 0,23
+  740   end
+  750   '
+  760   ' 3DIMension plotting
+  770   '
+  780   *Plot3D(X1,X2,Y1,Y2,Z1,Z2,Kaku,Kaku2,AmiX,AmiY,&Memo%())
+  790     local Tyuusin,Rx,Ry,Sx,Sy,Vx,Vy,Vz,I,J,Pp,P,P1,P2
+  800     dim PmemX1%(AmiY),PmemY1%(AmiY),PmemX2%(AmiY),PmemY2%(AmiY)
+  810     view
+  820     Tyuusin=Gxsize\2+(Gysize\2+20)*#i:Rx=250:Ry=Rx*sin(Kaku2)*#i
+  830     P1=Rx*cos(Kaku)+Ry*sin(Kaku)
+  840     P2=Rx*sin(Kaku)-Ry*cos(Kaku)
+  850     P=Tyuusin-P1
+  860     Vx=(P1-P2)/AmiX:Vy=(P1+P2)/AmiY
+  870     Takasa=(Gysize*3\10)/(Z2-Z1)
+  880     Vz=cos(Kaku2)
+  890     Sx=(X2-X1)/AmiX
+  900     Sy=(Y2-Y1)/AmiY
+  910     X=X1
+  920     'I=0
+  930     Y=Y1:Pp=P
+  940     FXY=int((val(Func#)-Z1)*Takasa):Memo%(0,0)=FXY
+  950     Xw=int(re(Pp)):Yw=int(im(Pp)-FXY*Vz)
+  960     PmemX1%(0)=Xw:PmemY1%(0)=Yw
+  970     pset (Xw,Yw),1
+  980     for J=1 to AmiY
+  990       Y+=Sy:Pp+=Vy
+ 1000       FXY=int((val(Func#)-Z1)*Takasa):Memo%(0,J)=FXY
+ 1010       Xw=int(re(Pp)):Yw=int(im(Pp)-FXY*Vz)
+ 1020       PmemX1%(J)=Xw:PmemY1%(J)=Yw
+ 1030       line -(Xw,Yw),1
+ 1040     next
+ 1050     X+=Sx:P+=Vx
+ 1060     '
+ 1070     for I=1 to AmiX
+ 1080       Y=Y1:Pp=P
+ 1090       'for J=0
+ 1100       FXY=int((val(Func#)-Z1)*Takasa):Memo%(I,0)=FXY
+ 1110       Xw=int(re(Pp)):Yw=int(im(Pp)-FXY*Vz)
+ 1120       PmemX2%(0)=Xw:PmemY2%(0)=Yw
+ 1130       line (PmemX1%(0),PmemY1%(0))-(Xw,Yw)
+ 1140       Y+=Sy:Pp+=Vy
+ 1150       '
+ 1160       for J=1 to AmiY
+ 1170         Xold=Xw:Yold=Yw
+ 1180         FXY=int((val(Func#)-Z1)*Takasa):Memo%(I,J)=FXY
+ 1190         Xw=int(re(Pp)):Yw=int(im(Pp)-FXY*Vz)
+ 1200         PmemX2%(J)=Xw:PmemY2%(J)=Yw
+ 1210         line (PmemX1%(J),PmemY1%(J))-(Xw,Yw)
+ 1220         line -(Xold,Yold)
+ 1230         Y+=Sy:Pp+=Vy
+ 1240       next
+ 1250       '
+ 1260       block PmemX1%(*)=block PmemX2%(*)
+ 1270       block PmemY1%(*)=block PmemY2%(*)
+ 1280       X+=Sx:P+=Vx
+ 1290     next
+ 1300   return
+ 1310   '
+ 1320   '
+ 1330   *Turn3D(&Memo%(),X1,X2,Y1,Y2,Z1,Z2,Kaku,Kaku2,AmiX,AmiY)
+ 1340     local Tyuusin,Rx,Ry,Vx,Vy,Vz,Pp,P,P1,P2,SinK,CosK
+ 1350     view
+ 1360     Tyuusin=Gxsize\2+(Gysize\2+20)*#i:Rx=250:Ry=Rx*sin(Kaku2)*#i
+ 1370     SinK=sin(Kaku):CosK=cos(Kaku)
+ 1380     P1=Rx*CosK+Ry*SinK:P2=Rx*SinK-Ry*CosK
+ 1390     P=Tyuusin-P1
+ 1400     Vx=(P1-P2)/AmiX:Vy=(P1+P2)/AmiY:Vz=cos(Kaku2)
+ 1410     '
+ 1420     call AmiDraw%(Memo%(0,0),P,Pp,Vx,Vy,Vz)
+ 1430   return

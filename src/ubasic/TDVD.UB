@@ -1,0 +1,19 @@
+ 6990   *Tdvd(A,&P(),&M(),&K,&B)
+ 7000   ' Modeled on the Pascal version
+ 7010   ' Note that all prime factors found by Tdvd will be less
+ 7020   ' than 2^34 = 1 71798 69184.
+ 7030   ' 9 May 1990
+ 7040   local Ub%=12251,Ubb=17179869184
+ 7050   local Sga%,Count%=0,I%=0,Z,Q
+ 7060   K=0:if A=0 then B=0:return endif
+ 7070   if A>0 then Sga%=1 else Sga%=-1 endif
+ 7080   A=abs(A):Z=2
+ 7090   while and{I%<Ub%,Z*Z<=A}
+ 7100   inc I%:Z=prm(I%)
+ 7110   repeat Q=A\Z:if res=0 then inc Count%:A=Q endif until res
+ 7120   if Count%>0 then inc K:P(K)=Z:M(K)=Count%:Count%=0 endif
+ 7130   wend
+ 7140   if A<Ubb then B=Sga%
+ 7150   :if A<>1 then inc K:P(K)=A:M(K)=1 endif
+ 7160   :else B=A*Sga% endif
+ 7170   return ' End of subroutine Tdvd.

@@ -1,0 +1,26 @@
+   10   'sample of Simpson's integration
+   20   S=0
+   30   for I=1 to 10
+   40   S+=fnSimpsonSub(&fnInvx(),I,I+1,1/10^6)
+   50   print using(3,5),S;log(I+1)
+   60   next
+   70   end
+   80   '
+   90   fnInvx(X)
+  100   return(1/X)
+  110   '
+  120   'Simpson's Rule (Numerical Integration)
+  130   'from: S.Moriguti Suuti Keisanjutu (Kyouritu Shuppan) p199
+  140   'take x2-x1 small
+  150   '
+  160   fnSimpsonSub(&fnF(),X1,X2,Err)
+  170      local Dy,H,M,N,S0,S1,S2,Y1,Y2
+  180   N=2:H=(X2-X1)/N
+  190   S0=fnF(X1)+fnF(X2):S1=fnF(X1+H):S2=0
+  200   Y1=(S0+4*S1)*H/3
+  210   repeat
+  220      N*=2:H/=2:S2+=S1:S1=0
+  230      for M=1 to N step 2:S1+=fnF(X1+M*H):next
+  240      Y2=(S0+4*S1+2*S2)*H/3:Dy=Y2-Y1:Y1=Y2
+  250   until absmax(Dy)<Err
+  260   return(Y2)

@@ -1,0 +1,749 @@
+   10   'mpqsx
+   20   '
+   30   '  Prime Factorization by MPQS
+   40   '        1987,88,89 by Yuji KIDA
+   50   '
+   60   word -12:point -2
+   70   dim SS(20),PD(20):'for intermediate factors and prime factors
+   80   print "Prime Factorization by MPQS"
+   90   '
+  100   print:input "Input an integer =";N
+  110   if N=0 then end
+  120   gosub *Factoring_MPQS(N)
+  130   goto 100
+  140   '
+  150   *Factoring_MPQS(N)
+  160   NN=N:S1%=1:SP%=0:DP%=0
+  170   '
+  180   '  Devide by small primes
+  190   '
+  200   D=prmdiv(N):if D=0 goto 290
+  210   if N=D goto 240
+  220   print D;"*";:N=N\D:S1%=0
+  230   goto 200
+  240   if S1% then print N;"is a prime":goto 710
+  250   print N:goto 710
+  260   '
+  270   '  If N has a big factor
+  280   '
+  290   print
+  300   '
+  310   '  ADLEMAN TEST
+  320   '
+  330   if fnAdleman(N)=0 then clr S1%:goto 404
+  340   '
+  350   '  Store in PD if a prime
+  360   '
+  370   PD(DP%)=N:inc DP%
+  380   if SP% then dec SP%:N=SS(SP%):goto 330
+  390   goto 490
+  401   '
+  402   '  Check if N is a power of an integer
+  403   '
+  404   N1=fnPowerCheck(N):N2=N\N1
+  405   if N1=1 then 430
+  406   if N1>N2 then swap N1,N2
+  407   SS(SP%)=N2:inc SP%:N=N1:goto 330
+  408   '
+  410   '  Find a factor by MPQS
+  420   '
+  430   N1=fnMPQS(N):N2=N\N1
+  440   if N1>N2 then swap N1,N2
+  450   SS(SP%)=N2:inc SP%:N=N1:goto 330
+  460   '
+  470   '  Display the result
+  480   '
+  490   if S1% then print N;"is a prime":goto 710
+  500   '
+  510   ' Display the smaller factors.
+  520   '
+  530   N=NN:print:print N;"="
+  540   D=prmdiv(N):if D=0 goto 570
+  550   print D;"*";:N=N\D
+  560   goto 540
+  570   if DP%=1 then print PD(0):goto 710
+  580   '
+  590   ' Sort and display the larger factors.
+  600   '
+  610   repeat
+  620      clr SW%
+  630      for I=0 to DP%-2
+  640         if PD(I)>PD(I+1) then swap PD(I),PD(I+1):SW%=1
+  650      next
+  660   until SW%=0
+  670   for I=0 to DP%-2
+  680   print PD(I);"*";
+  690   next
+  700   print PD(DP%-1)
+  710   return
+  720   '
+  730   '
+  740   fnADLEMAN(N)
+  750   local E%,ET%,G%,H%,I%,J%,MW%,NP%,NQ%,OK%,P%,Q%,SW%,W%,WK%,X%
+  760   local E,IN,M1,P1,S,T,U,U1,V,V1,W,U#,W#
+  770   dim Index%(9282):'index mod Q with base G
+  780   dim Phi%(9282),Psi%(9282)
+  790   dim Tau(16),Tau1(16),Tau2(16),Tau_e(16),Sum(16),Tau_p(16):'16=max of P-1
+  800   dim P%(6),Q%(27),G%(27):'6=no of P -1,27=no of Q -1
+  810   dim WK%(6,27),Eta%(6,27)
+  820   '
+  830   print "ADLEMAN Test for";N
+  840   restore *PrimeData1
+  850   for I%=0 to 6:read P%(I%):next
+  860   restore *PrimeData2
+  870   for I%=0 to 27:read Q%(I%),G%(I%):next
+  880   '
+  890   *PrimeData1
+  900   data 2,3,5,7,11,13,17
+  910   '
+  920   *PrimeData2
+  930   data 3,2,7,3,11,2,31,3
+  940   data 43,3,71,7,211,2
+  950   data 23,5,67,2,331,3,463,3,2311,3
+  960   data 79,3,131,2,547,2,859,2,911,17,2003,5,2731,3,6007,3
+  970   data 103,5,239,7,443,2,1123,2,1327,3,1871,14,3571,2,9283,2
+  980   '
+  990   if N=0 then return(N)
+ 1000   '
+ 1010   S=1
+ 1020   for NQ%=0 to 27
+ 1030    S=S*Q%(NQ%):if S^2>N then cancel for:jump
+ 1040   next
+ 1050   print:print "Too big.":stop:end
+ 1060   **
+ 1070   NP%=2+(NQ%>3)+(NQ%>6)+(NQ%>11)+(NQ%>19)
+ 1080   '
+ 1090   W=prmdiv(N)
+ 1100   if W goto *Factor?
+ 1110   '
+ 1120   '** TEST FOR P=2
+ 1130   '
+ 1140   gosub *Test4_2
+ 1150   if H%=1 then SW%=1 else gosub *Test3_2:SW%=OK%
+ 1160   MW%=1
+ 1170   for J%=0 to NQ%
+ 1180    Q%=Q%(J%):G%=G%(J%)
+ 1190    gosub *Test2_2
+ 1200    if not OK% then cancel for:goto *FAILED
+ 1210    if SW% then WK%=H%
+ 1220    :else gosub *Test5_2
+ 1230        :if not OK% then cancel for:goto *Factor
+ 1240    WK%(0,J%)=WK%:Eta%(0,J%)=ET%:if WK%>MW% then MW%=WK%
+ 1250   next
+ 1260   '* decide max of W and eta(chi)
+ 1270   if MW%<>1 then
+ 1280    :for J%=0 to NQ%
+ 1290        :if MW%>WK%(0,J%) then Eta%(0,J%)=0 endif
+ 1300    :next
+ 1310   '
+ 1320   '** TEST for P>2
+ 1330   '
+ 1340   for I%=1 to NP%
+ 1350    P%=P%(I%)
+ 1360    gosub *Test4_P
+ 1370    if H%=1 then SW%=1 else gosub *Test3_P:SW%=OK%
+ 1380    '
+ 1390    MW%=1
+ 1400    for J%=0 to NQ%
+ 1410       Q%=Q%(J%):G%=G%(J%)
+ 1420       if (Q%-1)@P% then clr WK%:clr ET%:jump
+ 1430       gosub *Test2_P
+ 1440       if not OK% then cancel for,for:goto *FAILED
+ 1450       if SW% then WK%=H%:ET%=Index%(N@Q%)@P%:jump
+ 1460       gosub *Test5_P
+ 1470       if not OK% then cancel for,for:goto *FAILED
+ 1480       **
+ 1490       WK%(I%,J%)=WK%:Eta%(I%,J%)=ET%
+ 1500       if WK%>MW% then MW%=WK%
+ 1510    next J%
+ 1520    '* decide max of W and eta(chi)
+ 1530    if MW%<>1 then
+ 1540      :for J%=0 to NQ%
+ 1550         :WK%=WK%(I%,J%)
+ 1560         :if WK% then if MW%>WK% then Eta%(I%,J%)=0 endif endif
+ 1570      :next J%
+ 1580   next I%
+ 1590   '
+ 1600   '** final test
+ 1610   '
+ 1620   gosub *GET_V
+ 1630   '
+ 1640   W=1
+ 1650   T=1:for I%=0 to NP%:T=T*P%(I%):next
+ 1660   while T
+ 1670    W=W*V@S:if W=1 goto *ALLOK
+ 1680    if N@W=0 goto *GetFactor
+ 1690    dec T
+ 1700   wend
+ 1710   '
+ 1720   *ALLOK
+ 1730   return(1)
+ 1740   '
+ 1750   *FAILED
+ 1760   return(0)
+ 1770   '
+ 1780   *Factor?
+ 1790   if W=N goto *ALLOK
+ 1800   *GetFactor
+ 1810   return(0)
+ 1820   '
+ 1830   '** Subroutines for P=2
+ 1840   '
+ 1850   '* Check condition 3 for P=2
+ 1860   '
+ 1870   *Test3_2
+ 1880    local J%
+ 1890    for J%=0 to NQ%
+ 1900       Q%=Q%(J%)
+ 1910       if kro(N,Q%)<>1 then cancel for:OK%=1:jump
+ 1920    next:OK%=0
+ 1930    **
+ 1940   return
+ 1950   '
+ 1960   '* Check condition 4 for P=2
+ 1970   '
+ 1980   *Test4_2
+ 1990    W#=N-1:H%=-1
+ 2000    repeat U#=W#:W#=W#\2:inc H% until res
+ 2010   return
+ 2020   '
+ 2030   '* Check condition 2 for P=2
+ 2040   '
+ 2050   *Test2_2
+ 2060    W=Q%:if (Q%-1)@4 then W=N-W
+ 2070    U=modpow(W,(N-1)\2,N)
+ 2080    if kro(N,Q%)<0 then ET%=1:OK%=(U=N-1)
+ 2090                  :else ET%=0:OK%=(U=1)
+ 2100   return
+ 2110   '
+ 2120   '* Check condition 5 for P=2
+ 2130   '
+ 2140   *Test5_2
+ 2150    T=kro(-1,Q%)*Q%:'ƒÑ^2
+ 2160    T=modpow(T,U#,N):WK%=1:OK%=1:ET%=0
+ 2170    if T=1 then jump
+ 2180    if T=N-1 then ET%=1:jump
+ 2190    repeat
+ 2200       inc WK%:W=T:T=T^2@N
+ 2210       if T=N-1 then ET%=1:jump
+ 2220    until T=1
+ 2230    W=gcd(W,N):OK%=(W=1)
+ 2240    **
+ 2250   return
+ 2260   '
+ 2270   '** Subroutines for P>2
+ 2280   '
+ 2290   '* Check condition 3 for P>2
+ 2300   '
+ 2310   *Test3_P
+ 2320    local J%
+ 2330    for J%=0 to NQ%
+ 2340       Q%=Q%(J%):E%=(Q%-1)\P%
+ 2350       if not res then
+ 2360          :if modpow(N,E%,Q%)<>1 then cancel for:OK%=1:jump
+ 2370    next:OK%=0
+ 2380    **
+ 2390   return
+ 2400   '
+ 2410   '* Check condition 4 for P>2
+ 2420   '  decompose N^(P%-1)-1 to P%^H%*U
+ 2430   '
+ 2440   *Test4_P
+ 2450    W#=N^(P%-1)-1:H%=-1
+ 2460    repeat U#=W#:W#=W#\P%:inc H% until res
+ 2470   return
+ 2480   '
+ 2490   '* Check condition 2 for P>2
+ 2500   '
+ 2510   ' Calculation of tau(chi)^n/tau(chi^n)
+ 2520   *Test2_P
+ 2530    local I%
+ 2540    W%=1:for I%=1 to Q%-1:W%=W%*G%@Q%:Index%(W%)=I%@P%:next:'calc index
+ 2550    gosub *TAU_P
+ 2560    if not SW% then block Tau_p(0..P%-2)=block Tau(0..P%-2)
+ 2570    '
+ 2580    E=N\P%:gosub *T_E
+ 2590    block Tau_e(0..P%-2)=block Tau(0..P%-2)
+ 2600    E%=N@P%:gosub *JACOBI
+ 2610    gosub *T_TM
+ 2620    'MAIN OF TEST2
+ 2630    E%=Index%(N@Q%)*(-N)@P%
+ 2640    if E%=P%-1 then W=-(N-1)*(P%-1)
+ 2650    :else if Tau(E%)<>1 then clr OK%:jump endif
+ 2660        :dec Tau(E%):clr W
+ 2670    for I%=0 to P%-2:W=W+Tau(I%):next
+ 2680    OK%=(W=0)
+ 2690    **
+ 2700   return
+ 2710   '
+ 2720   '* Check condition 5 for P>2
+ 2730   '
+ 2740   ' calculation of tan(chi)^p^u
+ 2750   *Test5_P
+ 2760    local I%,J%
+ 2770    block Tau1(0..P%-2)=block Tau_p(0..P%-2)
+ 2780    Tau(0)=1:block Tau(1..P%-2)=0
+ 2790    for I%=0 to len(U#)-2
+ 2800       if bit(I%,U#) gosub *T_T1
+ 2810       gosub *T1_T1
+ 2820    next
+ 2830    gosub *T_T1
+ 2840    ' check condition 5 by making tau(chi)^p^u
+ 2850    WK%=1:gosub *W_chi:if OK% then jump
+ 2860    repeat
+ 2870       block Tau1(0..P%-2)=block Tau(0..P%-2)
+ 2880       block Tau_e(0..P%-2)=block Tau(0..P%-2)
+ 2890       for I%=1 to len(P%)-2
+ 2900          gosub *T1_T1
+ 2910          if bit(I%,P%) gosub *T_T1
+ 2920       next
+ 2930       gosub *T1_T1
+ 2940       gosub *T_T1
+ 2950       inc WK%:gosub *W_chi
+ 2960    until OK%
+ 2970    if ET%>0 then OK%=1:jump
+ 2980    ' MAIN OF TEST 5
+ 2990    I%=0
+ 3000    loop
+ 3010       T=Tau_e(I%)
+ 3020       if gcd(T,N)=1 goto 3070
+ 3030       if T then W=gcd(T,N):clr OK%:jump
+ 3040       inc I%
+ 3050    endloop
+ 3060    '
+ 3070    if T<>1 then
+ 3080       :if gcd(T-1,N)=1 goto 3170 endif
+ 3090       :W=gcd(T-1,N):clr OK%:jump
+ 3100    :else J%=I%+1
+ 3110       :loop
+ 3120           :T=Tau_e(J%):if gcd(T,N)=1 goto 3170 endif
+ 3130           :if T then W=gcd(T,N):clr OK%:jump endif
+ 3140           :inc J%
+ 3150       :endloop
+ 3160    '
+ 3170    I%=0
+ 3180    loop
+ 3190       T=Tau_e(I%)
+ 3200       if gcd(T+1,N)=1 then OK%=1:jump
+ 3210       if T<N-1 then W=gcd(T+1,N):clr OK%:jump
+ 3220       inc I%
+ 3230    endloop
+ 3240    **
+ 3250   return
+ 3260   '
+ 3270   '* decide w(chi)
+ 3280   '
+ 3290   *W_chi
+ 3300    local I%
+ 3310    T=Tau(0)
+ 3320    if T<=1 then
+ 3330       :W=T:clr ET%
+ 3340       :for I%=1 to P%-2
+ 3350           :T=Tau(I%):if T then W=W+T:ET%=I% endif
+ 3360       :next
+ 3370       :OK%=(W=1)
+ 3380    :else if T<N-1 then clr OK%
+ 3390    :else for I%=1 to P%-2
+ 3400             :if Tau(I%)<T then cancel for:clr OK%:jump endif
+ 3410         :next:OK%=1:ET%=P%-1
+ 3420    endif
+ 3430    **
+ 3440   return
+ 3450   '
+ 3460   '* calculation of tau(chi)^p
+ 3470   '
+ 3480   *TAU_P
+ 3490    local I%,J%
+ 3500    block Psi%(1..Q%-1)=block Index%(1..Q%-1)
+ 3510    block Phi%(1..Q%-1)=block Index%(1..Q%-1)
+ 3520    Tau(0)=1:block Tau(1..P%-2)=0:'SET 1
+ 3530    Tau1(0)=1:block Tau1(1..P%-2)=0:'SET 1
+ 3540    for I%=1 to len(P%)-2
+ 3550       gosub *PSI_PSI
+ 3560       if bit(I%,P%) gosub *PHY_PSI
+ 3570    next
+ 3580    gosub *PSI_PSI
+ 3590    gosub *T_T1
+ 3600    block Tau1(0..P%-2)=block Tau(0..P%-2)
+ 3610    clr Tau1(P%-1)
+ 3620    J%=Phi%(Q%-1)
+ 3630    for I%=0 to P%-1:W%=(I%+J%)@P%:Tau(W%)=Tau1(I%):next
+ 3640    W=Tau(P%-1)
+ 3650    for I%=0 to P%-2:Tau(I%)=(Tau(I%)-W)*Q%@N:next
+ 3660   return
+ 3670   '
+ 3680   '* calculation of  T^E
+ 3690   '
+ 3700   *T_E
+ 3710    local I%,J%
+ 3720    block Tau1(0..P%-2)=block Tau(0..P%-2)
+ 3730    J%=0
+ 3740    if even(E) then
+ 3750       :while bit(J%,E)=0:gosub *T1_T1:inc J%:wend
+ 3760       :block Tau(0..P%-2)=block Tau1(0..P%-2)
+ 3770    for I%=J%+1 to len(E)-1
+ 3780       gosub *T1_T1
+ 3790       if bit(I%,E) gosub *T_T1
+ 3800    next
+ 3810   return
+ 3820   '
+ 3830   '* calculation of  tau(chi)^e/tau(chi^e)
+ 3840   '
+ 3850   *JACOBI
+ 3860    local I%,J%
+ 3870    block Psi%(0..Q%-1)=block Index%(0..Q%-1)
+ 3880    Tau1(0)=1:block Tau1(1..P%-2)=0
+ 3890    J%=0:while bit(J%,E%)=0:gosub *PSI_PSI:inc J%:wend
+ 3900    block Tau(0..P%-2)=block Tau1(0..P%-2)
+ 3910    block Phi%(0..Q%-1)=block Psi%(0..Q%-1)
+ 3920    for I%=J%+1 to len(E%)-1
+ 3930       gosub *PSI_PSI
+ 3940       if bit(I%,E%) gosub *PHY_PSI
+ 3950    next
+ 3960   return
+ 3970   '
+ 3980   '* calculation of  T=T*TM
+ 3990   '
+ 4000   *T_TM
+ 4010    local I%,J%
+ 4020    for J%=0 to P%-2:Tau2(J%)=Tau(0)*Tau_e(J%)@N:next:clr Tau2(P%-1)
+ 4030    for I%=1 to P%-2
+ 4040       for J%=0 to P%-2
+ 4050          W%=(I%+J%)@P%:Tau2(W%)=Tau2(W%)+Tau(I%)*Tau_e(J%)@N
+ 4060       next
+ 4070    next
+ 4080    W=Tau2(P%-1)
+ 4090    for I%=0 to P%-2:Tau(I%)=(Tau2(I%)-W)@N:next
+ 4100    block Tau2(0..P%-2)=block Tau(0..P%-2)
+ 4110   return
+ 4120   '
+ 4130   '* calculation of  the sum of PSI(A)*PSI(1-A)
+ 4140   '
+ 4150   *PSI_PSI
+ 4160    local I%,J%
+ 4170    block Sum(0..P%-1)=0
+ 4180    for I%=2 to Q%-1:inc Sum((Psi%(I%)+Psi%(Q%+1-I%))@P%):next
+ 4190    ' calculation of  T1=T1*T1*U
+ 4200    for I%=0 to (P%-1)\2:Tau2(2*I%)=Tau1(I%)^2@N:next
+ 4210    for I%=(P%+1)\2 to P%-2:Tau2(2*I%-P%)=Tau1(I%)^2@N:next:clr Tau2(P%-2)
+ 4220    for I%=0 to P%-3
+ 4230       for J%=I%+1 to P%-2
+ 4240          W%=(I%+J%)@P%:Tau2(W%)=Tau2(W%)+2*Tau1(I%)*Tau1(J%)@N
+ 4250       next
+ 4260    next
+ 4270    for J%=0 to P%-1:Tau1(J%)=Tau2(0)*Sum(J%)@N:next
+ 4280    for I%=1 to P%-1
+ 4290       for J%=0 to P%-1
+ 4300          W%=(I%+J%)@P%:Tau1(W%)=Tau1(W%)+Tau2(I%)*Sum(J%)@N
+ 4310       next
+ 4320    next
+ 4330    W=Tau1(P%-1)
+ 4340    for I%=0 to P%-2:Tau1(I%)=(Tau1(I%)-W)@N:next
+ 4350    ' calculation of  PSI^2
+ 4360    for I%=0 to Q%-1:Psi%(I%)=2*Psi%(I%)@P%:next
+ 4370   return
+ 4380   '
+ 4390   '* calculation of  the sum of PHY(A)*PSI(1-A)
+ 4400   '
+ 4410   *PHY_PSI
+ 4420    local I%,J%
+ 4430    block Sum(0..P%-1)=0
+ 4440    for I%=2 to Q%-1:inc Sum((Phi%(I%)+Psi%(Q%+1-I%))@P%):next
+ 4450    ' calculation of  T=T*T1*SU
+ 4460    for J%=0 to P%-2:Tau2(J%)=Tau(0)*Tau1(J%)@N:next:clr Tau2(P%-1)
+ 4470    for I%=1 to P%-2
+ 4480       for J%=0 to P%-2
+ 4490          W%=(I%+J%)@P%:Tau2(W%)=Tau2(W%)+Tau(I%)*Tau1(J%)@N
+ 4500       next
+ 4510    next
+ 4520    for J%=0 to P%-1:Tau(J%)=Tau2(0)*Sum(J%)@N:next
+ 4530    for I%=1 to P%-1
+ 4540       for J%=0 to P%-1
+ 4550          W%=(I%+J%)@P%:Tau(W%)=Tau(W%)+Tau2(I%)*Sum(J%)@N
+ 4560       next
+ 4570    next
+ 4580    W=Tau(P%-1)
+ 4590    for I%=0 to P%-2:Tau(I%)=(Tau(I%)-W)@N:next
+ 4600    ' calculation of  PHY=PHY*PSY
+ 4610    for I%=0 to Q%-1:Phi%(I%)=(Phi%(I%)+Psi%(I%))@P%:next
+ 4620   return
+ 4630   '
+ 4640   '* calculation of  T=T*T1
+ 4650   '
+ 4660   *T_T1
+ 4670    local I%,J%
+ 4680    for J%=0 to P%-2:Tau2(J%)=Tau(0)*Tau1(J%)@N:next:clr Tau2(P%-1)
+ 4690    for I%=1 to P%-2
+ 4700       for J%=0 to P%-2
+ 4710          W%=(I%+J%)@P%:Tau2(W%)=Tau2(W%)+Tau(I%)*Tau1(J%)@N
+ 4720       next
+ 4730    next
+ 4740    W=Tau2(P%-1)
+ 4750    for I%=0 to P%-2:Tau(I%)=(Tau2(I%)-W)@N:next
+ 4760   return
+ 4770   '
+ 4780   '* calculation of  T1=T1*T1
+ 4790   '
+ 4800   *T1_T1
+ 4810    local I%,J%
+ 4820    for I%=0 to (P%-1)\2:Tau2(2*I%)=Tau1(I%)^2@N:next
+ 4830    for I%=(P%+1)\2 to P%-2:Tau2(2*I%-P%)=Tau1(I%)^2@N:next:clr Tau2(P%-2)
+ 4840    for I%=0 to P%-3
+ 4850       for J%=I%+1 to P%-2
+ 4860          W%=(I%+J%)@P%:Tau2(W%)=Tau2(W%)+2*Tau1(I%)*Tau1(J%)@N
+ 4870       next
+ 4880    next
+ 4890    W=Tau2(P%-1)
+ 4900    for I%=0 to P%-2:Tau1(I%)=(Tau2(I%)-W)@N:next
+ 4910   return
+ 4920   '
+ 4930   '** subroutine for the final test
+ 4940   '
+ 4950   ' * calculation of  V mod S
+ 4960   '
+ 4970   *GET_V
+ 4980    local I%,J%
+ 4990    for J%=0 to NQ%
+ 5000       IN=Eta%(0,J%):P1=2
+ 5010       for I%=1 to NP%
+ 5020          if WK%(I%,J%) then
+ 5030             :P%=P%(I%):U1=P1*modinv(P1,P%):V1=1-U1
+ 5040             :P1=P1*P%:IN=(IN*V1+Eta%(I%,J%)*U1)@P1
+ 5050       next
+ 5060       Q%=Q%(J%):X%=modpow(G%(J%),IN,Q%)
+ 5070       if J% then
+ 5080          :U1=M1*modinv(M1,Q%):V1=1-U1
+ 5090          :M1=M1*Q%:V=(V*V1+X%*U1)@M1
+ 5100       :else M1=Q%:V=X%
+ 5110    next
+ 5120   return
+ 5230   '
+ 5240   'POWERCHK V1.1
+ 5250   '  Check if N is a power of an integer
+ 5260   '  1987,89 by Yuji KIDA
+ 5270   '
+ 5280   fnPowerCheck(N)
+ 5290      local E%,D#,EP#,W#
+ 5300   print "Power Check ";
+ 5310   for E%=(len(N)-1)\17 to 2 step -1:print E%;
+ 5320   '
+ 5330   ' approximation by NEWTON's method
+ 5340   '
+ 5350   D#=exp(log(N)/E%):W#=D#^E%:'initial value for NEWTON's method
+ 5360   EP#=(D#+1)^E%-W#:'acceptable error
+ 5370   '
+ 5380   repeat
+ 5390   D#=((E%-1)*W#+N)*D#/(E%*W#):W#=D#^E%:'main of NEWTON's method
+ 5400   until abs(W#-N)<EP#
+ 5410   '
+ 5420   ' test for each integer
+ 5430   '
+ 5440   D#=int(D#):W#=D#^E%
+ 5450   if W#>N goto 5530
+ 5460   if W#=N then cancel for:goto 5580
+ 5470   'if smaller
+ 5480   inc D#:W#=D#^E%
+ 5490   if W#=N then cancel for:goto 5580
+ 5500   if W#<N goto 5480
+ 5510   goto 5560:'next e%
+ 5520   'if bigger
+ 5530   dec D#:W#=D#^E%
+ 5540   if W#=N then cancel for:goto 5580
+ 5550   if W#>N goto 5530
+ 5560   next
+ 5570   D#=1:'not a power
+ 5580   print
+ 5590   return(D#)
+ 5600   '
+10000   ' MPQS version 2.0 (Function Version)
+10010   '    originally  by P.Montgomery
+10020   '    VAX & SUN version by R.Silverman
+10030   '    implemented by Y.Kida
+10040   '
+10050   word -12:point -2
+10060   input "N=";N
+10070   print fnMPQS(N)
+10080   end
+10090   '
+10100   '* fnMPQS(N)
+10110   '  input   : positive integer, composite, has no small factor
+10120   '  output  : one of factors, not always prime
+10130   '  destroy : nothing
+10140   '  remark  : WORD must be 12, POINT is enough by 2
+10150   '            if it stops by lack of memory, decrease 38 in SX%=16*38
+10160   '            if it works well, inclease as large as possible
+10170   fnMPQS(N)
+10180   local SX%=16*38,BX%=2*SX%
+10190   local COUN%,E%,BASE%,I%,IX%,J%,K%,KW%,KX%,REPTIM%,PRMS%,Q%,W%,X%,Y%,Z%
+10200   local A,A2,A3,B,B0,B1,C,D,D2,ERRLIM,KNUF,FMAX,KN,M,MS,OF,PRM,QN,U,X,Y
+10210   local W#
+10220   dim SIEVE%(32767)
+10230   dim X(SX%),Y(SX%)
+10240   dim PRM%(SX%-1,4)
+10250   dim YR%(BX%*2),MX(BX%),MY(BX%)
+10260   '
+10270   '  set user routine
+10280   '
+10290   dim MPQS%(1300),WRK2%(BX%*2+SX%+2),WRK3%(SX%+1,(SX%\16*2+2+7)\8*8-1)
+10300   bload "MPQS#10",MPQS%()
+10310   '
+10320   print "MPQS Method  for";N
+10330   X=log(N)
+10340   BASE%=min(SX%,int(1.8*exp(sqrt(X*log(X)/12)))\16*16+16)
+10350   PRMS%=BASE%-1
+10360   '
+10370   ' let the probability be maximum
+10380   '
+10390   K%=1:KX%=K%:KW%=len(N)\3:FMAX=0
+10400   '
+10410   KN=K%*N:if KN@8<>1 then K%=nxtprm(K%):goto 10410
+10420   KNUF=2*log(2)-log(K%)/2
+10430   J%=2
+10440   for I%=2 to PRMS%
+10450    PRM=prm(J%):inc J%:if kro(KN,PRM)=-1 then 10450
+10460    KNUF=KNUF+(kro(KN,PRM)+1)*log(PRM)/PRM
+10470   next
+10480   if KNUF>FMAX then FMAX=KNUF:KX%=K%
+10490   if K%<KW% then K%=nxtprm(K%):goto 10410
+10500   '
+10510   KN=KX%*N:QN=isqrt(KN)
+10520   print "with  Multiplier=";KN\N;"Size=";BASE%
+10530   '
+10540   '
+10550   PRM%(0,0)=-1
+10560   PRM%(1,0)=2:PRM%(1,2)=1:PRM%(1,3)=1
+10570   '
+10580   '  select P so that KN is a quadratic residue mod P
+10590   '
+10600   J%=2
+10610   for I%=2 to PRMS%
+10620    PRM=prm(J%):inc J%:if kro(KN,PRM)=-1 then 10620
+10630    PRM%(I%,0)=PRM
+10640   next
+10650   '
+10660   '  solve X^2 = KN mod P% (P%>2)
+10670   '
+10680   for I%=2 to PRMS%:PRM=PRM%(I%,0)
+10690    if PRM=KX% then PRM%(I%,1)=0
+10700              :else PRM%(I%,1)=fnSqrt_mod(KN,PRM)
+10710   next
+10720   '
+10730   '  calculation of logarithms to base 2 (*2 except P%=KX)
+10740   '
+10750   for I%=1 to PRMS%:PRM=PRM%(I%,0)
+10760    if PRM=KX% then PRM%(I%,4)=len(PRM)-1
+10770              :else PRM%(I%,4)=len(PRM^2)-1
+10780   next
+10790   '
+10800   '  MAIN PART
+10810   '
+10820   ERRLIM=int(exp(log(PRM%(PRMS%,0))*2.0)):'limit of 'small' value
+10830   REPTIM%=1+(len(N)>60)*(len(N)-60)\30
+10840   M=2^16:MS=REPTIM%*M\2
+10850   MPQS%(1)=BASE%:'                        size of Factor Base
+10860   MPQS%(2)=min(BX%,2*BASE%):'             size of LPV area
+10870   MPQS%(3)=len(MS^2*KN\2)-1:'             initial log
+10880   MPQS%(4)=len(ERRLIM^2)-1:'              log of ER
+10890   MPQS%(0)=0
+10900   call MPQS%(PRM%(0,0),W#,N,X,Y,X(0),Y(0),YR%(0),SIEVE%(0))
+10910   '
+10920   IX%=0:COUN%=0:D=max(PRM%(PRMS%,0)+3,int(sqrt(sqrt(KN)/MS*7/10)))\4*4+3
+10930   '
+10940   *MPQSLP
+10950    D=D+4:if kro(KN,D)<>1 then *MPQSLP
+10960          if (modpow(2,(D-1)\2,D)-kro(2,D))@D then *MPQSLP
+10970          if (modpow(3,(D-1)\2,D)-kro(3,D))@D then *MPQSLP
+10980    B0=modpow(KN,(D+1)\4,D)
+10990    B1=(KN-B0^2)*modinv(2*B0,D)\D:if res then *MPQSLP
+11000    A=D^2:B=(B0+B1*D)@A:if even(B) then B=A-B
+11010    A2=2*A:D2=modinv(2*D,KN)
+11020    C=(B^2-KN)\(4*A)
+11030    '
+11040    OF=-MS
+11050    for I%=2 to PRMS%
+11060       PRM=PRM%(I%,0):A3=modinv(A2,PRM)
+11070       PRM%(I%,2)=((-B+PRM%(I%,1))*A3-OF)@PRM
+11080       PRM%(I%,3)=((-B-PRM%(I%,1))*A3-OF)@PRM
+11090    next
+11100    for I%=1 to REPTIM%
+11110       gosub *SIEVE
+11120       OF=OF+M:if IX%>BASE% then cancel for:goto 11180
+11130    next
+11140   goto *MPQSLP
+11150   '
+11160   '  If get FB%+1 members then do GAUSSIAN ELIMINATION
+11170   '
+11180   MPQS%(0)=6:call MPQS%():IX%=MPQS%(3)
+11190   '
+11200   '  Check if a square number is obtained
+11210   '
+11220   MPQS%(0)=7:call MPQS%()
+11230   if W#=0 then MPQS%(0)=9:call MPQS%():goto *MPQSLP
+11240   X=1
+11250   block SIEVE%(1..BASE%-1)=0
+11260   for I%=0 to len(W#)-1
+11270    if bit(I%,W#) then X=X*X(I%)@N:Y=abs(Y(I%))
+11280                      :MPQS%(0)=8:call MPQS%()
+11290   next
+11300   Y=1
+11310   for I%=1 to BASE%-1
+11320    E%=SIEVE%(I%):if E% then Y=Y*PRM%(I%,0)^(E%\2)@N
+11330   next
+11340   GCD=gcd(X-Y,N):if and{1<GCD,GCD<N} then 11390
+11350   goto 11220
+11360   '
+11370   '  found it!!
+11380   '
+11390   print
+11400   return(GCD):'GCD=factor
+11410   '
+11420   '  Do quadratic sieving
+11430   '
+11440   *SIEVE
+11450   MPQS%(0)=1:call MPQS%()
+11460   repeat
+11470    MPQS%(0)=2:call MPQS%():if X=-1 then 11500
+11480    X=X+OF:Y=A*X^2+B*X+C:X=(A2*X+B)*D2@KN:gosub *DIVISION
+11490   until IX%>BASE%
+11500   return
+11510   '
+11520   '  Decompose by division
+11530   '
+11540   *DIVISION
+11550   if (Y-X^2)@KN then print "error":stop
+11560   W#=abs(Y):MPQS%(0)=3:call MPQS%():if W#>1 then 11640
+11570   W#=Y:MPQS%(0)=5:call MPQS%()
+11580   inc COUN%:print chr(13);COUN%;
+11590   if IX%<=BASE% then inc IX%
+11600   return
+11610   '
+11620   '  Find a pair
+11630   '
+11640   MPQS%(0)=4:call MPQS%()
+11650   K%=MPQS%(1):if MPQS%(0) then 11690
+11660   if K%>=0 then MY(K%)=Y\W#:MX(K%)=X
+11670   return
+11680   '
+11690   U=X:X=abs(X)
+11700   X=X*MX(K%)@N*modinv(W#,N)@N:W#=Y\W#*MY(K%)
+11710   MPQS%(0)=5:call MPQS%()
+11720   X=U:goto 11580
+11730   '
+11740   '  solve X^2 = A mod P (P%>2)
+11750   '
+11760   fnSqrt_mod(A,P)
+11770   local I%,X,Y,Z,E%,Q
+11780    if P@4=3 then Y=modpow(A,(P+1)\4,P):goto 11910
+11790    X=P-1:E%=-1
+11800    repeat:inc E%:X=X\2:until res
+11810    Q=2*X+1
+11820    Z=1:repeat:inc Z:until kro(Z,P)=-1
+11830    Z=modpow(Z,Q,P)
+11840    X=modpow(A,Q,P):Y=modpow(A,(Q+1)\2,P)
+11850    K=(P-1)\Q\4
+11860    for I%=E%-2 to 0 step -1
+11870       if modpow(X,K,P)<>1 then
+11880          :W=modinv(Z,P):X=X*W^2@P:Y=Y*W@P
+11890       Z=Z^2@P:K=K\2
+11900    next
+11910   return(Y)

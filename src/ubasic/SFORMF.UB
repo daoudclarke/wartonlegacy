@@ -1,0 +1,32 @@
+   10   *Sformf(N,&F)
+   20   ' Shanks square form factorization of N.  F is a factor.
+   30   ' Version which uses the 2nd cntnd fraction & rejects small denom.
+   40   ' 7 May 1990.
+   50   dim Squf(80) ' Holds small denominators.
+   60   local P,Q,Pp=0,Qq=1,Qqq=N,Te,A,R=0,K,I=0,J=0,Ub,Jj,Ii=0,Ta,Iii,Flag
+   70   local Npp,Nqq,Na,Nr,Nqqq,Np,Nq
+   80   K=isqrt(N):if not res then F=K:return endif:A=K:Ub=2*sqrt(2*sqrt(N))
+   90   Squf(0)=1
+  100   ' Loop starts here.
+  110   inc Ii:if Ii>7000 then F=0:return endif
+  120   P=K-R:Q=Qqq+A*(Pp-P)
+  130   if Q<Ub then Iii=-1:Flag=1
+  140   :while and{Flag,(Iii<J)} inc Iii
+  150   :if Q=Squf(Iii) then Flag=0 endif wend
+  160   :if Flag then inc J:Squf(J)=Q endif endif
+  170   A=(P+K)\Q:R=res:inc I
+  180   Pp=P:Qqq=Qq:Qq=Q
+  190   Te=isqrt(Q):Ta=res
+  200   if or{odd(I),Ta<>0} then 110
+  210   if even(Te) then Te=Te\2 endif
+  220   Jj=0
+  230   while (Jj<=J):if Te=Squf(Jj) then 110 else inc Jj endif wend
+  240   ' Initialize for the second continued fraction
+  250   Npp=K-R:Nqq=isqrt(Q):Na=(Npp+K)\Nqq:Nr=res:Nqqq=(N-Npp*Npp)\Nqq
+  260   ' Loop begins
+  270   Np=K-Nr
+  280   if Np=Npp then 300 else Nq=Nqqq+Na*(Npp-Np):Na=(Np+K)\Nq:Nr=res
+  290   :Npp=Np:Nqqq=Nqq:Nqq=Nq:goto 270 endif
+  300   if even(Nqq) then F=Nqq\2 else F=Nqq endif
+  310   if or{F=1,F=N} then 110
+  320   return ' End of subroutine Sformf.

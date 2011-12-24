@@ -1,0 +1,12 @@
+  700   P=93
+  702   D=7
+  704   Bb=1
+  706   Temp2=P+D*Bb*Bb
+  708   Temp3=int(Temp2^0.5)
+  710   if Temp2=Temp3*Temp3 then goto 720
+  712   Bb=Bb+1
+  714   if Bb<1000 then goto 706
+  716   print "notfound"
+  718   goto 722
+  720   print Temp2,Bb
+  722   end

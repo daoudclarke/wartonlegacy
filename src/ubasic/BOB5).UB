@@ -1,0 +1,134 @@
+    5   dim X(3),Y(3),T(3)
+    6   N=3001910273
+    7   Coun=1
+   10   Aa=0
+   12   X(2)=0
+   14   Y(2)=1
+   16   T(2)=1
+   23   Precod=N
+   25   for I=1 to 20
+   26   Temp=Precod\2
+   28   Rem1=Precod-Temp*2
+   30   Precod=Temp
+   32   if Rem1>0 then goto 38
+   33   if Temp=0 then goto 600
+   34   Precod=int(Precod)
+   36   next I
+   38   Precod=Precod*2+1
+   40   for I=1 to 200
+   41   Precod=int(Precod)
+   42   Temp=Precod\3
+   44   Rem1=Precod-Temp*3
+   46   Precod=Temp
+   48   if Rem1>0 then goto 54
+   50   if Temp=0 then goto 600
+   52   next I
+   54   Precod=Precod*3+Rem1
+   60   print N,Precod
+   62   N=int(Precod)
+   64   X(2)=0
+   66   Y(2)=1
+   68   T(2)=1
+  110   Ab=1
+  111   for I=1 to 150
+  112   print Prx1,Aa
+  115   Prx1=nxtprm(Ab)
+  116   Ab=Prx1
+  117   if Ab>1000 then goto 350
+  121   Q=Ab
+  123   Q1=Q
+  125   L=int(700/Q)
+  129   if Q1>L then goto 500
+  130   Q1=Q*Q1
+  132   X(2)=X(2)*Q1
+  133   Y(2)=Y(2)*Q1
+  134   T(2)=T(2)*Q1
+  137   Dy=2*Y(2)*T(2)
+  138   Dy=int(Dy)
+  139   Dy2=int(Dy/N)
+  141   Dyr=Dy-Dy2*N
+  143   Dy=Dyr
+  144   print "dy",Dy
+  148   Little=Dy
+  149   if Little=0 then goto 350
+  150   gosub 917
+  152   if Gcd2>1 then goto 300
+  160   print "aa",Aa
+  161   gosub 960
+  162   M1=3*X(2)^2+Aa*T(2)*T(2)
+  164   T(2)=T(2)*Dy6
+  165   print "x2y2",X(2),Y(2)
+  166   X(3)=-2*X(2)*Dy6+M1*M1*Dy4*T(2)
+  167   Temp=-1*Y(2)*Dy6+M1*Dy5*3*X(2)
+  168   Y(3)=Temp-M1^3*Dy3*T(2)
+  169   print "xyq1",X(3),Y(3),T(2)
+  170   T(3)=int(T(2))
+  176   Temp=int(X(3)/N)
+  178   X(3)=X(3)-Temp*N
+  186   Temp=int(Y(3)/N)
+  188   Y(3)=Y(3)-Temp*N
+  189   Temp=int(T(3)/N)
+  190   T(3)=T(3)-Temp*N
+  191   print "xyt",X(3),Y(3),T(3)
+  192   X(2)=int(X(3))
+  193   Y(2)=int(Y(3))
+  194   T(2)=int(T(3))
+  195   print "q1",Q1
+  196   goto 129
+  300   print "gcd2",Gcd2
+  302   if Gcd2=N then goto 350
+  304   goto 600
+  350   Aa=Aa+1
+  352   goto 64
+  500   next I
+  501   Aa=Aa+1
+  502   goto 64
+  600   print "end"
+  602   end
+  700   print "ab",Ab
+  702   end
+  810   U=1
+  811   D=A
+  812   if B=1 then goto 888
+  813   V1=0
+  814   V3=B
+  815   if V3=0 then goto 830
+  816   Qq=D\V3
+  817   T3=D-Qq*V3
+  818   T1=U-Qq*V1
+  819   U=V1
+  820   D=V3
+  821   V1=T1
+  822   V3=T3
+  823   goto 815
+  830   V=(D-A*U)/B
+  831   goto 860
+  840   V=0
+  850   print "uv",U,V
+  860   if U=0 then goto 870
+  862   if U<0 then goto 870
+  863   V=V*(1-A)
+  864   V=int(V)
+  865   print "va",V,A
+  866   Temp=V\A
+  869   V=V-Temp*A
+  870   print "funny",U,V
+  872   goto 890
+  888   V=B
+  890   return
+  917   Big=N
+  918   Little=int(Little)
+  919   Temp=Big\Little
+  920   Rem1=Big-Little*Temp
+  922   if Rem1=0 then goto 940
+  924   Big=Little
+  926   Little=Rem1
+  928   goto 918
+  940   Gcd2=Little
+  942   print "gcdsub",Gcd2
+  950   return
+  960   Dy3=Dy^3
+  962   Dy4=Dy3*Dy
+  964   Dy5=Dy4*Dy
+  966   Dy6=Dt58Dy
+  968   return

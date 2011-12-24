@@ -1,0 +1,62 @@
+   10   'PPMP5 version 2.0
+   20   '
+   30   '  Factorization by PPMPQS
+   40   '        1991/92 by Yuji KIDA
+   50   '
+   60   word -23:point -2
+   70   '
+   80   Pc$#=version
+   90   if instr(Pc$#,"PC9801") then PC=0
+  100   :elseif instr(Pc$#,"IBM-PC") then PC=1
+  110   :elseif instr(Pc$#,"FMR") then PC=2
+  120   :else PC=10
+  130   '
+  140   'enable 20-31 bit address lines
+  150   if PC=0 then
+  160     :out 0xf2,0
+  170     :out 0xf2,0
+  180   :elseif PC=1 then
+  190     :out 0x64,0xd1:while bit(1,inp(0x64)) wend
+  200     :out 0x60,0xdf:while bit(1,inp(0x64)) wend
+  210     :out 0x64,0xff:while bit(1,inp(0x64)) wend
+  220   :elseif PC=2 then
+  230     :out 0x24,1
+  240     :out 0x24,1
+  250   :else
+  260     :print "not yet supported":end
+  270   :endif
+  280   '
+  290   print:print "5. matrix elimination";:locate 56:print date
+  300   '
+  310   open "ppmpdrv" for input as #1
+  320     input #1,XMEMsize
+  330     input #1,DataDrv$
+  340     input #1,Drv1%,SZ1
+  350     input #1,Drv2%,SZ2
+  360   close #1
+  370   MatrixSize=SZ1+SZ2
+  380   '
+  390   '
+  400   dim MP%(18000)
+  410   bload "ppmp5",MP%()
+  420   '
+  430   MP%(0)=0:MP%(1)=XMEMsize
+  440   MP%(2)=MatrixSize\2
+  450   MP%(3)=Drv1%:MP%(4)=SZ1\2
+  460   MP%(5)=Drv2%
+  470   call MP%()
+  480   BLK=MP%(0)
+  490   if BLK=-1 then print "disk error":beep:end
+  500   if BLK=-2 then print "lack of memory":beep:end
+  510   '
+  520   '  Gaussian Elimination
+  530   '
+  540   I=MatrixSize\BLK+1
+  550   repeat
+  560     dec I:print chr(13);"Gauss";I;
+  570     MP%(0)=1:call MP%()
+  580   until MP%(0)=0
+  590   '
+  600   MP%(0)=2:call MP%():print chr(13);MP%(0);"relations"
+  610   '
+  620   run "ppmp6"

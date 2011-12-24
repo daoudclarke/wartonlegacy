@@ -1,0 +1,41 @@
+    6   input "number";N
+    8   Nk=(N-1)/2
+   10   Ifg=2
+   11   Ipow=2
+   12   Iy=Ifg
+   13   Iy2=Iy
+   14   if Ipow>Nk goto 20
+   16   Ipow=Ipow*2
+   18   goto 14
+   20   Ie=int(Ipow/2)
+   21   Ike=Ie
+   22   N1=Nk
+   23   Iy=Ifg
+   24   N1=N1-Ie
+   25   Iy2=Iy
+   26   if Ie=1 then goto 100
+   28   Ie=int(Ie/2)
+   30   Iy=Iy*Iy
+   32   Itemp=int(Iy/N)
+   34   Irem1=Iy-Itemp*N
+   36   Iy=Irem1
+   38   if N1<Ie then goto 26
+   40   N1=N1-Ie
+   42   Iy=Iy*Iy2
+   44   Itemp=int(Iy/N)
+   46   Irem1=Iy-Itemp*N
+   48   Iy=Irem1
+   50   goto 26
+  100   if Iy=N-1 then goto 104
+  102   if Iy>1 goto 110
+  103   goto 130
+  104   print N,"is prime"," base=",Ifg
+  106   end
+  110   print N,"is composite"
+  112   A=A
+  114   A=A
+  120   end
+  130   print N,"is possibly prime","base=",Ifg
+  131   Ie=Ike
+  132   Ifg=Ifg+1
+  134   goto 22

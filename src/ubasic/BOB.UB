@@ -1,0 +1,30 @@
+   72   end
+  810   U=1
+  811   D=A
+  812   if B=0 then goto 840
+  813   V1=0
+  814   V3=B
+  815   if V3=0 then goto 830
+  816   QQ=D\V3
+  817   T3=D-QQ*V3
+  818   T1=U-QQ*V1
+  819   U=V1
+  820   D=V3
+  821   V1=T1
+  822   V3=T3
+  823   goto 815
+  830   V=(D-A*U)/B
+  831   goto 860
+  840   V=0
+  850   print U,V
+  860   if U=0 then goto 870
+  862   if U<0 then goto 870
+  863   V=V*(1-A)
+  864   V=int(V)
+  865   print V,A
+  866   Temp=V\A
+  867   print Temp
+  868   Temp=V\A
+  869   V=V-Temp*A
+  870   print U,V
+  872   return

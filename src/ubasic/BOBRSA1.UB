@@ -1,0 +1,38 @@
+    5   dim Barr(100),Bpow(100)
+   10   input "public key1";N
+   12   input "public key2";Q1
+   14   input "private code";Incod
+  131   print Q1
+  132   Ind1=1
+  134   P1=Q1
+  136   Pr=int(P1/2)
+  138   Temp=P1-Pr*2
+  140   Barr(Ind1)=Temp
+  141   print "barr",Barr(Ind1),Ind1
+  142   P1=Pr
+  144   if Pr=0 then goto 150
+  146   Ind1=Ind1+1
+  148   goto 136
+  150   Bpow(1)=Incod
+  152   Ind2=1
+  154   Ind3=Ind2+1
+  156   Bpow(Ind3)=Bpow(Ind2)*Bpow(Ind2)
+  158   Temp=Bpow(Ind3)
+  160   Temp1=int(Temp/N)
+  162   Rem1=Temp-Temp1*N
+  164   Bpow(Ind3)=Rem1
+  166   Ind2=Ind2+1
+  168   if Ind2=Ind1 then goto 180
+  170   goto 154
+  180   Bprod=1
+  182   Ind4=1
+  184   if Barr(Ind4)=0 then goto 194
+  186   Bprod=Bprod*Bpow(Ind4)
+  188   Temp1=int(Bprod/N)
+  190   Rem1=Bprod-Temp1*N
+  192   Bprod=Rem1
+  193   print Bprod,Ind4
+  194   if Ind4=Ind1 then goto 200
+  196   Ind4=Ind4+1
+  198   goto 184
+  200   print "scrambled code",Bprod

@@ -1,0 +1,252 @@
+   10   dim Umew(6,5),Ibar(6,5),Bsar(6,5),Ih(6,6),Bb(6),Itemb(6)
+   12   dim Ihtem(6)
+   14   Nl=3
+   16   Nnl=3
+   18   goto 168
+  168   I=1
+  170   J=1
+  171   Ih(I,J)=0
+  172   Ibar(I,J)=0
+  173   A=A
+  174   J=J+1
+  176   if J<Nnl+1 then goto 172
+  177   J=1
+  178   I=I+1
+  180   if I<Nl+1 then goto 172
+  182   I=1
+  183   Ih(I,I)=1
+  184   A=A
+  186   I=I+1
+  188   if I<Nnl+1 then goto 183
+  189   Ih(Nl,Nl)=1
+  196   goto 6052
+  810   Iu=1
+  811   Id=Ia
+  812   if Ib=0 then goto 888
+  813   Iv1=0
+  814   Iv3=Ib
+  815   if Iv3=0 then goto 830
+  816   Iqq=int(Id/Iv3)
+  817   It3=Id-Iqq*Iv3
+  818   It1=Iu-Iqq*Iv1
+  819   Iu=Iv1
+  820   Id=Iv3
+  821   Iv1=It1
+  822   Iv3=It3
+  823   goto 815
+  830   Iv=(Id-Ia*Iu)/Ib
+  860   if Iu=0 then goto 890
+  862   if Iu<0 then goto 890
+  863   Iv=Iv*(1-A)
+  866   Itemp=int(Iv/Ia)
+  869   Iv=Iv-Itemp*Ia
+  872   goto 890
+  888   Iv=Ib
+  890   return
+  918   Little=int(Little)
+  919   Temp=Big\Little
+  920   Rem1=Big-Little*Temp
+  922   if Rem1=0 then goto 940
+  924   Big=Little
+  926   Little=Rem1
+  928   goto 918
+  940   Gcd2=Little
+  944   return
+ 1000   Norma=Kia^5-Ia4*Kia^4*Kib+Ia3*Kia^3*Kib^2-Ia2*Kia^2*Kib^3
+ 1002   Norma=Norma+Ia1*Kia*Kib^4-Ia0*Kib^5
+ 1004   Litt=(Kia+Kib*M)*Norma
+ 1005   Litd=abs(Litt)
+ 1006   Iab=1
+ 1008   Iprx1=nxtprm(Iab)
+ 1163   Iab=Iprx1
+ 1164   if Iprx1>Lprx1 goto 1190
+ 1166   Itemp=int(Litd/Iab)
+ 1168   Irem1=Litd-Itemp*Iab
+ 1170   if Itemp=0 then goto 1186
+ 1174   if Irem1>0 then goto 1008
+ 1176   Litd=Itemp
+ 1180   goto 1166
+ 1186   Icon=Icon+1
+ 1188   print "hitno",Icon,"a=",Kia,"b=",Kib,Litt
+ 1190   return
+ 3100   I=1
+ 3102   J=1
+ 3104   Umew(I,J)=0.0
+ 3108   Bsar(I,J)=0.0
+ 3110   J=J+1
+ 3112   if J<Nnl+1 then goto 3104
+ 3113   J=1
+ 3114   I=I+1
+ 3116   if I<Nl+1 then goto 3104
+ 3118   I=1
+ 3120   Bb(I)=0.0
+ 3122   I=I+1
+ 3124   if I<Nl+1 then goto 3120
+ 3126   K=2
+ 3128   Kmax=1
+ 3129   I=1
+ 3130   Bsar(I,1)=Ibar(I,1)
+ 3134   I=I+1
+ 3136   if I<Nl+1 then goto 3130
+ 3138   I=1
+ 3140   Bb(1)=Bb(1)+Ibar(I,1)*Ibar(I,1)
+ 3142   I=I+1
+ 3144   if I<Nl+1 then goto 3140
+ 3160   if K<Kmax then goto 5000
+ 3162   if K=Kmax then goto 5000
+ 3163   Kmax=K
+ 3164   I=1
+ 3166   Bsar(I,K)=Ibar(I,K)
+ 3167   Bsar(I,1)=Ibar(I,1)
+ 3168   I=I+1
+ 3170   if I<Nl+1 then goto 3166
+ 3171   print "bsar3",Bsar(1,3),Bsar(2,3),Bsar(3,3)
+ 3172   gosub 8800
+ 3174   J=1
+ 3175   I=1
+ 3176   Umew(K,J)=Umew(K,J)+Ibar(I,K)*Bsar(I,J)
+ 3178   I=I+1
+ 3180   if I<Nl+1 then goto 3176
+ 3181   if abs(Bb(J))<0.0000000000001 then goto 4000
+ 3182   Umew(K,J)=Umew(K,J)/Bb(J)
+ 3183   A=A
+ 3184   I=1
+ 3185   J=J+1
+ 3186   if J<K then goto 3176
+ 3188   I=1
+ 3190   J=1
+ 3192   Bsar(I,K)=Bsar(I,K)-Umew(K,J)*Bsar(I,J)
+ 3194   J=J+1
+ 3196   if J<K then goto 3192
+ 3198   I=I+1
+ 3199   J=1
+ 3200   if I<Nl+1 then goto 3192
+ 3202   I=1
+ 3206   Bb(K)=Bb(K)+Bsar(I,K)*Bsar(I,K)
+ 3208   I=I+1
+ 3210   if I<Nl+1 then goto 3206
+ 3211   if K=3 then goto 8700
+ 3212   if abs(Bb(K))<0.0000000000001 then goto 4000
+ 3213   goto 5000
+ 3214   if abs(Umew(K,Ipar))<0.5 then goto 3236
+ 3216   if abs(Umew(K,Ipar))=0.5 then goto 3236
+ 3217   Iqa=int(0.5+Umew(K,Ipar))
+ 3218   I=1
+ 3219   A=A
+ 3220   Ibar(I,K)=Ibar(I,K)-Iqa*Ibar(I,Ipar)
+ 3221   Ih(I,K)=Ih(I,K)-Iqa*Ih(I,Ipar)
+ 3222   I=I+1
+ 3224   if I<Nl+1 then goto 3220
+ 3226   Umew(K,Ipar)=Umew(K,Ipar)-Iqa
+ 3228   I=1
+ 3229   if I>Ipar-1 then goto 3236
+ 3230   Umew(K,I)=Umew(K,I)-Iqa*Umew(Ipar,I)
+ 3232   I=I+1
+ 3234   goto 3229
+ 3235   Frm=1
+ 3236   gosub 8002
+ 3238   return
+ 4000   stop
+ 5000   gosub 8000
+ 5001   gosub 3214
+ 5002   if Bb(K)<(0.75-Umew(K,K-1)^2)*Bb(K-1) then goto 5100
+ 5004   Ipar=Ipar-1
+ 5006   if Ipar<1 then goto 5020
+ 5008   gosub 3214
+ 5010   goto 5004
+ 5020   K=K+1
+ 5022   if K<Nnl+1 then goto 8500
+ 5023   K=K-1
+ 5026   I=1
+ 5027   A=A
+ 5028   print "redb",Ibar(I,1),Ibar(I,2),Ibar(I,3),Ibar(I,4),Ibar(I,5)
+ 5030   I=I+1
+ 5032   if I<Nl+1 then 5027
+ 5033   print "ukk-1",Umew(K,K-1),"umew32",Umew(3,2),"bb3",Bb(3),"bb2",Bb(2),"bb1",Bb(1),"k",K
+ 5034   end
+ 5100   I=1
+ 5101   print "stoppage"
+ 5102   Itemb(I)=Ibar(I,K)
+ 5103   A=A
+ 5104   Ihtem(I)=Ih(I,K)
+ 5106   I=I+1
+ 5108   if I<Nl+1 then goto 5102
+ 5110   I=1
+ 5112   Ibar(I,K)=Ibar(I,K-1)
+ 5114   Ih(I,K)=Ih(I,K-1)
+ 5116   I=I+1
+ 5118   if I<Nl+1 then goto 5112
+ 5120   I=1
+ 5122   Ibar(I,K-1)=Itemb(I)
+ 5124   Ih(I,K-1)=Ihtem(I)
+ 5126   I=I+1
+ 5128   if I<Nl+1 then goto 5122
+ 5130   if K>2 goto 5260
+ 5132   goto 5272
+ 5260   J=1
+ 5262   Utem2=Umew(K,J)
+ 5264   Umew(K,J)=Umew(K-1,J)
+ 5266   Umew(K-1,J)=Utem2
+ 5268   J=J+1
+ 5270   if J<K-1 then goto 5262
+ 5272   Umm=Umew(K,K-1)
+ 5274   Bbb=Bb(K)+Umm^2*Bb(K-1)
+ 5276   Umew(K,K-1)=Umm*Bb(K-1)/Bbb
+ 5278   Bb(K)=Bb(K-1)*Bb(K)/Bbb
+ 5280   Bb(K-1)=Bbb
+ 5282   I=K+1
+ 5284   Itc=Umew(I,K)
+ 5286   Umew(I,K)=Umew(I,K-1)-Umm*Itc
+ 5288   Umew(I,K-1)=Itc+Umew(K,K-1)*Umew(I,K)
+ 5290   I=I+1
+ 5292   if I<Kmax+1 then goto 5284
+ 5294   if K-1>2 then goto 5300
+ 5296   K=2
+ 5298   goto 5310
+ 5300   K=K-1
+ 5302   Ipar=K-1
+ 5310   goto 5001
+ 6052   for I=1 to Nl
+ 6053   for J=1 to Nnl
+ 6054   Ibar(I,J)=3*(J-1)+I
+ 6055   next J
+ 6056   next I
+ 6058   print "ibar11",Ibar(1,1)
+ 6060   goto 3100
+ 6100   for J=1 to Nnl
+ 6102   A=A
+ 6104   A=A
+ 6106   next J
+ 6108   goto 5028
+ 7000   A=A
+ 7002   if K>2 then goto 7020
+ 7004   print "k",K,"ibark",Ibar(1,K),Ibar(2,K),Ibar(3,K),Ibar(4,K)
+ 7006   print "k-1",K-1,"ibark-1",Ibar(1,K-1),Ibar(2,K-1),Ibar(3,K-1),Ibar(4,K-1)
+ 7007   print "bsar2",Bsar(1,2),Bsar(2,2),Bsar(3,2),Bsar(4,2)
+ 7008   print "bb1",Bb(1),"bb2",Bb(2),"ukk-1",Umew(K,K-1)
+ 7014   A=A
+ 7020   return
+ 8000   Ipar=K-1
+ 8002   if K>7 then goto 8010
+ 8004   print "bbk",Bb(K),"ukk-1",Umew(K,K-1),"bbk-1",Bb(K-1),"k",K,"frm",Frm
+ 8006   Frm=0
+ 8010   return
+ 8500   print "ibar1",Ibar(1,1),Ibar(2,1),Ibar(3,1),"k",K
+ 8502   print "ibar2",Ibar(1,2),Ibar(2,2),Ibar(3,2)
+ 8504   print "bb1",Bb(1),"bb2",Bb(2)
+ 8506   goto 3160
+ 8700   print "k",K,"bb(k)",Bb(K)
+ 8702   stop
+ 8800   if K<3 then goto 8820
+ 8801   for Kv=2 to K-1
+ 8802   Tot=0
+ 8804   for Iv=1 to Nl
+ 8806   Tot=Tot+Ibar(Iv,Kv)*Bsar(Iv,Kv-1)
+ 8808   next Iv
+ 8810   Tot=Tot/Bb(Kv-1)
+ 8812   for Iv=1 to Nl
+ 8814   Bsar(Iv,Kv)=Ibar(Iv,Kv)-Tot*Bsar(Iv,Kv-1)
+ 8816   next Iv
+ 8818   next Kv
+ 8819   print "bsark",Bsar(1,2),Bsar(2,2),Bsar(3,2)
+ 8820   return

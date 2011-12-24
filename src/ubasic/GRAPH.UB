@@ -1,0 +1,56 @@
+   10   'graphic sample program
+   20   '
+   30   '
+   40   '
+   50   randomize
+   60   screen 20,15,0:screen 21:color:console 0,*,0:cls 3
+   70   Xbase=100:Ybase=100
+   80   N=24:R=80:S=16
+   90   for J=0 to S-1
+  100      pset (Xbase+R*cos(pi(J/N)),Ybase-R*sin(pi(J/N)))
+  110      for I=J+S to 2*N+J step S
+  120         X=Xbase+R*cos(pi(I/N)):Y=Ybase-R*sin(pi(I/N))
+  130         line -(X,Y),irnd@16
+  140      next
+  150   next
+  160   Xbase+=200
+  170   for R=80 to 10 step -5
+  180      circle (Xbase,Ybase),R,irnd@16
+  190   next
+  200   Xbase+=200
+  210   for Y=Ybase-80 to Ybase+80 step 5
+  220      for X=Xbase-80 to Xbase+80 step 5
+  230         pset (X,Y),irnd@16
+  240      next
+  250   next
+  260   Xbase=100:Ybase=290
+  270   for R=80 to 10 step -7
+  280      line (Xbase-R,Ybase-R)-(Xbase+R,Ybase+R),4,"b"
+  290   next
+  300   for R=80 to 10 step -7
+  310      paint (Xbase+2-R,Ybase+2-R),irnd@16,4
+  320   next
+  330   Xbase+=200
+  340   Xoff=80*cos(#pi/10):Yoff=80*sin(#pi/10)
+  350   circle (Xbase,Ybase),80,7,#pi/10,-#pi/10
+  360   line (Xbase,Ybase)-(Xbase+Xoff,Ybase+Yoff),7
+  370   line (Xbase,Ybase)-(Xbase+Xoff,Ybase-Yoff),7
+  380   paint (Xbase-10,Ybase),6,7
+  390   Xbase+=200
+  410   view (Xbase-90,Ybase-90)-(Xbase+90,Ybase+90),4,2
+  415   window (-1.2,-1.2)-(1.2,1.2)
+  420   gosub *Lissajous
+  430   view (Xbase-90,Ybase-60)-(Xbase+120,Ybase+60),6,7
+  435   window (-1.2,-1.2)-(1.2,1.2)
+  440   gosub *Lissajous
+  450   view (Xbase-30,Ybase-120)-(Xbase+30,Ybase+90),5,3
+  455   window (-1.2,-1.2)-(1.2,1.2)
+  460   gosub *Lissajous
+  470   end
+  480   *Lissajous
+  490   pset (-1,0),1
+  500   for S=-200 to 200
+  510      T=S*#pi/200
+  520      line -(cos(3*T),sin(5*T)),1
+  530   next
+  540   return

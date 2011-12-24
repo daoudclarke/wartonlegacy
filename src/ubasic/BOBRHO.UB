@@ -1,0 +1,131 @@
+    8   Ind1=0
+   10   input "number";N
+   12   Pn=1
+   14   Pren=1
+   16   Curr=Pren*Pren+Pn
+   18   gosub 800
+   20   Curr1=Curr
+   22   Pren=Curr
+   24   Curr=Pren*Pren+Pn
+   26   gosub 800
+   30   Little=abs(Curr2-Curr1)
+   32   if Little=0 then goto 200
+   34   gosub 917
+   36   if Gcd2>1 then goto 300
+   38   Pren=Curr
+   40   Curr=Pren*Pren+Pn
+   42   gosub 800
+   44   Pren=Curr
+   46   Curr=Pren*Pren+Pn
+   48   gosub 800
+   50   Pret=Curr
+   52   Little=abs(Pret-Curr2)
+   54   if Little=0 then goto 200
+   56   gosub 917
+   58   if Gcd2>1 then goto 300
+   60   Pren=Curr
+   62   Len=2
+   64   Sz=4
+   66   Ba=Sz+1
+   68   Bz=Sz+Len
+   70   Curr=Pren*Pren+Pn
+   72   gosub 800
+   73   Pren=Curr
+   74   if Ba=Bz then goto 80
+   76   Ba=Ba+1
+   78   goto 70
+   80   Little=abs(Curr-Pret)
+   82   if Little=0 then goto 200
+   84   gosub 917
+   86   if Gcd2>1 then goto 300
+   88   Sa=Bz+1
+   89   Sa2=Sa
+   90   Sz=Sz*2
+   91   goto 210
+   92   Pren=Bcurr1
+   94   Curr=Pren
+   96   gosub 800
+   98   Little=abs(Curr-Pret)
+  100   if Little=0 then goto 200
+  102   gosub 917
+  104   if Gcd2>1 then goto 300
+  108   if Sa=Sz then goto 114
+  110   Sa=Sa+1
+  111   Curr=Pren*Pren+Pn
+  112   goto 96
+  114   Pret=Curr
+  116   Pren=Curr
+  118   Len=Len*2
+  120   goto 66
+  200   Pn=Pn+1
+  202   print "polynomial no.",Pn
+  204   goto 14
+  210   Bcon=1
+  212   Bcurr=1
+  214   Sw1=0
+  216   Pren=Curr
+  218   Curr=Pren*Pren+Pn
+  220   gosub 800
+  222   Bcurr=abs(Curr-Pret)*Bcurr
+  224   gosub 850
+  226   if Sw1=1 then goto 234
+  228   Bcurr1=Curr
+  230   Sw1=1
+  234   if Sa2=Sz then goto 320
+  236   Sa2=Sa2+1
+  238   if Bcon=1000 then goto 244
+  240   Bcon=Bcon+1
+  242   goto 216
+  244   Little=Bcurr
+  246   if Little=0 then goto 260
+  248   gosub 917
+  250   if Gcd2>1 then goto 300
+  252   Sa=Sa2
+  254   goto 210
+  260   Ind2=1
+  262   Curr=Bcurr1
+  266   gosub 800
+  268   Little=abs(Curr-Pret)
+  270   if Little=0 then goto 200
+  272   gosub 917
+  274   if Gcd2>1 then goto 300
+  276   if Ind2=1000 then goto 290
+  278   Ind2=Ind2+1
+  280   Pren=Curr
+  281   Curr=Pren*Pren+Pn
+  282   goto 266
+  290   Sa=Sa2
+  292   goto 210
+  300   print "factor found",Gcd2
+  302   Fact2=int(N/Gcd2)
+  304   print "remaining factor =",Fact2
+  306   end
+  320   Little=Bcurr
+  321   A=A
+  323   if Little=0 then goto 92
+  324   gosub 917
+  326   if Gcd2>1 then goto 300
+  328   goto 114
+  800   if Curr<N then goto 807
+  802   Temp=int(Curr/N)
+  804   Rem1=Curr-Temp*N
+  806   Curr=Rem1
+  807   Ind1=Ind1+1
+  808   A=A
+  810   return
+  850   if Bcurr<N then goto 860
+  852   Temp=int(Bcurr/N)
+  854   Rem2=Bcurr-Temp*N
+  856   Bcurr=Rem2
+  860   return
+  917   Big=N
+  918   Little=int(Little)
+  919   Temp=int(Big/Little)
+  920   Rem1=Big-Little*Temp
+  922   if Rem1=0 then goto 940
+  924   Big=Little
+  926   Little=Rem1
+  928   goto 918
+  940   Gcd2=Little
+  942   A=A
+  950   return

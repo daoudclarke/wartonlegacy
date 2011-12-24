@@ -1,0 +1,244 @@
+    1   dim Prod(10)
+    2   Con=0
+    8   input "type 1 or 2";Iort
+   10   Aa=-1*Iort
+   11   input "mod";P
+   12   if Aa>-1 then goto 14
+   13   Aa=Aa+P
+   14   Itemp=int(Aa/P)
+   16   Aa=Aa-Itemp*P
+   17   if Aa>0 then goto 23
+   18   X=0
+   20   goto 200
+   23   Precod=P-1
+   25   I=0
+   26   Temp=int(Precod/2)
+   28   Rem1=Precod-Temp*2
+   30   if Temp=0 then goto 46
+   32   if Rem1>0 then goto 40
+   34   Precod=Temp
+   36   I=I+1
+   38   if I<200 then goto 26
+   40   Q=Precod
+   42   E=I
+   44   goto 48
+   46   Q=1
+   47   E=I
+   48   I=1
+   49   print "qs",Q
+   50   N=1
+   52   N=N*607
+   54   Temp=int(N/1000)
+   56   Rem1=N-1000*Temp
+   58   N=Rem1
+   60   D=N
+   62   gosub 400
+   63   if K=-1 then goto 68
+   64   I=I+1
+   66   if I<1000 then goto 52
+   68   Pn=Q
+   69   Aas=N
+   70   gosub 516
+   72   Z=Bprod
+   73   print "zz",Z
+   76   Y=Z
+   78   R=E
+   80   Pn=(Q-1)/2
+   81   print "pn",Pn,Aa
+   82   Aas=Aa
+   84   gosub 516
+   86   X=Bprod
+   87   print X
+   88   Temp=Aa*X*X
+   90   Temp2=int(Temp/P)
+   91   Rem1=Temp-Temp2*P
+   92   B=Rem1
+   93   print "bbb",B
+   94   Temp=Aa*X
+   96   Temp2=int(Temp/P)
+   98   X=Temp-Temp2*P
+  100   Temp=int(B/P)
+  102   Rem1=B-P*Temp
+  104   if Rem1=1 then goto 200
+  106   I=1
+  108   M=1
+  110   Pow=2^M
+  111   goto 700
+  112   Rem2=Bprod
+  113   print "rem2",Rem2
+  118   if Rem2=1 then goto 130
+  120   M=M+1
+  122   goto 110
+  130   if M=R then goto 180
+  132   Pow=2^(R-M-1)
+  133   goto 800
+  134   T=Bprod
+  142   Y=T*T
+  144   Temp=int(Y/P)
+  146   Rem1=Y-Temp*P
+  148   Y=Rem1
+  150   Temp=int(M/P)
+  152   Rem1=M-P*Temp
+  154   M=Rem1
+  156   R=Rem1
+  158   Temp=X*T
+  160   Temp2=int(Temp/P)
+  162   Rem1=Temp-Temp2*P
+  164   X=Rem1
+  166   Temp=B*Y
+  168   Temp2=int(Temp/P)
+  170   Rem1=Temp-Temp2*P
+  172   B=Rem1
+  174   goto 100
+  180   print "no square root exists "
+  182   end
+  200   Ix=P-X
+  201   print "square root =",X,"or",Ix
+  202   goto 850
+  400   D=D
+  401   P=P
+  402   De=int(D/2)
+  404   Pe=int(P/2)
+  406   De2=D-De*2
+  408   Pe2=P-Pe*2
+  410   if De2=0 then goto 414
+  412   goto 416
+  414   if Pe2=0 then goto 512
+  416   V=0
+  417   Pe=P
+  418   Ii=0
+  419   print "pefirst",Pe
+  420   Pe2=int(Pe/2)
+  422   Pe3=Pe-Pe2*2
+  424   if Pe3=1 then goto 432
+  426   Pe=Pe2
+  428   V=V+1
+  429   Ii=Ii+1
+  430   if Ii<50 then goto 419
+  432   Ve=int(V/2)
+  434   Ve2=V-Ve*2
+  436   if Ve2=0 then goto 450
+  438   Ae=(D^2-1)/8
+  440   Ae1=int(Ae/2)
+  442   Ae2=Ae-Ae1*2
+  444   Ae3=Ae2+2
+  446   K=(-1)^Ae3
+  448   goto 451
+  450   K=1
+  451   De=D
+  452   if De=0 then goto 510
+  453   V=0
+  454   Ii=0
+  456   De1=int(De/2)
+  458   De2=De-De1*2
+  460   if De2=1 then goto 470
+  462   V=V+1
+  464   De=De1
+  465   Ii=Ii+1
+  466   if Ii<50 then goto 456
+  470   Ve=int(V/2)
+  472   Ve2=V-Ve*2
+  474   if Ve2=0 then goto 486
+  476   Ae=(Pe^2-1)/8
+  478   Ae2=int(Ae/2)
+  480   Ae3=Ae-Ae2*2
+  482   Ae3=Ae3+2
+  484   K=(-1)^Ae3*K
+  486   Ae2=((De-1)*(Pe-1))/4
+  488   Ae3=int(Ae2/2)
+  490   Ae4=Ae2-Ae3*2
+  492   Ae4=Ae4+2
+  494   K=(-1)^Ae4*K
+  496   R=abs(De)
+  497   print "r",R,Pe
+  498   Temp=int(Pe/R)
+  500   De=Pe-Temp*R
+  502   Pe=R
+  503   print "pe",Pe,De
+  504   goto 452
+  510   if Pe=1 then goto 513
+  512   K=0
+  513   print K,Pe
+  514   return
+  516   Coun=1
+  517   Q1=Pn
+  518   if Q1=0 then goto 604
+  520   Ipow=2
+  522   if Ipow>Q1 then goto 526
+  523   Ipow=Ipow*2
+  524   goto 522
+  526   Ie=int(Ipow/2)
+  527   N1=Q1
+  528   Igg1=Aas
+  530   Bprod=Aas
+  532   N1=N1-Ie
+  534   if Ie=1 then goto 620
+  535   Ie=int(Ie/2)
+  536   Bprod=Bprod*Bprod
+  537   if Bprod<P then goto 541
+  538   Itemp=int(Bprod/P)
+  539   Bprod=Bprod-Itemp*P
+  541   if N1<Ie then goto 534
+  543   N1=N1-Ie
+  544   Bprod=Bprod*Igg1
+  545   if Bprod<P then goto 534
+  560   Itemp=int(Bprod/P)
+  561   Bprod=Bprod-Itemp*P
+  562   goto 534
+  563   Coun=Coun+1
+  565   I=I+1
+  567   goto 527
+  590   Bprod=Prod(1)
+  592   if Coun=1 then goto 620
+  593   I=2
+  594   Bprod=Bprod*Prod(I)
+  596   Temp=int(Bprod/P)
+  598   Rem1=Bprod-Temp*P
+  600   Bprod=Rem1
+  601   I=I+1
+  602   if I<Coun+1 then goto 594
+  603   goto 620
+  604   Itemp=int(Aas/P)
+  606   Bprod=Aas-Itemp*P
+  620   return
+  700   Pn=Pow
+  702   Aas=B
+  704   gosub 516
+  706   goto 112
+  800   Pn=Pow
+  802   Aas=Y
+  804   gosub 516
+  806   goto 134
+  850   M=(X^2+Iort)/P
+  851   Y=1
+  852   print "m",M,"x",X,"y",Y,"con",Con
+  853   Itemp=int(X/M)
+  854   Xa=X-Itemp*M
+  855   Xb=Xa-M
+  856   Itemp=int(Y/M)
+  857   Ya=Y-Itemp*M
+  858   goto 940
+  862   X2=(Xa*X+Ya*Y*Iort)/M
+  864   Y2=(X*Ya-Xa*Y)/M
+  865   if X2^2+Iort*Y2^2=P then goto 900
+  866   X=X2
+  867   M=(X2^2+Y2^2*Iort)/P
+  868   X=X2
+  870   Y=Y2
+  871   Con=Con+1
+  872   if Con<8 then goto 853
+  873   goto 853
+  900   X2=abs(X2)
+  901   X2=int(X2)
+  902   Y2=abs(Y2)
+  903   Y2=int(Y2)
+  905   print "x",X2,"y",Y2
+  906   stop
+  920   print "x",X,"y",Y
+  922   stop
+  940   if M=1 then goto 920
+  942   if 2*Xa<M then goto 950
+  944   Xa=Xa-M
+  950   if 2*Ya<M then goto 862
+  952   Ya=Ya-M
+  954   goto 862

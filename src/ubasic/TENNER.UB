@@ -1,0 +1,16 @@
+   10   *Tenner(N,&A(),&Leng,&F)
+   20   ' Tenner"s algorithm for the continued fraction of n^(1/2).
+   25   ' Returns leng = -1 for error.
+   30   ' Modeled on the Pascal version.
+   40   ' 4 May 1990
+   50   local Ub%=200,U,Uu,V,Vv,Sqn
+   60   if N<1 then Leng=-1:return endif
+   70   F=1:Leng=0:Sqn=isqrt(N):A(0)=Sqn
+   80   U=N-Sqn*Sqn:if U=0 then return endif
+  100   V=Sqn:Vv=V:Uu=U
+  110   repeat
+  120   inc Leng:if Leng>Ub% then dec Leng:F=0:return endif
+  140   A(Leng)=(Sqn+V)\U:V=U*A(Leng)-V
+  150   U=(N-V*V)\U
+  160   until and{V=Vv,U=Uu}
+  170   return ' End of subroutine Tenner.

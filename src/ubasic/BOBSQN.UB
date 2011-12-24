@@ -1,0 +1,72 @@
+   10   dim Msm(20),Mbig(20),Iai(20)
+   12   for I=1 to 5
+   14   Mbig(I)=1
+   16   next I
+   20   Msm(1)=5
+   22   Msm(2)=7
+   24   Msm(3)=11
+   26   Msm(4)=13
+   28   Msm(5)=17
+   30   Nms=5
+   32   Mprod=Msm(1)
+   34   for I=1 to Nms-1
+   36   Mprod=Mprod*Msm(I+1)
+   38   next I
+   40   print Mprod
+   41   for J=1 to Nms
+   42   for I=1 to Nms
+   43   if J=I then goto 48
+   44   Mbig(J)=Mbig(J)*Msm(I)
+   45   Itemp=int(Mbig(J)/Msm(J))
+   46   Mbig(J)=Mbig(J)-Itemp*Msm(J)
+   47   print "mbigs",J,Mbig(J)
+   48   next I
+   49   next J
+   50   for I=1,Nms
+   52   Itemp=int(Mbig(I)/Msm(I)
+   54   B=Mbig(I)-Itemp*Msm(I)
+   56   A=Msm(I)
+   58   gosub 810
+   60   Iai(I)=V
+   62   print "iai",Iai(I)
+   64   next I
+  810   U=1
+  811   D=A
+  812   if B=0 then goto 888
+  813   V1=0
+  814   V3=B
+  815   if V3=0 then goto 830
+  816   Qq=int(D/V3)
+  817   T3=D-Qq*V3
+  818   T1=U-Qq*V1
+  819   U=V1
+  820   D=V3
+  821   V1=T1
+  822   V3=T3
+  823   goto 815
+  830   V=(D-A*U)/B
+  831   goto 860
+  840   V=0
+  850   print "uv",U,V
+  860   if U=0 then goto 870
+  862   if U<0 then goto 870
+  863   V=V*(1-A)
+  864   V=int(V)
+  865   print "va",V,A
+  866   Temp=int(V/A)
+  869   V=V-Temp*A
+  870   print "funny",U,V
+  872   goto 890
+  888   V=B
+  890   return
+  917   Big=N
+  918   Little=int(Little)
+  919   Temp=Big\Little
+  920   Rem1=Big-Little*Temp
+  922   if Rem1=0 then goto 940
+  924   Big=Little
+  926   Little=Rem1
+  928   goto 918
+  940   Gcd2=Little
+  942   print "gcdsub",Gcd2
+  950   return

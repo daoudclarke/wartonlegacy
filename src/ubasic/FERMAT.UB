@@ -1,0 +1,18 @@
+   10   *Fermat(A,Ubnd,&F,&G)
+   20   ' Fermat method of factoring.  Factors are returned in f and g.
+   30   ' F and G will be -1 or 0 if failure.
+   40   ' Modeled on the Pascal version.  20 April 1990.
+   45   '
+   50   local T,U,V,S,C=0
+   60   if or{A<1,even(A)} then F=0:G=0:return endif
+   70   T=isqrt(A)
+   80   if res=0 then F=T:G=T:return endif
+   90   inc T:U=2*T+1:V=1:S=T*T-A
+  100   while and{S<>0,C<Ubnd}
+  110   inc C
+  120   if S<0 then S+=U:U+=2 else
+  130   :while (S>0)S-=V:V+=2 wend endif
+  140   wend
+  150   if (C>=Ubnd) then F=-1:G=-1:else
+  160   :F=(U+V-2)\2:G=(U-V)\2 endif
+  170   return ' End of subroutine Fermat

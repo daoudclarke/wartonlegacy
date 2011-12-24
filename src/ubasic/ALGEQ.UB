@@ -1,0 +1,96 @@
+   10   'algeq   by S.A.
+   20   word -200:point 4
+   30   print " * Solve algebraic equations of real coefficients *"
+   40   print " * input example : x^3+2.3*x+4.1                  *":print
+   50   '
+   60   strinput "f(x)=";W#
+   70   if len(W#)<2 then end
+   80   X=_X:F#=val(W#)
+   90   N=deg(F#):if N<3 then goto 60
+  100   dim A(N),X(N)
+  110   US=int(-log(#eps)/log(10))-5
+  120   for I=0 to N:A(I)=coeff(F#,N-I):next
+  130   for I=0 to N:if im(A(I)) then cancel for:print "must be real.":goto 60
+  140   next
+  150   print F#
+  160   randomize 20
+  170   gosub *AlgEq(N,&A(),&X())
+  180   E=alen(N)+1
+  190   for I=1 to N
+  200     X=X(I):print " X(";using(E),I;")= ";using(,US),X;
+  210     X=val(F#,X):if im(X)=0 then print spc(US+5);
+  220     print " ( absF(X)= ";using(,US),abs(F);" )"
+  230   next I:print
+  240   end
+  250   '
+  260   *AlgEq(N,&A(),&X())
+  270      local N1,N2,B,C
+  280   dim B1(N),C1(N)
+  290   N1=N
+  300   gosub *Qfac(A()):N2=1
+  310   gosub *Quad(B,C):N2+=2:N1-=2
+  320   if N1>=3 then gosub *Qfac(B1()):goto 310
+  330   if N1=1 then X(N2)=-B1(1)/B1(0)
+  340      :else B=B1(1)/B1(0):C=B1(2)/B1(0):gosub *Quad(B,C):N2+=2
+  350   gosub *Newton
+  360   return
+  370   '
+  380   *Quad(B,C)
+  390   Disc=sqrt(B^2-4*C)
+  400   X(N2)=(-B+Disc)/2:X(N2+1)=(-B-Disc)/2
+  410   return
+  420   '
+  430   *Qfac(A1())
+  440      local I,Ct,RT,Ml
+  450      local A1,B1,C1,D1,Det,X1,X2,Y1,Y2
+  460   loop
+  470      B=3*(rnd-0.5):C=3*(rnd-0.5)
+  480      for Ct=0 to 29
+  490         B1(0)=A1(0):B1(1)=A1(1)-B*B1(0)
+  500         C1(0)=B1(0):C1(1)=B1(1)-B*C1(0)
+  510         for I=2 to N1
+  520            B1(I)=A1(I)-B*B1(I-1)-C*B1(I-2)
+  530            C1(I)=B1(I)-B*C1(I-1)-C*C1(I-2)
+  540         next
+  550         A1=C1(N1-2):B1=C1(N1-3)
+  560         C1=C1(N1-1)-B1(N1-1):D1=C1(N1-2)
+  570         X1=B1(N1-1):Y1=B1(N1)
+  580         '
+  590         Det=A1*D1-B1*C1
+  600         X2=(D1*X1-B1*Y1)/Det
+  610         Y2=(-C1*X1+A1*Y1)/Det
+  620         '
+  630         B+=X2:C+=Y2
+  640         if and{abs(X2)<=#eps*abs(B),abs(Y2)<=#eps*abs(C)}
+  650           :then cancel for:jump
+  660      next
+  670      if (X2^2+Y2^2)<0.001 then
+  680        :if Ml=1 then print "Apploximation is not sufficient":jump
+  690                :else Ml=1:goto 470
+  700      inc RT:print "Retry";RT;:locate 0
+  710   endloop
+  720   **
+  730   return
+  740   '
+  750   *Newton
+  760      local I,K,Dif,Eps1,Eps2,SX,DX
+  770   Eps1=sft(#eps,7):Eps2=sft(#eps,33)
+  780   for K=1 to N
+  790      repeat
+  800         if absadd(X(K))<Eps1 then X(K)=0 goto 880
+  810         SX=A(0):for I=1 to N:SX=SX*X(K)+A(I):next
+  820         DX=N*A(0):for I=1 to N-1:DX=DX*X(K)+(N-I)*A(I):next
+  830         if absadd(DX)<Eps2 then
+  840            :print " We cannot decide  X(";K;")  in full accuracy becase it is a multiple root.":goto 880
+  850         Dif=SX/DX
+  860         X(K)-=Dif
+  870      until Dif=0
+  880   next
+  890   return
+  900   '
+  910   ' Using Bairstow-Hitchcock method
+  920   ' It will give an suitably accurate answer in any POINT assignment.
+  930   ' The last digit may have an error.
+  940   ' The final stage (Newton's method) decreases the error,
+  950   ' but this routine may be an endless loop.  If this is the case
+  960   ' eliminate repeat-until in *Newton.

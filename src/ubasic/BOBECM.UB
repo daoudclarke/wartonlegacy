@@ -1,0 +1,292 @@
+    1   dim Bb(20),Cc(20),X1(20),X2(20),Y1(20),Y2(20),Dd(20),X3(20),Y3(20)
+    2   dim Xp(20),Yp(20)
+    3   goto 1420
+    4   Nr=10^Nr
+    5   Pow=log(log(Nr))
+    6   Pow=(log(Nr)*Pow)^0.5
+    7   L1=exp(Pow)
+    8   L1=L1^(1/(2^0.5))
+   10   Aa=61
+   12   X=0
+   14   Y=1
+   23   Precod=N
+   25   I=1
+   26   Temp=int(Precod/2)
+   28   Rem1=Precod-Temp*2
+   30   Precod=Temp
+   32   if Temp=0 then goto 700
+   33   if Rem1>0 then goto 40
+   35   I=I+1
+   36   if I<200 then goto 26
+   40   I=1
+   41   Precod=Precod*2+Rem1
+   42   Temp=int(Precod/3)
+   44   Rem1=Precod-Temp*3
+   46   Precod=Temp
+   48   if Temp=0 then goto 700
+   50   if Rem1>0 then goto 53
+   51   I=I+1
+   52   if I<200 then goto 42
+   53   Prn=L1
+   56   N=Precod*3+Rem1
+   64   for I=1 to 20
+   66   X1(I)=0
+   68   X2(I)=0
+   70   Y1(I)=1
+   72   Y2(I)=1
+   74   next I
+   76   Bigsw=0
+  110   Ab=1
+  111   I=1
+  114   Prx1=nxtprm(Ab)
+  115   Ab=Prx1
+  116   if Ab>Prn then goto 600
+  117   for I=1 to 20
+  118   Xp(I)=X2(I)
+  119   Yp(I)=Y2(I)
+  120   next I
+  121   Q=Ab
+  123   Q1=Q
+  124   A=A
+  125   L=int(L1/Q)
+  128   if Q1>L then goto 131
+  129   Q1=Q1*Q
+  130   goto 128
+  131   print Aa,Q1
+  132   gosub 136
+  134   goto 300
+  136   Ee=1
+  138   if Ee>Q1 then goto 146
+  140   Ee=Ee*2
+  142   goto 138
+  146   Ee=Ee/2
+  147   A=A
+  148   Q1=Q1-Ee
+  150   if Ee=1 then goto 299
+  152   Ee=Ee/2
+  154   A=A
+  156   Dy=Y2(1)*2
+  158   if Dy<N then goto 164
+  160   Temp=int(Dy/N)
+  162   Dy=Dy-Temp*N
+  164   if Dy=0 then goto 360
+  165   Bb(1)=Dy
+  166   Prod=Bb(1)
+  168   Dd(1)=Bb(1)
+  170   for I=2 to 20
+  171   Dd(I)=Y2(I)*2
+  172   Prod=Prod*Dd(I)
+  173   if Dd(I)<N then goto 176
+  174   Itemp=int(Dd(I)/N)
+  175   Dd(I)=Dd(I)-Itemp*N
+  176   if Prod<N then goto 180
+  177   Itemp=int(Prod/N)
+  178   Prod=Prod-Itemp*N
+  179   if Prod=0 then goto 360
+  180   Bb(I)=Prod
+  181   next I
+  182   gosub 184
+  183   goto 220
+  184   A=N
+  186   B=Bb(20)
+  188   gosub 800
+  190   if D>1 then goto 1500
+  191   Cc(20)=V*Bb(19)
+  192   Prod2=V
+  193   gosub 1350
+  194   for I=1 to 18
+  195   Prod2=Prod2*Dd(21-I)
+  196   Temp=Prod2*Bb(19-I)
+  198   if Temp<N then goto 204
+  200   Itemp=int(Temp/N)
+  202   Temp=Temp-Itemp*N
+  203   gosub 1200
+  204   Cc(20-I)=Temp
+  205   next I
+  206   Temp=Prod2*Dd(2)
+  208   if Temp<N then goto 214
+  210   Itemp=int(Temp/N)
+  212   Temp=Temp-Itemp*N
+  214   Cc(1)=Temp
+  216   return
+  220   for I=1 to 20
+  222   M1=3*X2(I)*X2(I)+Aa+I-1
+  223   gosub 1300
+  224   M1=M1*Cc(I)
+  225   gosub 1300
+  226   Xt=(-2)*X2(I)+M1*M1
+  227   gosub 1400
+  228   Yt=(-1)*Y2(I)+M1*(X2(I)-Xt)
+  230   gosub 1000
+  232   X2(I)=Xt
+  234   Y2(I)=Yt
+  235   next I
+  236   if Q1<Ee then goto 150
+  238   Q1=Q1-Ee
+  240   Dx=X1(1)-X2(1)
+  242   Temp=int(Dx/N)
+  244   Bb(1)=Dx-Temp*N
+  245   Dd(1)=Bb(1)
+  246   Prod=Bb(1)
+  247   if Bb(1)=0 then goto 360
+  248   for I=2 to 20
+  249   Dd(I)=X1(I)-X2(I)
+  250   Prod=Prod*Dd(I)
+  251   Temp=int(Dd(I)/N)
+  252   Dd(I)=Dd(I)-Temp*N
+  253   Temp=int(Prod/N)
+  254   Prod=Prod-Temp*N
+  256   Bb(I)=Prod
+  257   if Bb(I)=0 then goto 360
+  258   next I
+  259   gosub 184
+  260   for I=1 to 20
+  261   M1=(Y1(I)-Y2(I))*Cc(I)
+  262   Xt=(-1)*X1(I)-1*X2(I)+M1*M1
+  264   Yt=-1*Y1(I)+M1*(X1(I)-Xt)
+  265   A=A
+  266   gosub 1000
+  268   X2(I)=Xt
+  270   Y2(I)=Yt
+  271   next I
+  272   goto 150
+  299   return
+  300   for I=1 to 20
+  302   X1(I)=X2(I)
+  304   Y1(I)=Y2(I)
+  306   next I
+  308   goto 114
+  350   Aa=Aa+20
+  352   goto 64
+  360   Aa=Aa+1
+  362   print "i",I
+  364   A=A
+  366   goto 64
+  500   I=I+1
+  504   goto 350
+  600   Q1=Prn
+  601   if Bigsw=1 then goto 624
+  602   for I=1 to 20
+  606   X3(I)=X2(I)
+  608   Y3(I)=Y2(I)
+  610   next I
+  612   Bigsw=1
+  614   for I=1 to 20
+  616   X1(I)=Xp(I)
+  617   X2(I)=Xp(I)
+  618   Y1(I)=Yp(I)
+  619   Y2(I)=Yp(I)
+  620   next I
+  622   goto 110
+  624   Prcon=1
+  628   Dx=X2(1)-X3(1)
+  630   Temp=int(Dx/N)
+  632   Dd(1)=Dx-Temp*N
+  634   if Dd(1)<0 then goto 1100
+  636   if Dd(1)=0 then goto 360
+  638   Bb(1)=Dd(1)
+  640   Prod=Dd(1)
+  643   for I=2 to 20
+  644   Dd(I)=X2(I)-X3(I)
+  645   Prod=Prod*Dd(I)
+  646   Temp=int(Dd(I)/N)
+  647   Dd(I)=Dd(I)-Temp*N
+  648   Temp=int(Prod/N)
+  649   Prod=Prod-Temp*N
+  650   Bb(I)=Prod
+  651   if Bb(I)=0 then goto 360
+  652   next I
+  653   gosub 184
+  654   for I=1 to 20
+  656   M1=(Y2(I)-Y3(I))*Cc(I)
+  658   Xt=(-1)*X2(I)-1*X3(I)+M1*M1
+  660   Yt=-1*Y2(I)+M1*(X2(I)-Xt)
+  662   gosub 1000
+  664   X2(I)=Xt
+  666   Y2(I)=Yt
+  668   next I
+  670   if Prcon=70000 then goto 350
+  672   Prcon=Prcon+1
+  674   A=A
+  675   print Aa,"sec",Prx1
+  676   goto 628
+  700   print "combination of 2's and 3's"
+  702   end
+  800   if B<0 then goto 804
+  802   goto 810
+  804   B=B+A
+  810   U=1
+  811   D=A
+  812   if B=0 then goto 888
+  813   V1=0
+  814   V3=B
+  815   if V3=0 then goto 828
+  816   Qq=int(D/V3)
+  817   T3=D-Qq*V3
+  818   T1=U-Qq*V1
+  819   U=V1
+  820   D=V3
+  821   V1=T1
+  822   V3=T3
+  823   goto 815
+  828   if D>1 then goto 890
+  830   V=(D-A*U)/B
+  831   goto 860
+  840   V=0
+  850   A=A
+  860   if U=0 then goto 870
+  862   if U<0 then goto 870
+  863   V=V*(1-A)
+  864   V=int(V)
+  865   A=A
+  866   Temp=int(V/A)
+  869   V=V-Temp*A
+  870   A=A
+  872   goto 890
+  888   V=B
+  890   return
+  917   Big=N
+  918   Little=int(Little)
+  919   Temp=Big\Little
+  920   Rem1=Big-Little*Temp
+  922   if Rem1=0 then goto 940
+  924   Big=Little
+  926   Little=Rem1
+  928   goto 918
+  940   Gcd2=Little
+  942   A=A
+  950   return
+ 1000   Temp=int(Xt/N)
+ 1002   Xt=Xt-Temp*N
+ 1004   Temp=int(Yt/N)
+ 1006   Yt=Yt-Temp*N
+ 1010   return
+ 1100   A=A
+ 1102   end
+ 1200   if Prod2<N then goto 1204
+ 1201   Ttem=int(Prod2/N)
+ 1202   Prod2=Prod2-Ttem*N
+ 1204   return
+ 1300   if M1<N then goto 1304
+ 1301   Ttem=int(M1/N)
+ 1302   M1=M1-Ttem*N
+ 1304   A=A
+ 1306   return
+ 1350   if Cc(20)<N then goto 1354
+ 1351   Ttem=int(Cc(20)/N)
+ 1352   Cc(20)=Cc(20)-Ttem*N
+ 1354   return
+ 1400   if Xt<N then goto 1410
+ 1402   Ttem=int(Xt/N)
+ 1404   Xt=Xt-Ttem*N
+ 1410   return
+ 1420   input "code";N
+ 1422   input "what is the likely maximum prime as approx. power of 10";Nr
+ 1424   goto 4
+ 1500   D=int(D)
+ 1502   print "endwell prime =",Prx1
+ 1504   print "prime divisor found on curve",Aa
+ 1506   print "prime divisor =",D
+ 1508   Fact2=int(N/D)
+ 1510   print "other factor =",Fact2
+ 1512   end

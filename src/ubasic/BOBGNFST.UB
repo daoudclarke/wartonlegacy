@@ -1,0 +1,195 @@
+   10   dim Prod(180)
+   40   Blim=0
+   42   Ulim=200
+   44   Lprx1=43059
+   46   Icon=0
+   48   Isivl=100
+   50   N=121932631137021795226185032752758725782151044046102621551703
+   52   M1=7041848180
+   54   M2=7041848177
+   56   Ia0=2774485699
+   58   Ia1=1037288717
+   60   Ia2=1295337210
+   62   Ia3=785872630
+   64   Ia4=359019090
+   66   Ia5=789844842
+  198   Ia=1
+  199   Ib=1
+  200   goto 450
+  202   Iabia=abs(Ia)
+  203   Iabib=abs(Ib)
+  204   if Iabib>Iabia then goto 220
+  206   Big=Iabia
+  208   Little=Iabib
+  210   gosub 918
+  212   if Gcd2=1 then goto 300
+  214   Ia=Ia+1
+  215   if Ia>Isivl then goto 240
+  216   goto 200
+  220   Big=Iabib
+  222   Little=Iabia
+  224   gosub 918
+  226   if Gcd2=1 then goto 300
+  228   Ia=Ia+1
+  230   if Ia>Isivl then goto 240
+  232   goto 200
+  240   Ib=Ib+1
+  242   if Ib>Isivl then goto 400
+  244   Ia=1
+  246   goto 200
+  300   Ib=Ib
+  304   Kia=Ia
+  306   Kib=Ib
+  308   gosub 1000
+  312   Kia=Ia*(-1)
+  316   gosub 1000
+  326   Ia=Ia+1
+  328   if Ia>Isivl then goto 340
+  330   goto 200
+  340   Ib=Ib+1
+  342   if Ib>Isivl then goto 400
+  344   Ia=1
+  346   goto 200
+  400   Ia=1
+  402   Ib=1
+  404   Blim=Blim+100
+  406   Isivl=Isivl+100
+  408   if Isivl=Ulim+100 then goto 420
+  410   goto 200
+  420   end
+  450   if Ia>Blim then goto 460
+  452   if Ib>Blim then goto 460
+  454   Ia=Blim+1
+  456   goto 202
+  460   if Ia=1 then goto 300
+  462   if Ib=1 then goto 300
+  464   goto 202
+  510   Q1=Litd
+  512   Pn=Litd
+  514   Coun=1
+  520   I=1
+  522   Prod(I)=2
+  523   I=I+1
+  524   if I<180 then goto 522
+  526   I=1
+  527   Bigi=1
+  528   J=1
+  530   if Bigi>Pn then goto 560
+  532   if Bigi=Pn then goto 590
+  534   Prep=Prod(I)
+  535   Prod(I)=Prod(I)*Prod(I)
+  536   Temp=int(Prod(I)/Q1)
+  537   Rem1=Prod(I)-Temp*Q1
+  538   Prod(I)=Rem1
+  539   Bigi=Bigi*2
+  541   J=J+1
+  543   if J<181 then goto 530
+  560   Pn=Pn-int(Bigi/2)
+  561   Prod(I)=Prep
+  563   Coun=Coun+1
+  565   I=I+1
+  567   goto 527
+  590   Bprod=Prod(1)
+  592   if Coun=1 then goto 604
+  593   I=2
+  594   Bprod=Bprod*Prod(I)
+  596   Temp=int(Bprod/Q1)
+  598   Rem1=Bprod-Temp*Q1
+  600   Bprod=Rem1
+  601   I=I+1
+  602   if I<Coun+1 then goto 594
+  604   Tst=Bprod-2
+  606   Temp=int(Tst/Q1)
+  608   Rem1=Tst-Temp*Q1
+  610   if Rem1>0 then goto 620
+  612   print Q1,"is probably prime"
+  614   Indp=1
+  616   goto 630
+  620   print Q1,"is composite"
+  622   Indp=0
+  630   return
+  810   Iu=1
+  811   Id=Ia
+  812   if Ib=0 then goto 888
+  813   Iv1=0
+  814   Iv3=Ib
+  815   if Iv3=0 then goto 830
+  816   Iqq=int(Id/Iv3)
+  817   It3=Id-Iqq*Iv3
+  818   It1=Iu-Iqq*Iv1
+  819   Iu=Iv1
+  820   Id=Iv3
+  821   Iv1=It1
+  822   Iv3=It3
+  823   goto 815
+  830   Iv=(Id-Ia*Iu)/Ib
+  860   if Iu=0 then goto 890
+  862   if Iu<0 then goto 890
+  863   Iv=Iv*(1-A)
+  866   Itemp=int(Iv/Ia)
+  869   Iv=Iv-Itemp*Ia
+  872   goto 890
+  888   Iv=Ib
+  890   return
+  918   Little=int(Little)
+  919   Temp=Big\Little
+  920   Rem1=Big-Little*Temp
+  922   if Rem1=0 then goto 940
+  924   Big=Little
+  926   Little=Rem1
+  928   goto 918
+  940   Gcd2=Little
+  944   return
+ 1000   Norma=Ia5*Kia^5+Ia4*Kia^4*Kib+Ia3*Kia^3*Kib^2+Ia2*Kia^2*Kib^3
+ 1001   Flim=10000
+ 1002   Norma=Norma+Ia1*Kia*Kib^4+Ia0*Kib^5
+ 1003   print "norma",Norma,"icon",Icon
+ 1004   Litt=(Kia*M2-Kib*M1)
+ 1005   Litd=abs(Litt)
+ 1006   Iab=1
+ 1007   print "litd",Litd,"ia=",Kia,"ib=",Kib
+ 1008   Prex=0
+ 1010   Iprx1=nxtprm(Iab)
+ 1163   Iab=Iprx1
+ 1164   if Iprx1>Lprx1 then goto 1500
+ 1165   if Iprx1>Flim then goto 1200
+ 1166   Itemp=int(Litd/Iab)
+ 1168   Irem1=Litd-Itemp*Iab
+ 1170   if Itemp=0 then goto 1300
+ 1174   if Irem1>0 then goto 1010
+ 1176   Litd=Itemp
+ 1178   if Litd<Lprx1 then goto 1300
+ 1180   goto 1166
+ 1200   if Litd=Prex then goto 1204
+ 1201   gosub 510
+ 1202   if Indp=1 then goto 1500
+ 1203   Prex=Litd
+ 1204   Flim=Flim+100000
+ 1206   goto 1166
+ 1300   Litt=Norma
+ 1301   Flim=10000
+ 1302   Litd=abs(Litt)
+ 1304   Iab=1
+ 1305   Prex=0
+ 1306   Iprx1=nxtprm(Iab)
+ 1308   Iab=Iprx1
+ 1364   if Iprx1>Lprx1 then goto 1500
+ 1365   if Iprx1>Flim then goto 1400
+ 1366   Itemp=int(Litd/Iab)
+ 1368   Irem1=Litd-Itemp*Iab
+ 1370   if Itemp=0 then goto 1386
+ 1374   if Irem1>0 then goto 1306
+ 1376   Litd=Itemp
+ 1378   if Litd<Lprx1 then goto 1386
+ 1380   goto 1366
+ 1386   Icon=Icon+1
+ 1388   print "hitno",Icon,"a=",Kia,"b=",Kib,Litt
+ 1390   goto 1500
+ 1400   if Litd=Prex then goto 1404
+ 1401   gosub 510
+ 1402   if Indp=1 then goto 1500
+ 1403   Prex=Litd
+ 1404   Flim=Flim+100000
+ 1406   goto 1366
+ 1450   stop
+ 1500   return

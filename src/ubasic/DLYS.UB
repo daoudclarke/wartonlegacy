@@ -1,0 +1,145 @@
+   10   ' Driver program for LDIOSYS
+   12   ' 19 June 1990
+   15   word 20
+   20   dim A(15,16),V(15,15)
+   30   print "How many rows in the coeff. matrix":input R
+   40   print "How many columns":input C
+   80   gosub *Getarray(R,C,&A())
+  100   gosub *Ldiosys(R,C,&A(),&V(),&Soln,&Rank)
+  290   print=print + lprint
+  300   gosub *Report(R,C,&A(),&V(),&Soln,&Rank)
+  302   print:print:print:print=lprint+"Malm.UBD"
+  305   gosub *Report2(R,C,&A(),&V(),&Soln,&Rank)
+  306   print:print:print:print:print:
+  310   print=print
+  400   end
+  490   '
+  495   '
+  500   *Getarray(R,C,&A())
+  510   ' Obtains from the keyboard the coefficient array A.
+  520   '15 June 1990
+  530   local I%,J%,T%
+  540   print "Enter the equation coefficients including the R.H.S."
+  550   print "Follow each number with return."
+  560   for I%=1 to R:for J%=1 to C+1:input A(I%,J%):next J%
+  570   print "eq'n completed":next I%
+  580   print "The matrix (by columns) is:"
+  590   for J%=1 to C+1:for I%=1 to R:print A(I%,J%):next I%
+  600   print "Lightly press return to continue":T%=input$(1):print
+  610   :next J%
+  620   repeat input "Do you want to change an entry (1 or 0)";T%
+  630   if T%=1 then
+  640   :print "Which row ":input I%:print "Which column ":input J%
+  650   :print "New value: ":input A(I%,J%)
+  660   :endif
+  670   until T%=0
+  680   return ' End of subroutine Getarray.
+  790   '
+  795   '
+  800   *Report(R,C,&A(),&V(),&Soln,&Rank)
+  810   ' Outputs the results in a format that is O.K. if the matrices are not
+  820   ' too big nor are the numbers.
+  830   ' 18 June 1990
+  850   local I%,J%,S
+  860   if Soln=0 then print "No solution." endif
+  870   if Rank=0 then print "The rank is zero." else
+  875   :print "The rank is ";Rank
+  880   :print "The augmented coeff. matrix followed by the record matrix:"
+  890   :for I%=1 to R:print "        ";
+  900   :for J%=1 to C+1:print A(I%,J%),
+  910   :next J%:print:next I%
+  920   :for I%=1 to C:print "        ";
+  930   :for J%=1 to C:print V(I%,J%),
+  940   :next J%:print:next I%
+  950   :for I%=1 to 3:print:next I%
+  960   :if Soln then
+  970   ::for I%=1 to C:S=0:print "        ";
+  980   ::for J%=1 to Rank:S+=V(I%,J%)*A(J%,C+1):next J%
+  990   ::print S,:print "          ";
+ 1000   ::for J%=Rank+1 to C:print V(I%,J%),:next J%
+ 1010   ::print:next I%
+ 1020   ::endif ' if soln
+ 1030   :endif:return ' End of SubroutineReport.
+ 1090   '
+ 1095   '
+ 1100   *Report2(R,C,&A(),&V(),&Soln,&Rank)
+ 1110   ' Outputs the results one number to a line.
+ 1130   ' 19 June 1990.
+ 1140   local I%,J%,S
+ 1160   print "The augmented coefficient matrix by columns:":print
+ 1170   for J%=1 to C+1:for I%=1 to R:print A(I%,J%):next I%:print:next J%
+ 1200   print:print "The record matrix by columns:":print
+ 1210   for J%=1 to C:for I%=1 to C:print V(I%,J%):next I%:print:next J%
+ 1230   print:print "The rank is ";Rank
+ 1240   if Soln=0 then print "No solution":return endif
+ 1250   print "A particular solution (column):":print
+ 1260   for I%=1 to C:S=0
+ 1270   for J%=1 to Rank:S+=V(I%,J%)*A(J%,C+1):next J%
+ 1280   print S:next I%:print
+ 1300   print "The coeff. matrix of the parameters(by columns):":print
+ 1310   for I%=Rank+1 to C:for J%=1 to C:print V(J%,I%):next J%:print:next I%
+ 1320   return ' End of subroutine Report2.
+ 1330   '
+ 1335   '
+ 2320   *LDiosys(R,C,&A(),&V(),&Soln,&Rank)
+ 2330   ' Solve the linear Diophantine system represented by the (augmented)
+ 2340   ' matrix A().  Matrix V() contains a record of the manipulations.
+ 2350   ' A is R by C+1, while V is C by C.  Soln is 1 if there is a solution
+ 2360   ' and is 0 if there is no solution.  Rank is the rank of the system.
+ 2370   '
+ 2380   ' NOTE - there is a GLOBAL variable J% - required to receive the value
+ 2390   ' of the function Pivotind, which LDiosys calls.
+ 2400   '
+ 2410   ' 19 June 1990
+ 2420   local K%,M%,N%,I%,Done,Te,Found,P
+ 2430   for I%=1 to C:for K%=1 to C:V(I%,K%)=0:next K%:next I%
+ 2440   for I%=1 to C:V(I%,I%)=1:next I%
+ 2450   Done=0:I%=0:Soln=1
+ 2460   while and{I%<R,I%<C,Done=0}
+ 2470   inc I%:J%=fnPivotind(I%)
+ 2480   if J%=0 then K%=I%:Found=0
+ 2490   :while and{Found=0,K%<R}
+ 2500   :inc K%:J%=fnPivotind(K%)
+ 2510   :if J%<>0 then Found=1 endif
+ 2520   :wend
+ 2530   :if Found=0 then Done=1 else
+ 2540   :for M%=1 to C+1:swap A(K%,M%),A(I%,M):next M%
+ 2550   :endif endif
+ 2560   if Done=0 then
+ 2570   :repeat K%=J%:P=A(I%,J%)
+ 2580   :for N%=I% to C
+ 2590   :if N%<>J% then Te=A(I%,N%)\P
+ 2600   :for M%=I% to R:A(M%,N%)-=Te*A(M%,J%):next M%
+ 2610   :for M%=1 to C:V(M%,N%)-=Te*V(M%,J%):next M%
+ 2620   :endif:next N%
+ 2630   :J%=fnPivotind(I%)
+ 2640   :until J%=K%
+ 2650   :if I%<>J% then
+ 2660   :for M%=I% to R:swap A(M%,I%),A(M%,J%):next M%
+ 2670   :for M%=1 to C:swap V(M%,I%),V(M%,J%):next M%
+ 2680   :endif
+ 2690   :if A(I%,C+1)@A(I%,I%)<>0 then Done=1 else
+ 2700   :A(I%,C+1)\=A(I%,I%):A(I%,I%)=1
+ 2710   :for M%=I%+1 to R:A(M%,C+1)-=A(M%,I%)*A(I%,C+1):A(M%,I%)=0:next M%
+ 2720   :endif
+ 2730   :endif ' done=0
+ 2740   wend
+ 2750   Te=min(R,C):Rank=0
+ 2760   for K%=1 to Te:if A(K%,K%)<>0 then inc Rank endif next K%
+ 2770   K%=0
+ 2780   while and{K%<Rank,Soln}:inc K%:if A(K%,K%)<>1 then Soln=0 endif wend
+ 2790   for K%=Rank+1 to R:if A(K%,C+1)<>0 then Soln=0 endif:next K%
+ 2800   return ' End of subroutine LDiosys.
+ 2810   '
+ 2820   fnPivotind(Kk%)
+ 2830   ' Returns the column index of the smallest (in absolute value )
+ 2840   ' non-zero entry in row Kk% of the coefficient matrix A.
+ 2850   ' If all entries are zero, then Pivotind = 0.
+ 2855   ' 15 June 1990
+ 2860   local T,S,K%,J%
+ 2870   T=abs(A(Kk%,1))
+ 2880   if T<>0 then K%=1 else K%=0 endif
+ 2890   for J%=2 to C
+ 2900   S=abs(A(Kk%,J%))
+ 2910   if and{S<>0,or{T=0,S<T}} then T=S:K%=J% endif
+ 2920   next J%:return(K%) ' End of function Pivotind.

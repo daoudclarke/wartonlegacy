@@ -1,0 +1,30 @@
+   12   dim Ihtem(6)
+   13   goto 945
+  945   Ic=1
+  946   Lprx1=292458
+  947   Litt=12345678901234567890123456979+534+429
+  949   gosub 1005
+  951   if Litd>14600000000 then goto 960
+  953   print "ic",Ic
+  955   stop
+  960   Ic=Ic+1
+  961   print "ic",Ic
+  962   Litt=Litt+1
+  964   goto 949
+ 1000   Norma=Ia5*Kia^5-Ia4*Kia^4*Kib+Ia3*Kia^3*Kib^2-Ia2*Kia^2*Kib^3
+ 1002   Norma=Norma+Ia1*Kia*Kib^4-Ia0*Kib^5
+ 1004   Litt=(Kia*M2+Kib*M1)*Norma
+ 1005   Litd=abs(Litt)
+ 1006   Iab=1
+ 1008   Iprx1=nxtprm(Iab)
+ 1163   Iab=Iprx1
+ 1164   if Iprx1>Lprx1 goto 1190
+ 1166   Itemp=int(Litd/Iab)
+ 1168   Irem1=Litd-Itemp*Iab
+ 1170   if Itemp=0 then goto 1186
+ 1174   if Irem1>0 then goto 1008
+ 1176   Litd=Itemp
+ 1180   goto 1166
+ 1186   Icon=Icon+1
+ 1188   print "hitno",Icon,"a=",Kia,"b=",Kib,Litt
+ 1190   return

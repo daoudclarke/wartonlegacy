@@ -1,0 +1,9 @@
+   10   dim PRX(41)
+  110   PRX(1)=2
+  111   for I=1 to 40
+  112   A=PRX(I)
+  113   I2=I+1
+  115   PRX(I2)=nxtprm(A)
+  117   if PRX(I2)>1999 then goto 122
+  120   next I
+  121   print PRX(40)

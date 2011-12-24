@@ -1,0 +1,17 @@
+ 1100   *Rho(N,C,Ubnd,&F,&G)
+ 1110   ' Pollard rho method of factoring n, as modified by Brent.
+ 1120   ' Modeled on the Pascal version.
+ 1130   ' 15 May 1990
+ 1140   local Cc=20,Front,Rear=2,Prod=1,T,I,Count=0,Index=1
+ 1150   if N<0 then F=0:G=0:return endif
+ 1160   Front=C+4
+ 1170   while Count<=Ubnd
+ 1180   for I=0 to Index
+ 1190   Front=(Front*Front+C)@N:Prod=((Rear-Front)*Prod)@N
+ 1200   inc Count:if Count@Cc=0 then T=gcd(N,Prod)
+ 1210   :if T>1 then F=T:G=N\F:cancel for:return endif endif
+ 1220   next I
+ 1230   Rear=Front:Index=2*Index
+ 1240   for I=1 to Index:Front=(Front*Front+C)@N:next I
+ 1250   wend ' If here, failure.
+ 1260   F=-1:G=-1:return ' End of subroutine Rho.

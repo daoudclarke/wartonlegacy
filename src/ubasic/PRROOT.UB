@@ -1,0 +1,16 @@
+ 1050   fnPrroot(N)
+ 1060   ' Returns the smallest positive primitive root of n, which
+ 1070   ' is assumed prime.  N-1 must be factorable by the function prmdiv.
+ 1080   ' Returns 0 for failure or error.
+ 1090   local R=1,Factor,N1,Te,T,Tt,F%
+ 1100   if N<3 then if N=2 then return(1) else return(0) endif endif
+ 1110   N1=N-1
+ 1120   repeat inc R:Te=N1:F%=1
+ 1130   repeat
+ 1140   Factor=prmdiv(Te):if Factor=0 then return(0) endif
+ 1150   repeat Te=Te\Factor until res
+ 1160   Te=Factor*Te+res:Tt=N1\Factor
+ 1170   T=modpow(R,Tt,N)
+ 1180   if T=1 then F%=0:Te=1 endif
+ 1190   until Te=1:until F%
+ 1200   return(R) ' End of function Prroot.

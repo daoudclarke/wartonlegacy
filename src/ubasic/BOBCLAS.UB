@@ -1,0 +1,153 @@
+    2   dim Iq(50)
+    3   Big=5
+    4   Little=3
+    5   gosub 917
+   10   input "code";N
+   16   Isw=0
+   18   Icon=0
+   20   Itemp=int(N/4)
+   22   Irem=N-Itemp*4
+   24   if Irem=1 then goto 40
+   26   Dd=4*N
+   28   Itemp=sqrt(Dd)
+   29   Dd1=sqrt(Dd)
+   30   D=int(Itemp)
+   32   B=2*int(D/2)
+   33   print "b",B
+   34   goto 48
+   40   Dd=N
+   42   Itemp=sqrt(Dd)
+   43   Dd1=sqrt(Dd)
+   44   D=int(Itemp)
+   46   B=2*int((D-1)/2)+1
+   47   print "b",B
+   48   I=0
+   50   Itemp=sqrt(D)
+   52   L=int(Itemp)
+   54   F1=1
+   56   F2=B
+   57   F3=(B*B-Dd)/4
+   58   gosub 60
+   59   goto 96
+   60   Aba=abs(F1)
+   61   gosub 300
+   62   A=A
+   63   A=A
+   65   goto 91
+   91   F1=F3
+   92   F3=(B1*B1-Dd)/(4*F3)
+   93   F2=B1
+   94   A=A
+   95   return
+   96   I=I+1
+   97   Itemp=int(I/2)
+   98   Irem=I-Itemp*2
+  100   if Irem=1 then goto 120
+  101   if F1<0 then goto 118
+  102   Itemp=sqrt(F1)
+  103   A=A
+  104   Itt=int(Itemp)
+  105   A=A
+  106   if Itt<Itemp then goto 118
+  108   if Itt>Itemp then goto 118
+  110   for Ii=1 to Icon
+  112   if Itt=Iq(Ii) then goto 118
+  114   next Ii
+  115   A=A
+  116   goto 130
+  118   if F1=1 then goto 900
+  120   if abs(F1)>L then goto 125
+  121   A=A
+  122   Icon=Icon+1
+  123   A=A
+  124   Iq(Icon)=abs(F1)
+  125   A=A
+  126   gosub 60
+  127   A=A
+  128   goto 96
+  130   Big=Itt
+  132   Little=F2
+  133   A=A
+  134   gosub 915
+  136   if Gcd2=1 then goto 150
+  137   if Gcd2=0 then goto 150
+  138   Big=Gcd2
+  140   Little=Dd
+  142   gosub 915
+  144   if Gcd2=1 then goto 150
+  146   Gcd2=Gcd2*Gcd2
+  147   print "cond1 gcd2=",Gcd2
+  148   stop
+  150   F1=Itt
+  152   F2=-1*F2
+  153   A=A
+  154   F3=F3*Itt
+  156   if Isw=0 then goto 170
+  157   A=A
+  158   if F2=Ffb then goto 200
+  160   Ffb=F2
+  162   gosub 60
+  164   goto 157
+  170   Isw=1
+  172   goto 160
+  200   Itemp=int(abs(F1)/2)
+  201   print "f1",F1
+  202   Irem=abs(F1)-Itemp*2
+  204   if Irem=1 then goto 210
+  206   Gcd2=Itemp
+  208   print "factor found=",Gcd2,"n=",N
+  209   goto 220
+  210   Gcd2=int(abs(F1))
+  212   goto 208
+  220   Fact2=int(N/Gcd2)
+  222   print "cofactor=",Fact2
+  224   if Gcd2=1 then goto 230
+  226   if Fact2=1 then goto 230
+  228   goto 260
+  230   Itemp=int(N/4)
+  232   Irem=N-4*Itemp
+  234   if Irem=3 then goto 240
+  236   if Irem=1 then goto 244
+  238   print "divide by 2 and retry is an option"
+  239   goto 260
+  240   print "multiply n by 3 and retry is an option"
+  242   goto 260
+  244   print "multiply n by 5 and retry is an option"
+  260   end
+  300   Abc=abs(F3)*2
+  302   if abs(F3)<Dd1 goto 330
+  304   Dis=-1*F2+abs(F3)
+  306   Abdis=abs(Dis)
+  308   Itemp=int(Abdis/Abc)
+  309   if Dis>0 then goto 320
+  310   B1=-1*F2-Itemp*Abc
+  312   if B1>-1*abs(F3) then goto 350
+  314   B1=B1+Abc
+  316   goto 350
+  320   B1=-1*F2+Itemp*Abc
+  322   goto 312
+  330   Dis=-1*F2-Dd1+Abc
+  332   Abdis=abs(Dis)
+  334   Itemp=int(Abdis/Abc)
+  335   if Dis<0 goto 346
+  336   B1=-1*F2-Itemp*Abc
+  338   if B1>Dd1-Abc then goto 350
+  340   B1=B1+Abc
+  342   goto 350
+  346   B1=-1*F2+Itemp*Abc
+  348   goto 338
+  350   return
+  900   print "premature end"
+  902   stop
+  915   if Big=0 then goto 944
+  916   if Little=0 then goto 944
+  917   Itemp=int(Big/Little)
+  919   Irem=Big-Itemp*Little
+  921   if Irem=0 then goto 940
+  923   Big=Little
+  925   Little=Irem
+  927   goto 917
+  940   Gcd2=Little
+  942   goto 950
+  944   Gcd2=0
+  950   return

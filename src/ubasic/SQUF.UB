@@ -1,0 +1,19 @@
+   10   *Squf(N,&F)
+   20   ' Shanks square form factorization of N.  F is a factor.
+   30   ' Version using the numerator of the convergent.
+   40   ' Second of 3 May 1990.
+   50   local H1,H2=1,P,Q,Pp=0,Qq=1,Qqq=N,Te,A,R=0,K,I=0,Ii=0,Ta
+   60   K=isqrt(N):if not res then F=K:return endif:H1=K:A=K
+   70   '
+   80   ' Loop starts here.
+   90   inc Ii:if Ii>2000 then F=0:return endif
+  100   P=K-R:Q=Qqq+A*(Pp-P)
+  110   A=(P+K)\Q:R=res:inc I
+  120   Te=A*H1+H2:H2=H1:H1=Te
+  130   Pp=P:Qqq=Qq:Qq=Q
+  140   Te=isqrt(Q):Ta=res
+  150   if or{odd(I),Ta<>0} then 90
+  160   Te=H2-Te
+  170   F=gcd(Te,N)
+  180   if or{F=1,F=N} then 90
+  190   return ' End of subroutine Squf.

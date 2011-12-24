@@ -1,0 +1,70 @@
+   10   ' Driver program for Tdvd and more
+   20   '10 May 1990
+   60   dim P(100),M(100)
+   65   print:print "*******":print
+   70   print "Number, please : ":input N
+   75   print N
+   80   gosub *Tdvd(N,&P(),&M(),&K,&B)
+  100   print "Length is ";K:print "Remaining factor: ";B
+  110   print "****** Prime *******"," ***** Multiplicity *****"
+  120   for I=1 to K:print P(I),M(I):next I
+  130   if B<>1 then print "Not completely factored":end endif
+  140   gosub *Tau(&M(),K,&Ans)
+  150   print "Number of divisors is ";Ans
+  160   gosub *Sigma(&P(),&M(),K,&Ans)
+  170   print "Sum of divisors is ";Ans
+  180   gosub *Lambda(&P(),&M(),K,&Ans)
+  190   print "Carmichael: ";Ans
+  195   print:print "*********":print
+  200   end
+ 1200   *Tau(&M(),K,&Ta)
+ 1210   ' Modeled on the Pascal version. M() is an input parameter.
+ 1220   ' 8 May 1990
+ 1230   local I
+ 1240   Ta=1
+ 1250   for I=1 to K:Ta=Ta*(M(I)+1):next I
+ 1260   return ' End of subroutine Tau.
+ 2260   *Sigma(&P(),&M(),K,&Sig)
+ 2270   ' Modeled on the Pascal version. P() and M() are input parameters.
+ 2280   ' 8 May 1990
+ 2290   local I,J,Tt,Te
+ 2300   Sig=1
+ 2310   for J=1 to K:Tt=1:Te=1
+ 2320   for I=1 to M(J):Tt*=P(J):Te+=Tt:next I
+ 2330   Sig*=Te
+ 2340   next J:return ' End of subroutine Sigma.
+ 4440   *Lambda(&P(),&M(),K,&Lam)
+ 4450   ' P() and M() are input parameters. This computes the smallest
+ 4460   ' universal exponent.  Modeled on the Pascal version.
+ 4470   ' 10 May 1990
+ 4480   local I,J,Ii,T,Te
+ 4490   if K=0 then Lam=0:return endif
+ 4500   Ii=1:Lam=1
+ 4510   if P(1)=2 then
+ 4520   :if M(1)=2 then Lam=2 else for I=1 to M(1)-2:Lam=2*Lam next I endif
+ 4530   :Ii=2 endif
+ 4540   for J=Ii to K
+ 4550   Te=1:T=P(J)
+ 4560   for I=1 to M(J)-1:Te*=T next I
+ 4570   T=T-1:Te*=T:T=Lam*Te
+ 4580   Te=gcd(Lam,Te):Lam=T\Te
+ 4590   next J:return ' End of subroutine Lambda.
+ 6990   *Tdvd(A,&P(),&M(),&K,&B)
+ 7000   ' Modeled on the Pascal version
+ 7010   ' Note that all prime factors found by Tdvd will be less
+ 7020   ' than 2^34 = 1 71798 69184.
+ 7030   ' 9 May 1990
+ 7040   local Ub%=12251,Ubb=17179869184
+ 7050   local Sga%,Count%=0,I%=0,Z,Q
+ 7060   K=0:if A=0 then B=0:return endif
+ 7070   if A>0 then Sga%=1 else Sga%=-1 endif
+ 7080   A=abs(A):Z=2
+ 7090   while and{I%<Ub%,Z*Z<=A}
+ 7100   inc I%:Z=prm(I%)
+ 7110   repeat Q=A\Z:if res=0 then inc Count%:A=Q endif until res
+ 7120   if Count%>0 then inc K:P(K)=Z:M(K)=Count%:Count%=0 endif
+ 7130   wend
+ 7140   if A<Ubb then B=Sga%
+ 7150   :if A<>1 then inc K:P(K)=A:M(K)=1 endif
+ 7160   :else B=A*Sga% endif
+ 7170   return ' End of subroutine Tdvd.

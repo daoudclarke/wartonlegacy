@@ -1,0 +1,40 @@
+   10   'TOWER OF HANOI
+   20   ' for UBASIC86 version 7
+   30   ' from H.Okumura: Computer Algorithm Jiten (Gijutsu-Hyouron-Sha)
+   40   '
+   50   N0=12:'number of disks
+   60   dim B%(3)
+   70   gosub *DisplayInit
+   80   Src=1:Dst=3:B%(Src)=N0
+   90   gosub *Move(N0,Src,Dst)
+  100   locate 0,N0+6:end
+  110   '
+  120   *Move(N,Src,Dst)
+  130    if N>1 then gosub *Move(N-1,Src,6-Src-Dst)
+  140                gosub *Display
+  150    if N>1 then gosub *Move(N-1,6-Src-Dst,Dst)
+  160   return
+  170   '
+  180   *DisplayInit
+  190   local I,J,K
+  200    cls
+  210    for J=1 to N0
+  220       locate 37-3*N0+J,N0-J+6:for K=1 to N0-J+1:print "€€";:next
+  230    next
+  240    for I=2 to 3
+  250       for J=1 to N0
+  260          locate 35+(2*I-5)*N0+2*I+N0,N0-J+6:print "≥≥";
+  270       next
+  280    next
+  290   return
+  300   '
+  310   *Display
+  320   local I1,I2,J1,J2,K
+  330    inc Stp:locate 16,0:print "STEP=";Stp;
+  340    locate 28,0:print "Move disk ";N;" from ";Src;" to ";Dst;"      ";
+  350    I1=Src:J1=B%(Src):dec B%(Src)
+  360    inc B%(Dst):I2=Dst:J2=B%(Dst)
+  370    locate 36+(2*I1-5)*N0+2*I1,N0-J1+6:print spc(N0-1);"≥≥";spc(N0-1)
+  380    locate 36+(2*I2-5)*N0+2*I2+N0-N,N0-J2+6:for K=1 to N:print "€€";:next
+  390    for I1=0 to (12-N0)*2000:next:'timer
+  400   return

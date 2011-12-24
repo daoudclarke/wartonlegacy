@@ -1,0 +1,61 @@
+   10   'PPMP4B version 2.0
+   20   '
+   30   '  factorization by PPMPQS
+   40   '        1991/92 by Yuji KIDA
+   50   '
+   60   word -23:point -2
+   70   '
+   80   Pc$#=version
+   90   if instr(Pc$#,"PC9801") then PC=0
+  100   :elseif instr(Pc$#,"IBM-PC") then PC=1
+  110   :elseif instr(Pc$#,"FMR") then PC=2
+  120   :else PC=10
+  130   '
+  140   'enable 20-31 bit address lines
+  150   if PC=0 then
+  160     :out 0xf2,0
+  170     :out 0xf2,0
+  180   :elseif PC=1 then
+  190     :out 0x64,0xd1:while bit(1,inp(0x64)) wend
+  200     :out 0x60,0xdf:while bit(1,inp(0x64)) wend
+  210     :out 0x64,0xff:while bit(1,inp(0x64)) wend
+  220   :elseif PC=2 then
+  230     :out 0x24,1
+  240     :out 0x24,1
+  250   :else
+  260     :print "not yet supported":end
+  270   :endif
+  280   '
+  290   print:print "4b. construct the reduced matrix";:locate 56:print date
+  300   '
+  310   open "ppmpdrv" for input as #1
+  320     input #1,XMEMsize
+  330     input #1,DataDrv$
+  340     input #1,Drv1%,SZ1
+  350     input #1,Drv2%,SZ2
+  360   close #1
+  370   MatrixSize=SZ1+SZ2
+  380   '
+  390   open DataDrv$+"PPMPDAT1" for input as #1
+  400     input #1,MSG$
+  410     input #1,N
+  420     input #1,SZ
+  430   close #1
+  440   '
+  450   dim MP%(25000)
+  460   bload "PPMP4B",MP%(DataDrv$)
+  470   '
+  480   MP%(0)=0:MP%(1)=XMEMsize
+  490   MP%(2)=MatrixSize\2
+  500   MP%(3)=Drv1%:MP%(4)=SZ1\2
+  510   MP%(5)=Drv2%
+  520   call MP%()
+  530   if MP%(0)=-1 then print "disk error":beep:stop:end
+  540   if MP%(0)=-2 then print "lack of data":beep:stop:end
+  550   if MP%(0)=-3 then print "lack of memory":beep:stop:end
+  560   '
+  570   MP%(0)=1:call MP%()
+  580   if MP%(0)=-1 then print "disk/data error":beep:stop
+  590   print "full size =";SZ;" -> reduced size =";MatrixSize
+  600   '
+  610   run "ppmp5"

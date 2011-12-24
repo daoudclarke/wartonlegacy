@@ -1,0 +1,141 @@
+   10   'PPMP3A version 2.0
+   20   '
+   30   '  factorization by PPMPQS
+   40   '        1991/92 by Yuji KIDA
+   50   '
+   60   word -23:point -2
+   70   Pc$#=version
+   80   if instr(Pc$#,"PC9801") then PC=0
+   90   :elseif instr(Pc$#,"IBM-PC") then PC=1
+  100   :elseif instr(Pc$#,"FMR") then PC=2
+  110   :else PC=10
+  120   '
+  130   'enable 20-31 bit address lines
+  140   if PC=0 then
+  150     :out 0xf2,0
+  160     :out 0xf2,0
+  170   :elseif PC=1 then
+  180     :out 0x64,0xd1:while bit(1,inp(0x64)) wend
+  190     :out 0x60,0xdf:while bit(1,inp(0x64)) wend
+  200     :out 0x64,0xff:while bit(1,inp(0x64)) wend
+  210   :elseif PC=2 then
+  220     :out 0x24,1
+  230     :out 0x24,1
+  240   :else
+  250     :print "not yet supported":end
+  260   :endif
+  270   '
+  280   print:print "3a. make Fully Factored data";:locate 56:print date
+  290   '
+  300   '  read data
+  310   '
+  320   *ReadParam
+  330   open "PPMPCONT" for input as #1:input #1,MSG$:close #1
+  340   open "PPMPDAT1" for input as #1
+  350   input #1,MSG$:print MSG$
+  360   input #1,N
+  370   input #1,SZ:NP=SZ-1:print "Size of Factor Base":print SZ
+  380   input #1,SieveWidth
+  390   input #1,KX:WN=N*KX:WNhalf=WN\2
+  400   input #1,IniLog
+  410   input #1,Scale
+  420   input #1,CutLog
+  430   close #1
+  440   '
+  450   dim MP%(1600)
+  460   bload "PPMP3a",MP%()
+  470   '
+  480   MP%(1)=(len(WN)+7)\8+2:'          byte size of WN
+  490   MP%(0)=0:call MP%(R1,R2,X)
+  500   if MP%(0)=-1 then print "disk error":stop:end
+  510   '
+  520   open "PPMP-F" for input as #1
+  530   kill "PPMP-FX+":open "PPMP-FX" for output as #2
+  540   print "Number of FF data"
+  550   clr FF
+  560   while not eof(1)
+  570     input #1,X
+  580     F=X^2@WN:if F>WNhalf then F-=WN
+  590     print #2,X,F:inc FF:print FF;chr(13);
+  600   wend
+  610   close #1:'do not close #2
+  620   '
+  630   'Large Prime Procedure
+  640   '
+  650   MP%(0)=1:call MP%()
+  660   if MP%(0)=-1 then print "disk error":stop:end
+  670   open "PPMP-P" for input as #1
+  680   print:print "Number of Partial data"
+  690   CtP=0
+  700   while not eof(1)
+  710     input #1,R,X:R1=R:R2=1
+  720     MP%(0)=2:call MP%():'set data
+  730     if MP%(0)=-1 then print "disk error":stop:end
+  740     inc CtP:print CtP;chr(13);
+  750   wend
+  760   close #1
+  770   open "PPMP-PP" for input as #1
+  780   print:print "Number of Partial-Partial data"
+  790   CtPP=0
+  800   while not eof(1)
+  810     input #1,R1,R2,X
+  820     MP%(0)=2:call MP%():'set data
+  830     if MP%(0)=-1 then print "disk error":stop:end
+  840     inc CtPP:print CtPP;chr(13);
+  850   wend
+  860   close #1
+  870   MP%(0)=3:call MP%():'QSort
+  880   if MP%(0)=-1 then print "disk error":stop:end
+  890   MP%(0)=4:call MP%():'ISort
+  900   if MP%(0)=-1 then print "disk error":stop:end
+  910   MP%(0)=5:call MP%():'elimination
+  920   if MP%(0)=-1 then print "disk error":stop:end
+  930   '
+  940   print:print "Number of new FF data (";X;")"
+  950   if FF+X<SZ then *GoRetry
+  960   for FF=FF+1 to SZ
+  970     MP%(0)=6:call MP%():'get relation
+  980     if MP%(0)=0 then cancel for:goto *FillByDummy
+  990     A#=1:B=1:C#=1
+ 1000     MP%(0)=7:call MP%():'get R1,R2,X
+ 1010     if R1 then
+ 1020       :F=X^2@WN:if F>WN-F then F-=WN endif
+ 1030       :F\=R1*R2:if res then stop endif
+ 1040       :A#*=R1*R2:B=B*X@WN:C#*=F:goto 1000
+ 1050     R=isqrt(A#)@WN
+ 1060     X=B*modinv(R,WN)@WN
+ 1070     if (X^2-C#)@WN then print "bad data!":stop:goto 1100
+ 1080     print #2,X,C#
+ 1090     print FF;chr(13);
+ 1100   next
+ 1110   close #2
+ 1120   MP%(0)=8:call MP%():'close work files
+ 1130   print
+ 1140   run "ppmp3b"
+ 1150   end
+ 1160   '
+ 1170   *FillByDummy
+ 1180   print "fill";SZ-FF;"rows by trivial data"
+ 1190   X=1:C#=1
+ 1200   for FF=FF to SZ
+ 1210     print #2,X,C#
+ 1220     print FF;chr(13);
+ 1230   next
+ 1240   goto 1110
+ 1250   '
+ 1260   *GoRetry
+ 1270   close #2
+ 1280   MP%(0)=8:call MP%():'close work files
+ 1290   '
+ 1300   Lacks=SZ-FF-X
+ 1310   print "lack of data by";Lacks;"(";using(3,1),Lacks*100/SZ;" %)"
+ 1320   RealSuccess=X/(CtP+CtPP)
+ 1330   print "success =";RealSuccess
+ 1340   IdealSuccess=(SZ-FF)/(CtP+CtPP)
+ 1350   NewSuccess=(RealSuccess+2*IdealSuccess)/3
+ 1360   print "retry with success =";NewSuccess
+ 1370   '
+ 1380   open "PPMPDAT1" for append as #1
+ 1390     print #1,NewSuccess
+ 1400   close #1
+ 1410   run "ppmp2"

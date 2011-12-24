@@ -1,0 +1,160 @@
+    2   dim Minn(6),Ibar(6,5),Itar(6),Jsum(6)
+   10   goto 50
+   12   Nl=6
+   14   Nll=2
+   16   Nh=int(N/2)
+   20   for I=1 to Nl
+   21   for J=1 to Nll
+   22   if Ibar(I,J)=0 then goto 28
+   24   if Ibar(I,J)<Nh then goto 28
+   26   Ibar(I,J)=(N-Ibar(I,J))*(-1)
+   28   next J
+   29   next I
+   30   for J=1 to Nll
+   32   Jsum(J)=0
+   34   next J
+   36   goto 60
+   50   N=34720401669540098819891283826314003404513999
+   52   goto 6000
+   60   for J=1 to Nll
+   62   for I=1 to Nl
+   64   Jsum(J)=Jsum(J)+abs(Ibar(I,J))
+   66   next I
+   67   print "sums",Jsum(J)
+   68   next J
+   70   for J=1 to Nll
+   72   Minn(J)=Jsum(J)
+   74   next J
+   90   K=1
+   92   Jf=1
+   94   Jl=1
+   96   if Jf=Jl then goto 290
+   98   for Ii=1 to Nl
+  100   Itar(Ii)=Ibar(Ii,Jf)
+  102   next Ii
+  110   Icon1=0
+  112   for Ii=1 to Nl
+  114   Itar(Ii)=Itar(Ii)+Ibar(Ii,Jl)
+  116   next Ii
+  118   for Ii2=1 to Nl
+  120   Itemp=int(Itar(Ii2)/N)
+  122   Itar(Ii2)=Itar(Ii2)-Itemp*N
+  124   if Itar(Ii2)<Nh then goto 130
+  126   Itar(Ii2)=Itar(Ii2)*(-1)
+  130   next Ii2
+  132   JJsum=0
+  134   for Ii3=1 to Nl
+  136   JJsum=JJsum+abs(Itar(Ii3))
+  137   next Ii3
+  138   print "jjsum1",JJsum
+  140   if JJsum>Minn(Jf) then goto 152
+  142   Minn(Jf)=JJsum
+  144   for Ii4=1 to Nl
+  146   Ibar(Ii4,Jf)=Itar(Ii4)
+  148   next Ii4
+  150   goto 290
+  152   Icon1=Icon1+1
+  154   if Icon1<20 then goto 112
+  156   Icon2=0
+  158   for Ii5=1 to Nl
+  160   Itar(Ii5)=Ibar(Ii5,Jf)
+  162   next Ii5
+  164   for Ii6=1 to Nl
+  166   Itar(Ii6)=Itar(Ii6)-Ibar(Ii6,Jl)
+  168   next Ii6
+  169   goto 400
+  170   for Ii7=1 to Nl
+  172   if Itar(Ii7)<Nh then goto 180
+  174   Itar(Ii7)=Itar(Ii7)*(-1)
+  180   next Ii7
+  182   JJsum=0
+  184   for Ii8=1 to Nl
+  186   JJsum=JJsum+abs(Itar(Ii8))
+  187   next Ii8
+  188   print "jjsum",JJsum
+  190   if JJsum>Minn(Jf) then goto 210
+  192   Minn(Jf)=JJsum
+  194   for Ii9=1 to Nl
+  196   Ibar(Ii9,Jf)=Itar(Ii9)
+  198   next Ii9
+  210   Icon2=Icon2+1
+  212   if Icon2<20 then goto 164
+  290   Jl=Jl+1
+  292   if Jl<Nll+1 then goto 96
+  294   Jl=1
+  296   Jf=Jf+1
+  298   if Jf<Nll+1 then goto 96
+  300   Jf=1
+  304   K=K+1
+  306   if K<20 then goto 92
+  308   for I=1 to Nl
+  310   print "red2",Ibar(I,1),Ibar(I,2),Ibar(I,3),Ibar(I,4),Ibar(I,5)
+  312   next I
+  314   end
+  400   for Lop=1 to Nl
+  402   Itemp=int(Itar(Lop)/N)
+  404   Itar(Lop)=Itar(Lop)-Itemp*N
+  406   next Lop
+  408   goto 170
+  810   Iu=1
+  811   Id=Ia
+  812   if Ib=0 then goto 888
+  813   Iv1=0
+  814   Iv3=Ib
+  815   if Iv3=0 then goto 830
+  816   Iqq=int(Id/Iv3)
+  817   It3=Id-Iqq*Iv3
+  818   It1=Iu-Iqq*Iv1
+  819   Iu=Iv1
+  820   Id=Iv3
+  821   Iv1=It1
+  822   Iv3=It3
+  823   goto 815
+  830   Iv=(Id-Ia*Iu)/Ib
+  860   if Iu=0 then goto 890
+  862   if Iu<0 then goto 890
+  863   Iv=Iv*(1-A)
+  866   Itemp=int(Iv/Ia)
+  869   Iv=Iv-Itemp*Ia
+  872   goto 890
+  888   Iv=Ib
+  890   return
+  918   Little=int(Little)
+  919   Temp=Big\Little
+  920   Rem1=Big-Little*Temp
+  922   if Rem1=0 then goto 940
+  924   Big=Little
+  926   Little=Rem1
+  928   goto 918
+  940   Gcd2=Little
+  944   return
+ 6000   Ndiv=int(N^(1/10))
+ 6031   Jv=1597138476798844545714999056010444156607598
+ 6032   Jvv=2000529129380787981866398087688389571624887
+ 6034   Big=Jvv
+ 6036   Little=Jv
+ 6038   gosub 918
+ 6040   print "gcd2",Gcd2
+ 6042   Ia=Jvv
+ 6044   Ib=Jv
+ 6046   gosub 810
+ 6048   print "d",Id
+ 6050   for I=1 to Nl
+ 6052   for J=1 to Nll
+ 6054   Ibar(I,J)=0
+ 6056   next J
+ 6058   next I
+ 6060   Ibar(1,1)=4502813
+ 6061   Ibar(2,1)=50150282
+ 6062   Ibar(3,1)=45620392
+ 6063   Ibar(4,1)=30820843
+ 6064   Ibar(5,1)=1747110
+ 6066   Ibar(6,1)=-34431487
+ 6067   Ibar(1,2)=63978454
+ 6068   Ibar(2,2)=1747107
+ 6069   Ibar(3,2)=30820840
+ 6070   Ibar(4,2)=45620389
+ 6071   Ibar(5,2)=50150279
+ 6072   Ibar(6,2)=-93907131
+ 6074   print "ibar21",Ibar(2,1)
+ 6080   goto 12

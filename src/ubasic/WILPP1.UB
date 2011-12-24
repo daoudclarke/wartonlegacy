@@ -1,0 +1,18 @@
+ 1070   *Wilpp1(N,P,Ub,&F)
+ 1080   ' Williams p+1 method for factoring N, returning the result in F.
+ 1090   ' If the method fails, F=1 (or N).  Ub is the maximum number
+ 1100   ' of cycles.  The constant Cc determines how often the gcd is
+ 1110   ' calculated.
+ 1120   ' 8 June 1990.
+ 1130   local Cc=10,Vs,Vb,I,J,K,Count=0,Kc
+ 1140   dim Bit%(35) 'This allows for Ub to be a 36-bit integer.
+ 1150   while and{Count<Ub,gcd(P-2,N)=1}
+ 1160   for I=1 to Cc
+ 1170   inc Count:Vs=P:Vb=(P*P-2)@N:J=-1:Kc=Count
+ 1180   repeat inc J:Kc=Kc\2:Bit%(J)=res until Kc=0
+ 1190   for K=J-1 to 0 step -1
+ 1200   if Bit%(K) then Vs=(Vs*Vb-P)@N:Vb=(Vb*Vb-2)@N
+ 1210   :else Vb=(Vs*Vb-P)@N:Vs=(Vs*Vs-2)@N endif
+ 1240   next K:P=Vs:next I:wend
+ 1250   F=gcd(P-2,N)
+ 1260   return ' End of subroutine Wilpp1.

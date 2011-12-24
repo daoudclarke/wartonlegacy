@@ -1,0 +1,21 @@
+ 1090   *Mppt(N,Q,&F)
+ 1100   ' Probabilistic test of Malm for primality (or compositeness).
+ 1110   ' Assumes N is odd, not a square, and that (Q|N)=1.  Returns F=1
+ 1120   ' if N is a probable prime, and F=0 if N is composite.
+ 1130   ' 8 June 1990.
+ 1140   dim Bit%(400)
+ 1150   local Nw,P=1,Vs,Vb,Vm,D,T,Ta,I,J=-1
+ 1160   Nw=(N+1)\2
+ 1170   repeat inc P:D=(P*P-4*Q):Ta=gcd(D,N)
+ 1180   until or{kro(D,N)=-1,and{Ta>1,Ta<N}}
+ 1190   if and{Ta>1,Ta<N} then F=0:return endif
+ 1200   repeat inc J:Nw=Nw\2:Bit%(J)=res until Nw=0
+ 1210   Vs=P:Vb=(P*Vs-2*Q)@N:T=Q
+ 1220   for I=J-1 to 0 step -1
+ 1230   Ta=2*T
+ 1240   if Bit%(I)=0 then Vb=(Vs*Vb-P*T)@N:Vs=(Vs*Vs-Ta)@N:T=(T*T)@N
+ 1250   :else Vs=(Vs*Vb-P*T)@N:Vb=(Vb*Vb-Q*Ta)@N:T=(T*T*Q)@N endif
+ 1270   next I
+ 1280   Vs=(Vs*Vs)@N:Ta=(4*Q)@N
+ 1290   if Vs=Ta then F=1 else F=0 endif
+ 1300   return ' End of subroutine Mppt.

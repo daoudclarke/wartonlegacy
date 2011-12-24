@@ -1,0 +1,90 @@
+   10   'MAILLET4
+   20   'Carlitz's version of Maillet's determinant
+   30   'cf. Rev Numb Th LeVEQUE, C20-18 by Carlitz & Olson
+   40   'sample of calculation of integer determinants
+   50   'by using multi-modulo
+   60   'better upper bound will make it faster
+   70   'using machine language subroutine
+   80   '
+   90   cls:print "Maillet's determinant"
+  100   word -2
+  110   dim PP(50),DP(50):'primes for modulus and DET mod p
+  120   dim Detp%(500):bload "detp",Detp%()
+  130   input "prime (P>5)";P
+  140   if P<>prmdiv(P) then print "not a prime.":goto 130
+  150   clr time
+  160   N=(P-1)\2-2:NN=(N+7)\8*8
+  170   dim A%(N-1,NN-1),W%(N-1,NN-1)
+  180   gosub *CARLITZ
+  190   print
+  200   print "Maillet's determinant"
+  210   print "=relative class number of";
+  220   print P;"th cyclotomic field is"
+  230   print:print abs(D#):print
+  240   print time
+  250   erase W%(),A%()
+  260   end
+  270   '
+  280   *CARLITZ
+  290   '
+  300   'make matrix
+  310   '
+  320   print "Making matrix";
+  330   for R%=0 to N-1
+  340   print ".";
+  350    for S%=0 to N-1
+  360       A%(R%,S%)=(R%+3)*(S%+3)\P-(R%+2)*(S%+3)\P
+  370    next
+  380   next:print
+  390   '
+  400   'get upper bound
+  410   '
+  420   Ubound#=fnHadamard
+  430   '
+  440   'decide primes to use
+  450   '
+  460   Pc%=6542
+  470   PP=prm(Pc%):M#=PP:PP(0)=PP:PR%=0
+  480   while M#<2*Ubound#
+  490      dec Pc%:PP=prm(Pc%):M#=M#*PP:inc PR%:PP(PR%)=PP
+  500   wend
+  510   print "Use";PR%+1; if PR% then print "primes:" else print "prime:"
+  520   '
+  530   'calculate determinant for each prime
+  540   '
+  550   for I%=0 to PR%
+  560     block W%(0..N-1,0..N-1)=block A%(0..N-1,0..N-1)
+  570     block W%(0..N-1,0..N-1)-=32767
+  580     locate I%@3*26
+  590     PP=PP(I%):print "DET mod";PP;
+  600     call Detp%(W%(0,0),N,PP,DP)
+  610     DP(I%)=DP:print "is";DP;:if I%@3=2 then print
+  620   next:if PR%@3<>2 then print
+  630   '
+  640   'decide exact determinant
+  650   '
+  660   gosub *Chinese
+  670   if D#>Ubound# then D#=D#-M#
+  680   return
+  690   '
+  700   *Hadamard
+  710   local I%,J%,Ubound#=1
+  720    for I%=0 to N-1
+  730       W#=0
+  740       for J%=0 to N-1
+  750          W#=W#+A%(I%,J%)^2
+  760       next
+  770       Ubound#=Ubound#*W#
+  780    next
+  790   return(isqrt(Ubound#))
+  800   '
+  810   *Chinese
+  820   local I%
+  830    MD#=PP(0):D#=DP(0)
+  840    for I%=1 to PR%
+  850       PP=PP(I%):D1=DP(I%)
+  860       W#=modinv(MD#,PP)*MD#
+  870       MD#=MD#*PP
+  880       D#=(D1*W#+D#*(1-W#))@MD#
+  890    next
+  900   return

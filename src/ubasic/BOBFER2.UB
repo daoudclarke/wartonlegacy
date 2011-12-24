@@ -1,0 +1,42 @@
+    9   Jj=1
+   10   input "number";N
+   11   I=0
+   12   N1=sqrt(N*Jj)
+   14   N2=int(N1)+1
+   16   Bsq=N2*N2
+   18   Incre=N2+N2-1
+   20   N3=Bsq-N*Jj
+   21   I=I+1
+   22   N4=sqrt(N3)
+   23   print "jj",Jj,"i",I
+   24   N5=int(N4)
+   26   if N4-N5=0 then goto 40
+   27   Jj=Jj+1
+   28   goto 11
+   30   Bsq=Bsq+Incre
+   32   goto 20
+   40   Lt=sqrt(Bsq)+N5
+   42   Little=int(Lt)
+   44   gosub 917
+   46   if Gcd2>1 then goto 60
+   48   Lt=Lt-2*N5
+   50   Little=int(Lt)
+   52   gosub 917
+   54   if Gcd2>1 then goto 60
+   56   print "factor not found"
+   58   end
+   60   print "factor found =",Gcd2,"mult=",Jj
+   62   Fact2=int(N/Gcd2)
+   64   print "other factor =",Fact2
+   66   end
+  917   Big=N
+  918   Little=int(Little)
+  919   Temp=Big\Little
+  920   Rem1=Big-Little*Temp
+  922   if Rem1=0 then goto 940
+  924   Big=Little
+  926   Little=Rem1
+  928   goto 918
+  940   Gcd2=Little
+  942   print "gcdsub",Gcd2
+  950   return

@@ -1,0 +1,98 @@
+    2   input "code";N
+    3   input "what is the likely maximum prime as power of 10";Mr
+    6   Nr=10^(Mr*2)
+    8   Pow=log(log(Nr))
+   10   Pow=(log(Nr)*Pow)^0.5
+   12   Prn=exp(Pow)
+   14   Prn=Prn^(1/(2^0.5))
+   68   Aperm=4
+   69   A=A
+   70   A0=int(Aperm/2)
+   72   A1=A0+Aperm-2*A0
+   74   A2=A1
+   76   A3=1
+   90   A=A
+  100   A=A
+  110   Ab=1
+  113   print "a0",A0,"prn",Prn,"aperm",Aperm
+  114   Prx1=nxtprm(Ab)
+  116   Ab=Prx1
+  118   if Ab>Prn then goto 500
+  121   Q=Ab
+  123   Q1=Q
+  125   L=int(Prn/Q)
+  128   if Q1>L then goto 131
+  129   Q1=Q1*Q
+  130   goto 128
+  131   print "q1",Q1
+  142   C0=A0
+  144   C1=A1
+  146   C2=A2
+  148   C3=A3
+  150   Iee=1
+  152   if Iee<Q1 then goto 160
+  154   if Iee=Q1 then goto 160
+  156   goto 170
+  160   Iee=Iee*2
+  162   goto 152
+  170   Iee=Iee/2
+  171   Itex=Q1-Iee
+  172   if Iee=1 then goto 230
+  173   B0=A0*A0-A1*A1-A2*A2-A3*A3
+  174   B1=2*A0*A1
+  176   B2=2*A0*A2
+  178   B3=2*A0*A3
+  179   A=A
+  180   Iee=Iee/2
+  181   Itemp=int(B0/N)
+  182   A0=B0-Itemp*N
+  184   Itemp=int(B1/N)
+  186   A1=B1-Itemp*N
+  188   Itemp=int(B2/N)
+  190   A2=B2-Itemp*N
+  192   Itemp=int(B3/N)
+  194   A3=B3-Itemp*N
+  196   if Itex<Iee then goto 172
+  198   Itex=Itex-Iee
+  200   B0=A0*C0-A1*C1-A2*C2-A3*C3
+  202   B1=A0*C1+A1*C0+A2*C3-A3*C2
+  204   B2=A0*C2+A2*C0+A3*C1-A1*C3
+  206   B3=A0*C3+A3*C0+A1*C2-A2*C1
+  208   Itemp=int(B0/N)
+  210   A0=B0-Itemp*N
+  212   Itemp=int(B1/N)
+  214   A1=B1-Itemp*N
+  216   Itemp=int(B2/N)
+  218   A2=B2-Itemp*N
+  220   Itemp=int(B3/N)
+  222   A3=B3-Itemp*N
+  224   goto 172
+  230   Big=N
+  231   if A0=1 then goto 113
+  232   Little=A0-1
+  233   Little=abs(Little)
+  234   gosub 917
+  236   if Gcd2=N then goto 500
+  238   if Gcd2=0 then goto 500
+  240   if Gcd2=1 then goto 113
+  242   print "factor found",Gcd2
+  243   Cof=int(N/Gcd2)
+  244   print "co-factor=",Cof
+  246   stop
+  250   if A21=0 then goto 260
+  252   goto 114
+  260   if A22=1 then goto 270
+  262   goto 114
+  270   end
+  400   print "loop too short"
+  402   stop
+  500   Aperm=Aperm+1
+  502   goto 70
+  917   Itemp=int(Big/Little)
+  918   Irem=Big-Itemp*Little
+  919   if Irem=0 then goto 940
+  922   Big=Little
+  924   Little=Irem
+  926   goto 917
+  940   Gcd2=Little
+  942   return

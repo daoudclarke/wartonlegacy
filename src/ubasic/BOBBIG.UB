@@ -1,0 +1,11 @@
+    8   input N
+   10   Y=int(N^0.5)
+   12   I=-200
+   13   Temp=Y+I
+   14   Temp2=int(N/Temp)
+   16   Rem1=N-Temp*Temp2
+   18   if Rem1=0 then goto 24
+   20   I=I+1
+   22   if I<200 then goto 13
+   24   print Temp
+   30   end

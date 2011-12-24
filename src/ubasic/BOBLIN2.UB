@@ -1,0 +1,215 @@
+    2   Summin=2^200
+    3   Conh=0
+    4   input "size";Apar
+    5   input "search start";Dtfirs
+    6   input "mod";N
+    7   input "search end";Dtlim
+    8   goto 1498
+    9   Y=1
+   10   Isw1=0
+   11   A=A
+   12   Itemp=N
+   13   A=A
+   14   Nrt=int(N/(Bb^5))
+   16   print "nrt",Nrt,"bb",Bb
+   17   A0=Nrt
+   18   A=A
+   19   Q=1
+   20   P=0
+   21   Inrt=A0
+   22   goto 1400
+   23   Vemp=(10^100)/Frem
+   24   Vemp=Vemp/(10^100)
+   25   Intem=int(Vemp)
+   26   A1=Intem
+   28   print "frem",Frem,"a1",A1,"bb",Bb,"n",N,"a0",A0
+   30   Inrt=int(Inrt)
+   32   A=A
+   34   Pm2=A0
+   36   Pm1=A1*A0+1
+   38   Qm2=1
+   39   Qm1=A1
+   40   A=A
+   41   if Pm2>Bb then goto 1700
+   42   if Pm1>Bb then goto 1700
+   43   print "a0",A0,"a1",A1
+   44   I=1
+   46   Frem=Vemp-Intem
+   47   A=A
+   48   Vemp=(10^100)/Frem
+   49   Vemp=Vemp/(10^100)
+   50   Inrt=int(Vemp)
+   51   Intem=Inrt
+   52   Ann=Inrt
+   54   Pm0=Ann*Pm1+Pm2
+   56   Qm0=Ann*Qm1+Qm2
+   57   Absp=abs(Bb*Pm0^1-N*Qm0^1)
+   58   print "absp",Absp,"pm0",Pm0,"qm0",Qm0,"ann",Ann,"conh",Conh,"ii2",Ii2
+   59   if Pm0>Bb then goto 1700
+   60   Pm2=Pm1
+   62   Pm1=Pm0
+   64   Qm2=Qm1
+   66   Qm1=Qm0
+   67   goto 100
+   68   I=I+1
+   69   if I<100 then goto 46
+   70   print "loop too small"," dtt",Dtt
+   71   stop
+   72   goto 300
+  100   print "absp",Absp,"pm0",Pm0,"qm0",Qm0,"bb",Bb,"n",N,"conh",Conh
+  101   A=A
+  102   Xx=Pm0
+  103   Dt=(Bb^5*Pm0^1-N*Qm0^1)*(-1)
+  104   Yy=Qm0
+  105   if Dt<0 then goto 46
+  106   print "pm0",Pm0,"qm0",Qm0,"bb",Bb,"dt",Dt
+  107   A=A
+  108   goto 130
+  110   print "dtt",Dtt
+  111   A=A
+  112   Xx=Pm2
+  113   Dt=(Bb^5*Pm2^1-N*Qm2^1)*(-1)
+  114   Yy=Pm2
+  115   goto 130
+  120   print "dtt,Dtt"
+  121   A=A
+  122   Xx=Pm1
+  123   Dt=(Bb*Pm1^1-N*Qm1^1)*(-1)
+  124   Yy=Pm1
+  126   stop
+  130   goto 176
+  175   A=A
+  176   N=Nvemp*Yy
+  177   A=A
+  178   Ibrem=Dt
+  180   Ia5=Xx
+  182   goto 1538
+  800   if B<0 then goto 804
+  802   goto 810
+  804   B=B+A
+  810   U=1
+  811   D=A
+  812   if B=0 then goto 888
+  813   V1=0
+  814   V3=B
+  815   if V3=0 then goto 828
+  816   Qq=int(D/V3)
+  817   T3=D-Qq*V3
+  818   T1=U-Qq*V1
+  819   U=V1
+  820   D=V3
+  821   V1=T1
+  822   V3=T3
+  823   goto 815
+  828   if D>1 then goto 890
+  830   V=(D-A*U)/B
+  831   goto 860
+  840   V=0
+  850   A=A
+  860   if U=0 then goto 870
+  862   if U<0 then goto 870
+  863   V=V*(1-A)
+  864   V=int(V)
+  865   A=A
+  866   Temp=int(V/A)
+  869   V=V-Temp*A
+  870   A=A
+  872   goto 890
+  888   V=B
+  890   return
+  900   Itemp=int(Xx/N)
+  902   B=Xx-Itemp*N
+  903   print "b",B,"a",A
+  904   Big=A
+  906   Little=B
+  908   Itemp=int(Big/Little)
+  910   Irem=Big-Itemp*Little
+  912   if Irem=0 then goto 940
+  914   Big=Little
+  916   Little=Irem
+  918   goto 908
+  940   Gcd2=Little
+  941   print "gcd2",Gcd2
+  942   if Gcd2=1 then goto 166
+  944   Itemp=int(Ib/Gcd2)
+  946   Irem=Ib-Itemp*Gcd2
+  947   if Irem=0 then goto 950
+  948   goto 300
+  950   A=A/Gcd2
+  952   B=B/Gcd2
+  954   goto 166
+ 1300   Ipre=Itemp
+ 1302   Num=(Ipre^4-Itemp)/(4*Ipre^3)
+ 1303   Icurr=int(Ipre-Num)
+ 1304   if Icurr<Ipre then goto 1310
+ 1306   Nrt=Ipre
+ 1308   goto 1320
+ 1310   Ipre=Icurr
+ 1312   goto 1302
+ 1320   return
+ 1400   Ntemp=N
+ 1404   Frem=Ntemp/(Bb^5)-Inrt
+ 1406   print "inrt",Inrt,"frem",Frem,"ntemp/bb)",Ntemp/Bb,"bb",Bb
+ 1407   if Frem=0 then goto 1600
+ 1408   goto 23
+ 1498   Nvemp=N
+ 1499   Nfirs=N
+ 1500   Nnrt=N^(1/5)
+ 1502   Nnrt=int(Nnrt)
+ 1503   Ii2=1
+ 1504   Ii2=Ii2+1
+ 1506   Mpow=1
+ 1508   Mpow=Mpow*Ii2
+ 1510   if Mpow>Nnrt then goto 1520
+ 1512   goto 1508
+ 1520   Minpow=Mpow/Ii2
+ 1522   Bb=Minpow
+ 1524   goto 9
+ 1534   Ia5=int(N/(Minpow^5))
+ 1536   Ibrem=N-Ia5*(Minpow^5)
+ 1538   Ia4=int(Ibrem/(Minpow^4))
+ 1539   print "ibrem","dt",Dt
+ 1540   Ibrem=Ibrem-Ia4*Minpow^4
+ 1541   print "ibrem2",Ibrem
+ 1542   Ia3=int(Ibrem/(Minpow^3))
+ 1544   Ibrem=Ibrem-Ia3*Minpow^3
+ 1545   print "ibrem3",Ibrem
+ 1546   Ia2=int(Ibrem/(Minpow^2))
+ 1548   Ibrem=Ibrem-Ia2*Minpow^2
+ 1549   print "ibrem4",Ibrem
+ 1550   Ia1=int(Ibrem/Minpow)
+ 1552   Ia0=Ibrem-Ia1*Minpow
+ 1554   print "ia5",Ia5,"ia4",Ia4,"ia3",Ia3,"ia2",Ia2,"ia1",Ia1,"ia0",Ia0
+ 1555   print "minpow",Minpow
+ 1556   Isum=Ia5^2+Ia4^2+Ia3^2+Ia2^2+Ia1^2+Ia0^2
+ 1557   A=A
+ 1558   if Isum>Summin then goto 1573
+ 1560   Summin=Isum
+ 1561   Summin2=Ia5+Ia4+Ia3+Ia2+Ia1+Ia0
+ 1562   Imin=Ii2
+ 1564   Respow=Minpow
+ 1565   Min5=Ia5
+ 1566   Min4=Ia4
+ 1567   Min3=Ia3
+ 1568   Min2=Ia2
+ 1569   Min1=Ia1
+ 1570   Min0=Ia0
+ 1571   Rescon=Conh+1
+ 1572   Resnrt=Nnrt
+ 1573   if Ii2<Dtlim+1 then goto 46
+ 1574   print "summin2",Summin2,"imin",Imin,"respow",Respow
+ 1576   print "min5",Min5,"min4",Min4,"min3",Min3,"min2",Min2,"min1",Min1
+ 1578   print "min0",Min0,"rescon",Rescon,"nfirs",Nfirs,"resnrt",Resnrt
+ 1579   print "bb",Bb,"pm0",Pm0,"qm0",Qm0,"n",N,"pm1",Pm1,"qm1",Qm1,"c",Conh
+ 1580   Conh=Conh+1
+ 1581   Isw1=0
+ 1582   N=Nfirs*(Conh+1)
+ 1583   Nvemp=N
+ 1584   if Conh<Apar+1 then goto 1500
+ 1586   end
+ 1600   print "premature end"," base",Ii2,"n",Nfirs,"mult",Conh
+ 1602   print "powered base",Minpow
+ 1604   stop
+ 1700   Ii2=Ii2+1
+ 1702   if Ii2<Dtlim+1 then goto 46
+ 1704   goto 1574

@@ -1,0 +1,19 @@
+ 1050   *Perrin(N,&Mc,&Mb,&Ma,&A,&B,&C)
+ 1060   ' Given N, returns the signature of N in the six output parameters.
+ 1070   ' Perrin-Shanks-Adams sequence.
+ 1080   ' 18 May 1990
+ 1090   local Wn,Da,Dma,Db,Dc,Dmb,Dmc,Mf1,Mf2,F1,F2
+ 1100   local I,J=-1
+ 1110   dim Bit%(400) ' Holds the bits of N; handles 120-digit numbers.
+ 1120   A=3:Ma=3:B=0:C=2:Mb=-1:Mc=1:Wn=N
+ 1130   repeat inc J:Wn=Wn\2:Bit%(J)=res until Wn=0
+ 1140   for I=J-1 to 0 step -1
+ 1150   Da=(A*A-2*Ma)@N:Dma=(Ma*Ma-2*A)@N
+ 1160   Db=(B*B-2*Mb)@N:Dmb=(Mb*Mb-2*B)@N
+ 1170   Dc=(C*C-2*Mc)@N:Dmc=(Mc*Mc-2*C)@N
+ 1180   F1=(Dc-Db)@N:F2=(F1+Da)@N
+ 1190   Mf2=(Dma-Dmb)@N:Mf1=(Mf2+Dmc)@N
+ 1200   if Bit%(I) then
+ 1210   :Mc=Dmc:Mb=Mf2:Ma=Dmb:A=Db:B=F2:C=Dc
+ 1220   :else Mc=Mf2:Mb=Dmb:Ma=Mf1:A=F1:B=Db:C=F2 endif
+ 1230   next I:return ' End of subroutine Perrin.

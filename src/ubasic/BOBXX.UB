@@ -1,0 +1,70 @@
+    1   Iee=1
+    2   Ibpr=2469135780246913578024691357802469139103
+    3   A=A
+    4   Mexp=1704400090896781130
+    5   Mexp=746415238937284113542090983238692295938
+    6   if Iee<Mexp then goto 20
+    8   if Iee=Mexp then goto 20
+   10   goto 30
+   20   Iee=Iee*2
+   22   goto 6
+   30   Iee=Iee/2
+   32   print "iee",Iee
+   34   Ibpr=Ibpr
+   36   Itex=Mexp-Iee
+   38   Igg1=5
+   40   Igg2=5
+   42   if Iee=1 then goto 100
+   44   Iee=Iee/2
+   46   Prod=Igg2*Igg2
+   48   Item=int(Prod/Ibpr)
+   50   Igg2=Prod-Ibpr*Item
+   52   if Itex<Iee then goto 42
+   54   Itex=Itex-Iee
+   56   Prod=Igg1*Igg2
+   58   Item=int(Prod/Ibpr)
+   60   Igg2=Prod-Item*Ibpr
+   62   goto 42
+  100   A=A
+  102   print "igg2",Igg2
+  104   A=A
+  120   Nn=81*11*107*167*1787*3041*8929
+  122   Nn2=Nn*Nn*Nn*Nn
+  124   Item=int(Nn2/Ibpr)
+  126   Ans=Nn2-Item*Ibpr
+  128   print "ans",Ans
+  130   Nn3=6780193034462383521*11546498371594334111
+  132   Item=int(Nn3/Ibpr)
+  134   Ans2=Nn3-Ibpr*Item
+  136   print "ans2",Ans2
+  140   Nn4=7*23*37*37*47*67*1429*1669*8069
+  142   Item=int(Nn4/Ibpr)
+  144   Ans3=Nn4-Ibpr*Item
+  146   print "ans3",Ans3
+  148   print "igg2",Igg2
+  150   Nn5=(Ibpr-1)*14109347315696650765
+  152   Item=int(Nn5/Ibpr)
+  154   Ans5=Nn5-Item*Ibpr
+  156   print "ans5",Ans5
+  160   Nn6=14109347315696650765*(Ibpr-7)
+  162   Itemp=int(Nn6/Ibpr)
+  164   Ans6=Nn6-Itemp*Ibpr
+  166   print "ans6",Ans6
+  170   Nn7=Ans5*7
+  172   Item=int(Nn7/Ibpr)
+  174   Ans7=Nn7-Ibpr*Item
+  176   print "ans7",Ans7
+  178   Nn8=6780193034462383521*11546498371594334111
+  179   Nn8=554724370836946273*9771646023834067395
+  180   Item=int(Nn8/Ibpr)
+  182   Ans8=Nn8-Item*Ibpr
+  184   print "ans8",Ans8
+  190   Nn9=8566389441672966536*49
+  192   Item=int(Nn9/Ibpr)
+  194   Ans9=Nn9-Ibpr*Item
+  196   print "ans9",Ans9
+  198   Nn10=2*(Ibpr-1)-2*1704400090896781130
+  199   Icpr=Ibpr-1
+  200   Item=int(Nn10/Icpr)
+  202   Ans10=Nn10-Icpr*Item
+  204   print "ans10",Ans10

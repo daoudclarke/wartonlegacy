@@ -1,0 +1,21 @@
+   10   print fnRk(&fnY(),0,1,log(50+100*#i),100)
+   20   end
+   30   '
+   40   fnY(X,Y)
+   50   return(Y)
+   60   '
+   70   ' Runga Kutta for y'=f(x,y), y(x0)=y0, integrating in N equal
+   80   ' steps from x0 to x.
+   90   fnRk(&fnF(),X0,Y0,X,N)
+  100   local H,I,K0,K1,K2,K3
+  110   H=(X-X0)/N/2
+  120   for I=1 to N
+  130   K0=fnF(X0,Y0)
+  140   X0+=H
+  150   K1=fnF(X0,Y0+H*K0)
+  160   K2=fnF(X0,Y0+H*K1)
+  170   X0+=H
+  180   K3=fnF(X0,Y0+2*H*K2)
+  190   Y0+=H*(K0+2*K1+2*K2+K3)/3
+  200   next
+  210   return(Y0)

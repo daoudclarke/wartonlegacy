@@ -1,0 +1,48 @@
+   10   '8 QUEEN for UBASIC86 version 8
+   20   '  sample of recursive subroutine
+   30   '  Pascal version from the book of N.Wirth
+   40   word 4
+   50   width 0,25:console 0,25
+   60   Q%=8:'NUMBER OF QUEENS
+   70   dec Q%
+   80   dim X%(Q%),A%(Q%),B%(2*Q%+1),C%(2*Q%+1)
+   90   clr time
+  100   gosub *DispFrame
+  110   clr SL%
+  120   gosub *Main(0)
+  130   locate 0,0:print time
+  140   end
+  150   '
+  160   '
+  170   *Main(Y%)
+  180    if Y%>Q% then *DispSol
+  190    for X%=0 to Q%
+  200       if or{A%(X%),B%(X%+Y%),C%(X%-Y%+Q%)} else
+  210         :X%(Y%)=X%:inc A%(X%),B%(X%+Y%),C%(X%-Y%+Q%)
+  220         :gosub *Main(Y%+1)
+  230         :X%=X%(Y%):clr A%(X%),B%(X%+Y%),C%(X%-Y%+Q%)
+  240    next
+  250   return
+  260   '
+  270   '
+  280   *DispSol
+  290    inc SL%
+  300    locate 0,0:print tab(-3*Q%\2-21);SL%;tab(-3*Q%\2-27);time:print
+  310    print
+  320    for I%=0 to Q%
+  330       print
+  340       print tab(-24);spc(3*X%(I%));"Qn";spc(3*(Q%-X%(I%))+1)
+  350    next
+  360   goto 250
+  370   '
+  380   '
+  390   *DispFrame
+  400    cls:print tab(3*Q%\2+12);"Solution "
+  410    print
+  420    print tab(-24);:for I%=0 to Q%:print I%+1;:next:print
+  430    for J%=0 to Q%
+  440       print tab(-23);:for I%=0 to Q%:print "+--";:next:print "+"
+  450       print tab(-20);J%+1
+  460    next
+  470    print tab(-23);:for I%=0 to Q%:print "+--";:next:print "+";
+  480   return

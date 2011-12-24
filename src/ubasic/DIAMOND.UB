@@ -1,0 +1,79 @@
+   10   '*********************************
+   20   '*                               *
+   30   '* Regular Extended Diamond Ring *
+   40   '*                               *
+   50   '*         1989/12 by H.Miyasaki *
+   60   '*********************************
+   70   'This program is taken from the series of elementary geomery
+   80   'programs written by Hiroshi Miyazaki in Japan
+   90   word -100:dim MM(30),X(60),Y(60)
+  100   console 0,*,0:cls
+  110   point -10
+  120   Ringflag=1
+  130   R1=270:R2=1.5
+  140   print
+  150   print "Draw a regular diamond ring.":print
+  160   print chr(25);" Number of Division Points(6<N<30) ? 17";chr(0x13131313);
+  170   input MM
+  180   if or{MM<7,int(MM)-MM<>0,MM>59} then beep:goto 160
+  190   if MM=18 then print "Select a different number.":goto 160
+  200   print chr(25);" Center offset (0.1<h<0.8) ? 0.4";chr(0x1313131313);
+  210   input H
+  220   if or{H<=0,H>=1} then beep:goto 200
+  230   screen 3:cls 3:gsize 16,16,16,20:gcolor 7
+  240   window (-500,-312)-(500,312)
+  250   'cls
+  260   D=H*R1:DD=3.5
+  270   if or{MM=10,MM=14,MM=22,MM=26,MM=34,MM=38,MM=44,MM=46,MM=58} then Evenflag=1
+  280   D=H*R1:DD=3.5
+  290   Argm=#pi/180:N=120
+  300   X00=(R1)*cos(N*Argm):Y00=(R1)*sin(N*Argm)
+  310   X(0)=X00:Y(0)=Y00
+  320   '------------------------
+  330   CC=0:Y=1
+  340   J=1:X0=X00:Y0=Y00
+  350   circle (X00,Y00),3,6
+  360   circle (0,0),R1,2:circle (D,0),R2,6
+  370   circle (0,0),2,2:circle (D,0),2,6
+  380   gosub *MAINSUB
+  390   W=abs(Y00-Y1):Z=abs(X00-X1):Wz=sqrt(W*W+Z*Z)
+  400   if or{MM>25,D>0.7} then 460
+  410   if or{MM>20,D>0.6} then 450
+  420   if or{MM>15,D>0.5} then 440
+  430   if Wz>55 then R2=R2+4:cls 2:goto 340
+  440   if Wz>35 then R2=R2+2.8:cls 2:goto 340
+  450   if Wz>25 then R2=R2+1.82:cls 2:goto 340
+  460   if Wz>15 then R2=R2+0.25:cls 2:goto 340
+  470   if Wz>10 then R2=R2+0.11:cls 2:goto 340
+  480   if Wz>5 then R2=R2+0.005:cls 2:goto 340
+  490   if and{W<=DD,Z<DD} then 500 else R2=R2+0.002:cls 2:goto 340
+  500   if Evenflag=1 then Evenflag=0:cls 2:R2=R2+2.5:goto 340
+  510   cls 2:beep
+  520   '
+  530   circle (0,0),R1,2
+  540    for J=0 to MM-1
+  550      for I=1 to MM\2
+  560        K=I@16:if K=0 then K=3
+  570      line (X(J),Y(J))-(X((I+J)@MM),Y((I+J)@MM)),K
+  580      next
+  590    next
+  600   glocate 0,0:gprint "N =";MM
+  610   gprint "h =";using(,2),H
+  620   locate 0,20
+  630   end
+  640   '-----------------------------------------------
+  650   *MAINSUB
+  660   while J<MM+1
+  670     if J=MM then COL=7 else COL=5
+  680     S=(D-X0)^2-R2^2:T=Y0*(X0-D)
+  690     W=T^2-S*(Y0^2-R2^2):if W<0 then stop:end
+  700     M=(T-sqrt(W))/S
+  710     if J<>1 then M=2*T/S-M1
+  720     X1=2*M*(X0*M-Y0)/(1+M^2)-X0
+  730     Y1=M*(X1-X0)+Y0
+  740     line (X0,Y0)-(X1,Y1),COL
+  750     X0=X1:Y0=Y1:M1=M
+  760     if Ringflag=1 then X(J)=X1:Y(J)=Y1:J=J+1:goto 780
+  770     J=J+1
+  780   wend
+  790   return

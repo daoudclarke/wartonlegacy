@@ -1,0 +1,22 @@
+    1   dim Ipow(5),Ia(5)
+   10   S1=15241580725499173
+   12   Ia(1)=5003
+   14   Ia(2)=6007
+   16   Ia(3)=0
+   18   Ia(4)=0
+   20   Ia(5)=0
+   22   input "no. of secret sharers";Idd2
+   24   input "modulus";Ipd
+   26   input "public key 1";Ipow(1)
+   28   for I=1 to Idd2-2
+   30   Itt=Ipow(1)*Ipow(I)
+   32   Itemp=int(Itt/Ipd)
+   34   Ipow(I+1)=Itt-Itemp*Ipd
+   36   next I
+   38   Isum=S1
+   40   for I=1 to Idd2-1
+   42   Itt=Isum+Ia(I)*Ipow(I)
+   44   Itemp=int(Itt/Ipd)
+   46   Isum=Itt-Itemp*Ipd
+   48   next I
+   50   print "public key2=";Isum

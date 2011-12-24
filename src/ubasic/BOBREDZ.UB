@@ -1,0 +1,290 @@
+    1   dim Hh(5,5),Bb(5,5),Lamdar(5,5),Ff(5),Dd(6)
+   10   Mm=4
+   12   Nn=3
+   14   for I=1 to Mm
+   16   for J=1 to Mm
+   18   Hh(I,J)=0
+   20   next J
+   22   next I
+   24   for I=1 to Mm
+   26   Hh(I,I)=1
+   27   A=A
+   28   next I
+   43   Bb(1,1)=27
+   44   Bb(2,1)=24
+   45   Bb(3,1)=25
+   46   Bb(4,1)=26
+   47   Bb(1,2)=11
+   48   Bb(2,2)=13
+   49   Bb(3,2)=17
+   50   Bb(4,2)=19
+   51   Bb(1,3)=53
+   52   Bb(2,3)=59
+   53   Bb(3,3)=61
+   54   Bb(4,3)=67
+   55   Bb(1,4)=13
+   56   Bb(2,4)=14
+   57   Bb(3,4)=15
+   58   Bb(4,4)=4
+   59   Bb(1,5)=17
+   60   Bb(2,5)=18
+   61   Bb(3,5)=19
+   62   Bb(4,5)=3
+   64   K=2
+   65   A=A
+   66   Kmax=1
+   67   A=A
+   68   I=Mm
+   69   A=A
+   70   Dd(1)=1
+   71   Tt=0
+   72   for I=1 to Mm
+   73   A=A
+   74   Tt=Tt+Bb(I,1)*Bb(I,1)
+   76   next I
+   78   A=A
+   79   print "tt",Tt
+   80   Dd(2)=Tt
+   81   A=A
+   82   Ff(1)=1
+   84   goto 90
+   86   Dd(2)=1
+   87   A=A
+   88   Ff(1)=0
+   89   A=A
+   90   Lamdar(2,1)=0
+   91   Sumt=0
+   92   for I=1 to Mm
+   94   Lamdar(2,1)=Lamdar(2,1)+Bb(I,1)*Bb(I,2)
+   95   Sumt=Sumt+Bb(I,2)*Bb(I,2)
+   96   next I
+   97   A=A
+   98   Dd(3)=Sumt*Dd(2)-Lamdar(2,1)*Lamdar(2,1)
+  100   print "dd1",Dd(1),"dd2",Dd(2),"dd3",Dd(3),"l21",Lamdar(2,1)
+  102   Ff(2)=1
+  103   A=A
+  104   goto 108
+  106   Ff(2)=0
+  107   Dd(3)=Dd(2)
+  108   A=A
+  110   Lpar=1
+  112   gosub 400
+  113   A=A
+  114   A=A
+  115   if Dd(3)*Dd(1)<(3*Dd(2)^2)/4-Lamdar(2,1)^2 then goto 118
+  116   goto 120
+  117   goto 119
+  118   gosub 492
+  119   goto 110
+  120   Kmax=2
+  121   if K=Nn then goto 356
+  122   K=3
+  123   if K<Kmax then goto 300
+  124   if K=Kmax then goto 300
+  125   Kmax=K
+  126   Lamdar(K,1)=0
+  127   for I=1 to Mm
+  128   Lamdar(K,1)=Lamdar(K,1)+Bb(I,K)*Bb(I,1)
+  130   next I
+  132   print "lamdar",Lamdar(K,1)
+  134   A=A
+  135   A=A
+  136   for J=2 to K
+  137   print "ffsfir",Ff(1),Ff(2),Ff(3)
+  138   A=A
+  139   Uu=0
+  140   for I=1 to Mm
+  142   Uu=Uu+Bb(I,K)*Bb(I,J)
+  144   next I
+  145   print "k",K,"j",J,"uu",Uu
+  146   goto 160
+  150   A=A
+  152   A=A
+  154   A=A
+  160   for I=1 to J-1
+  161   A=A
+  162   Uu=Uu*Dd(I+1)-Lamdar(K,I)*Lamdar(J,I)
+  164   Uu=Uu/Dd(I)
+  165   print "uu",Uu,"ddi",Dd(I),"i",I,"j",J
+  166   next I
+  168   if J<K then goto 190
+  170   if Uu=0 then goto 180
+  172   Dd(K+1)=Uu
+  174   A=A
+  176   goto 200
+  180   print "problems"
+  182   stop
+  184   A=A
+  190   Lamdar(K,J)=Uu
+  200   next J
+  202   print "k",K,"ffs",Ff(1),Ff(2),Ff(3)
+  204   Isw=1
+  300   A=A
+  302   Lpar=K-1
+  304   gosub 400
+  305   if K=3 then goto 306
+  306   if Dd(K+1)*Dd(K-1)<(3*Dd(K)^2)/4-Lamdar(K,K-1)^2 then goto 310
+  307   print "secffs",Ff(1),Ff(2),Ff(3)
+  308   A=A
+  309   goto 320
+  310   gosub 492
+  312   if K-1>2 then goto 318
+  314   K=2
+  316   goto 300
+  318   K=K-1
+  319   goto 300
+  320   Ll=K-2
+  340   if Ll<1 then goto 350
+  342   Lpar=Ll
+  344   gosub 400
+  346   Ll=Ll-1
+  348   goto 340
+  350   K=K+1
+  352   if K<Nn then goto 123
+  354   if K=Nn then goto 123
+  356   print "hs",Hh(1,1),Hh(2,1),Hh(3,1),Hh(4,1),Hh(5,1)
+  357   print "ffs",Ff(1),Ff(2),Ff(3),Ff(4),Ff(5)
+  358   for I=1 to Mm
+  360   print "bbs",Bb(I,1),Bb(I,2),Bb(I,3),Bb(I,4),Bb(I,5)
+  362   next I
+  363   print "dds",Dd(1),Dd(2),Dd(3),Dd(4),Dd(5),Dd(6)
+  364   stop
+  400   if abs(2*Lamdar(K,Lpar))=Dd(Lpar+1) then goto 490
+  402   if abs(2*Lamdar(K,Lpar))<Dd(Lpar+1) then goto 490
+  403   print "k",K,"firls",Lamdar(K,1),Lamdar(K,2),Lamdar(K,3),Lamdar(Lpar,1)
+  404   Qq=int((Lamdar(K,Lpar)/Dd(Lpar+1))+0.5)
+  406   I=1
+  408   Hh(I,K)=Hh(I,K)-Qq*Hh(I,Lpar)
+  409   Bb(I,K)=Bb(I,K)-Qq*Bb(I,Lpar)
+  410   if I=Mm then goto 413
+  411   I=I+1
+  412   goto 408
+  413   Lamdar(K,Lpar)=Lamdar(K,Lpar)-Qq*Dd(Lpar+1)
+  414   if Lpar=1 then goto 490
+  416   I=1
+  417   print "lamdarlpari",Lamdar(Lpar,I),"i",I,"lki",Lamdar(K,I),"qq",Qq
+  418   Lamdar(K,I)=Lamdar(K,I)-Qq*Lamdar(Lpar,I)
+  419   if I=Lpar-1 then goto 490
+  420   I=I+1
+  422   goto 418
+  490   print "k",K,"ls",Lamdar(K,1),Lamdar(K,2),Lamdar(K,3),"l21",Lamdar(2,1)
+  491   return
+  492   for I=1 to Mm
+  494   Itemp=Bb(I,K)
+  495   Bb(I,K)=Bb(I,K-1)
+  496   Bb(I,K-1)=Itemp
+  498   next I
+  499   A=A
+  500   for I=1 to Mm
+  502   Itemp=Hh(I,K)
+  504   Hh(I,K)=Hh(I,K-1)
+  506   Hh(I,K-1)=Itemp
+  508   next I
+  510   if K<3 then goto 521
+  512   for J=1 to K-2
+  514   Itemp=Lamdar(K,J)
+  516   Lamdar(K,J)=Lamdar(K-1,J)
+  518   Lamdar(K-1,J)=Itemp
+  520   next J
+  521   print "lamdarkk-1",Lamdar(K,K-1),"ds",Dd(1),Dd(2),Dd(3),Dd(4)
+  522   Lamda=Lamdar(K,K-1)
+  523   Bbb=(Dd(K-1)*Dd(K+1)+Lamda^2)/Dd(K)
+  524   if Lamdar(K,K-1)>int(Lamdar(K,K-1)) then goto 658
+  525   if K+1>Kmax then goto 532
+  526   for I=K+1 to Kmax
+  527   Tt=Lamdar(I,K)
+  528   Lamdar(I,K)=(Dd(K+1)*Lamdar(I,K-1)-Lamda*Tt)/Dd(K)
+  529   Lamdar(I,K-1)=(Tt*Bbb+Lamda*Lamdar(I,K))/Dd(K+1)
+  530   print "laik",Lamdar(I,K),"i",I,"k",K,"lik-1",Lamdar(I,K-1),"b",Bbb
+  531   next I
+  532   if K=2 then goto 533
+  533   Dd(K)=Bbb
+  534   print "bbb",Bbb,"kk",K
+  535   goto 590
+  536   Dd(K+1)=Dd(K)
+  537   if K+1>Kmax-1 then goto 545
+  538   for J=K+1 to Kmax-1
+  540   for I=J+1 to Kmax
+  542   Lamdar(I,J)=(Lamdar(I,J)*Dd(K))/Tt
+  543   next I
+  544   next J
+  545   if K+1>Kmax then goto 552
+  546   for J=K+1 to Kmax
+  548   Dd(J+1)=(Dd(J+1)*Dd(K))/Tt
+  550   next J
+  552   goto 590
+  560   if Isw=1 then goto 654
+  561   goto 533
+  562   Dd(K)=Dd(K-1)
+  564   A=A
+  566   Itemp=Ff(K)
+  568   Ff(K)=Ff(K-1)
+  570   Ff(K-1)=Itemp
+  571   print "ffk-1",Ff(K-1),"ffk",Ff(K)
+  572   Lamdar(K,K-1)=0
+  573   if K+1>Kmax then goto 590
+  574   for I=K+1 to Kmax
+  576   Lamdar(I,K)=Lamdar(I,K-1)
+  578   Lamdar(I,K-1)=0
+  580   next I
+  590   return
+  600   I=1
+  602   if Bb(I,K)=0 then goto 607
+  604   Ff(K)=1
+  606   goto 612
+  607   if I=Mm then goto 610
+  608   I=I+1
+  609   goto 602
+  610   Ff(K)=0
+  612   return
+  621   print "lamdarik",Lamdar(I,K)
+  650   print "k",K
+  652   print "ffs",Ff(1),Ff(2),Ff(3)
+  654   print "ds",Dd(1),Dd(2),Dd(3),Dd(4),"tt",Tt
+  656   print "lams21",Lamdar(2,1),"lam31",Lamdar(3,1),"lam32",Lamdar(3,2)
+  658   stop
+  700   Dd(3)=Sumt
+  702   goto 100
+  800   if B<0 then goto 804
+  802   goto 810
+  804   B=B+A
+  810   U=1
+  811   D=A
+  812   if B=0 then goto 888
+  813   V1=0
+  814   V3=B
+  815   if V3=0 then goto 828
+  816   Qq=int(D/V3)
+  817   T3=D-Qq*V3
+  818   T1=U-Qq*V1
+  819   U=V1
+  820   D=V3
+  821   V1=T1
+  822   V3=T3
+  823   goto 815
+  828   if D>1 then goto 890
+  830   V=(D-A*U)/B
+  831   goto 860
+  840   V=0
+  850   A=A
+  860   if U=0 then goto 870
+  862   if U<0 then goto 870
+  863   V=V*(1-A)
+  864   V=int(V)
+  865   A=A
+  866   Temp=int(V/A)
+  869   V=V-Temp*A
+  870   A=A
+  872   goto 890
+  888   V=B
+  890   return
+  917   Big=Big
+  919   Itemp=int(Big/Little)
+  920   Irem=Big-Little*Itemp
+  922   if Irem=0 then goto 940
+  924   Big=Little
+  926   Little=Irem
+  928   goto 919
+  940   D=Little
+  942   return
+  944   print "bobredz"

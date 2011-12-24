@@ -1,0 +1,132 @@
+   10   dim Mult1(20),Mult2(20),Mult3(20),Del(2)
+   20   D=-11
+   21   Pi=3.14159265358979323846264338327950288419716939937511
+   22   Mult1(1)=1
+   23   Sqrd=sqrt(D)
+   24   Idegm=0
+   25   Item=int(D/2)
+   26   Ib=D-Item*2
+   27   A=A
+   28   Bb=sqrt(abs(D/3))
+   29   Bb=int(Bb)
+   30   Tt=(Ib*Ib-D)/4
+   32   Aa=1
+   33   goto 600
+   34   if Aa<1 then goto 90
+   36   if Aa=1 then goto 90
+   38   Item=int(Tt/Aa)
+   40   Irem=Tt-Aa*Item
+   41   print "ibegidegm",Idegm
+   42   if Irem>0 then goto 100
+   44   Tau=(-1*Ib+Sqrd)/(2*Aa)
+   45   gosub 390
+   46   if Ib=Aa then goto 80
+   48   if Aa*Aa=Tt then goto 80
+   50   if Ib=0 then goto 80
+   52   Rej=re(Jj)
+   54   Idegn=2
+   56   Mult2(1)=1
+   58   Mult2(2)=-2*Rej
+   60   Mult2(3)=abs(Jj)*abs(Jj)
+   62   gosub 500
+   64   Idegm=Idegm+Idegn
+   65   print "idegm",Idegm
+   66   for I=1 to Idegm+1
+   68   Mult1(I)=Mult3(I)
+   70   next I
+   71   print "mididegm",Idegm
+   72   goto 100
+   80   Idegn=1
+   82   Mult2(1)=1
+   84   Mult2(2)=-1*Jj
+   86   gosub 500
+   88   goto 64
+   90   Aa=1
+  100   Aa=Aa+1
+  102   if Aa*Aa<Tt then goto 38
+  104   if Aa*Aa=Tt then goto 38
+  106   Ib=Ib+2
+  108   if Ib<Bb then goto 630
+  110   if Ib=Bb then goto 630
+  111   print "endidegm",Idegm
+  112   for I=1 to Idegm+1
+  113   print "i",I,"p",Mult1(I)
+  114   Itr=re(Mult1(I))
+  116   Mult1(I)=int(Itr+0.5)
+  118   A=A
+  119   print "i",I,"p",Mult1(I)
+  120   next I
+  122   stop
+  390   goto 700
+  392   Ibc=1
+  400   Iq=exp(2.0#i*Pi*Tau*Ibc)
+  401   print "iq",Iq
+  402   Icon=1
+  403   A=A
+  404   Isum=1
+  405   Pow1=(Icon*(3*Icon-1))/2
+  406   Pow2=(Icon*(3*Icon+1))/2
+  407   Jsum=Isum+(-1)^Icon*(Iq^Pow1+Iq^Pow2)
+  408   if abs(Jsum-Isum)<10^(-20) then goto 414
+  409   Icon=Icon+1
+  410   Isum=Jsum
+  411   print "jsum",Jsum
+  412   print "pow1",Pow1,"pow2",Pow2
+  413   goto 405
+  414   Del(Ibc)=Iq*Jsum^24
+  416   if Ibc=2 then goto 422
+  418   Ibc=Ibc+1
+  420   goto 400
+  422   Ff=Del(2)/Del(1)
+  424   Jj=((256*Ff+1)^3)/Ff
+  426   return
+  500   for I=1 to 20
+  502   Mult3(I)=0
+  504   Iic=1
+  506   Jjc=1
+  508   Mult3(Iic+Jjc-1)=Mult3(Iic+Jjc-1)+Mult1(Iic)*Mult2(Jjc)
+  510   if Jjc=Idegn+1 then goto 520
+  512   Jjc=Jjc+1
+  514   goto 508
+  520   if Iic=Idegm+1 then goto 530
+  522   Iic=Iic+1
+  524   goto 506
+  530   return
+  600   Tau=(-1*Ib+Sqrd)/(2*Aa)
+  602   gosub 390
+  604   Idegm=1
+  606   Mult1(1)=1
+  608   Mult1(2)=-1*Jj
+  610   goto 34
+  630   Tt=(Ib*Ib-D)/4
+  632   Aa=Ib
+  634   goto 34
+  700   A11=1
+  702   A12=0
+  704   A21=0
+  706   A22=1
+  708   Nr=re(Tau)
+  710   Nr=int(Nr+0.5)
+  712   Tau=Tau-Nr
+  714   Mat11=1
+  716   Mat12=-1*Nr
+  718   Mat21=0
+  720   Mat22=1
+  721   Imat11=Mat11*A11+Mat12*Aa21
+  722   Imat12=Mat11*A12+Mat12*A22
+  724   Imat21=Mat21*A11+Mat22*A21
+  726   Imat22=Mat21*A12+Mat22*A22
+  728   A11=Imat11
+  730   A12=Imat12
+  732   A21=Imat21
+  734   A22=Imat22
+  736   Mm=re(Tau)*re(Tau)+im(Tau)*im(Tau)
+  738   if Mm>1 then goto 392
+  740   if Mm=1 then goto 392
+  742   Tau=re(Tau)*(-1)+im(Tau)*1.0#i
+  744   Tau=Tau/Mm
+  746   Imat11=(-1)*A12
+  748   Imat12=(-1)*A22
+  750   Imat21=A11
+  752  =Imat22=A12
+  754   goto 708

@@ -1,0 +1,47 @@
+   10   ' Test program for Chinese
+   20   dim A(20),B(20),M(20)
+   30   print "How many congruences: "
+   40   input N%
+   50   print "Enter the congruences A, B, M"
+   60   for I=1 to N%
+   70   input A(I),B(I),M(I)
+   80   next I
+   90   print "**********************"
+  100   print N%,"Congruences"
+  110   print:print "A","B","M"
+  120   for I=1 to N%
+  130   print A(I),B(I),M(I)
+  140   next I:print:print
+  150   gosub *Chinese(N%,&A(),&B(),&M(),&Soln,&Modulo)
+  160   print "modulus is: ",Modulo
+  170   if Modulo<>0 then print "Solution: ";Soln
+  180   end
+  190   *Chinese(N%,&A(),&B(),&M(),&Soln,&Modulo)
+  200   ' Chinese remaindering algorithm, modeled on the Pascal version.
+  210   ' 21 August 1990
+  220   local C,Ca,Te,Ta,I%,Aa,Bb
+  230   if N%<=0 then Modulo=0:return endif
+  240   gosub *Fcgcd(A(1),M(1),&C,&Ca)
+  250   Te=B(1)\C:if res then Modulo=0:return endif
+  260   Soln=Te*Ca:Modulo=M(1)\C
+  270   for I%=2 to N%
+  280   Aa=A(I%)*Modulo:Bb=B(I%)-A(I%)*Soln
+  290   gosub *Fcgcd(Aa,M(I%),&C,&Ca)
+  300   Te=Bb\C:if res then Modulo=0:cancel for:return endif
+  310   Soln=Soln+Modulo*Te*Ca
+  320   Modulo=Modulo*(M(I%)\C)
+  330   Soln=Soln@Modulo
+  340   next I%
+  350   return ' End of subroutine Chinese
+  360   *Fcgcd(A,B,&C,&Ca)
+  370   ' Gcd with one coefficient.  c is the gcd of a and b.
+  380   ' ca*a + cb*b = c for some cb    16 April 1990
+  390   local R,Q,T,Af,Bf,B1
+  400   Ca=1:B1=0:Af=A:Bf=B
+  410   while B
+  420   T=B:Q=A\B:B=res
+  430   R=Ca-Q*B1:Ca=B1:B1=R:A=T
+  440   wend
+  450   C=A
+  460   if C<0 then neg C:neg Ca endif
+  470   return:' End of procedure Fcgcd.

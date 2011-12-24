@@ -1,0 +1,39 @@
+   10   word -200:'DET
+   20   print "Easygoing calculation of a determinant"
+   30   print "Be carefull for a real matrix.":print
+   40   '
+   50   input "Degree ";N:dim A(N,N):print
+   60   print "Input by separating each term by comma.(ex. 1.22,2//3,3Åj":print
+   70   C=2
+   80   for I=1 to N
+   90     print str(I)+"-th row";:strinput A
+  100     for J=1 to N
+  110       A(I,J)=val(member(A,J))
+  120     next J
+  130   next I:print
+  140   for I=1 to N:for J=1 to N
+  150     print A(I,J),
+  160   next J:print:next I:print
+  170   Det=fnDet(N,A())
+  180   print "Determinant = ";Det
+  190   print
+  200   end
+  210   '
+  220   fnDet(N,A())
+  230     local A,C,I,J,K,Det
+  240     Det=1
+  250     for I=1 to N
+  260       for J=I to N
+  270         if A(J,I) then cancel for:goto 300
+  280       next J
+  290       cancel for:return(0)
+  300       if J<>I then
+  310         :swap block A(I,I..N),A(J,I..N):neg Det
+  320       A=A(I,I)
+  330       for J=I+1 to N
+  340         C=A(J,I)//A
+  350         for K=I+1 to N:A(J,K)-=C*A(I,K):next K
+  360       next J
+  370       Det*=A
+  380     next I
+  390   return(Det)

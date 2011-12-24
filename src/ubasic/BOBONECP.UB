@@ -1,0 +1,266 @@
+    1   dim Barr(30),Xx(30),Zz(30)
+    2   input "code";N
+    3   input "what is the likely maximum prime as approx. power of 10";Nr
+    4   Nr=10^Nr
+    5   Pow=log(log(Nr))
+    6   Pow=(log(Nr)*Pow)^0.5
+    7   L1=exp(Pow)
+    8   L1=L1^(1/(2^0.5))
+   10   Aa=3
+   12   X=0
+   14   Y=1
+   23   Precod=N
+   25   I=1
+   26   Temp=int(Precod/2)
+   28   Rem1=Precod-Temp*2
+   30   Precod=Temp
+   32   if Temp=0 then goto 700
+   33   if Rem1>0 then goto 40
+   35   I=I+1
+   36   if I<200 then goto 26
+   40   I=1
+   41   Precod=Precod*2+Rem1
+   42   Temp=int(Precod/3)
+   44   Rem1=Precod-Temp*3
+   46   Precod=Temp
+   48   if Temp=0 then goto 700
+   50   if Rem1>0 then goto 53
+   51   I=I+1
+   52   if I<200 then goto 42
+   53   Prn=L1
+   56   N=Precod*3+Rem1
+   64   for I=1 to 30
+   66   Xx(I)=2
+   68   Zz(I)=1
+   70   next I
+   72   Ibb=1
+  110   Ab=1
+  111   I=1
+  114   Prx1=nxtprm(Ab)
+  115   A=A
+  116   Ab=Prx1
+  118   if Ab>Prn then goto 350
+  121   Q=Ab
+  123   Q1=Q
+  125   L=int(L1/Q)
+  128   if Q1>L then goto 131
+  129   Q1=Q1*Q
+  130   goto 128
+  131   print Aa,Q1
+  132   Ind1=1
+  134   P1=Q1
+  136   Pr=int(P1/2)
+  138   Temp=P1-Pr*2
+  140   Barr(Ind1)=Temp
+  141   A=A
+  142   P1=Pr
+  144   if Pr=0 then goto 149
+  146   Ind1=Ind1+1
+  148   goto 136
+  149   X1=Xx(Ibb)
+  150   Z1=Zz(Ibb)
+  151   if Ab>2 then goto 184
+  152   Icon=1
+  153   Xn=X1
+  154   Zn=Z1
+  156   gosub 1200
+  158   if Icon=Ind1 then goto 180
+  160   Icon=Icon+1
+  162   Xn=Xt
+  164   Zn=Zt
+  166   goto 156
+  180   X1=Xn
+  181   A=A
+  182   Z1=Zn
+  183   A=A
+  184   Xn=X1
+  186   Zn=Z1
+  188   gosub 1200
+  190   if Barr(Ind1-1)=0 then goto 200
+  192   X2=X1
+  194   Z2=Z1
+  196   X3=Xt
+  198   Z3=Zt
+  199   goto 220
+  200   Xm=Xt
+  202   Zm=Zt
+  204   Xn=X1
+  206   Zn=Z1
+  208   X2=Xt
+  210   Z2=Zt
+  212   gosub 1300
+  214   X3=Xt
+  216   Z3=Zt
+  218   goto 250
+  220   Xn=X3
+  222   Zn=Z3
+  224   gosub 1200
+  226   X5=Xt
+  228   Z5=Zt
+  230   Xm=X3
+  232   Zm=Z3
+  234   Xn=X2
+  236   Zn=Z2
+  238   gosub 1300
+  240   X2=Xt
+  242   Z2=Zt
+  244   X3=X5
+  246   Z3=Z5
+  250   Icon=2
+  251   if Barr(Ind1-Icon)=0 then goto 400
+  252   if Icon+1=Ind1 then goto 262
+  253   Xn=X3
+  254   Zn=Z3
+  256   gosub 1200
+  258   X5=Xt
+  260   Z5=Zt
+  262   Xm=X3
+  264   Zm=Z3
+  266   Xn=X2
+  268   Zn=Z2
+  270   gosub 1300
+  272   X2=Xt
+  274   Z2=Zt
+  276   X3=X5
+  278   Z3=Z5
+  280   Icon=Icon+1
+  282   if Icon=Ind1 then goto 440
+  284   goto 251
+  286   Xn=X4
+  288   Zn=Z4
+  290   gosub 1200
+  292   X3=Xt
+  294   Z3=Zt
+  296   goto 250
+  300   print "gcd",Gcd2
+  302   goto 600
+  350   Aa=Aa+30
+  352   goto 64
+  400   if Icon+1=Ind1 then goto 412
+  402   Xn=X2
+  404   Zn=Z2
+  406   gosub 1200
+  408   X4=Xt
+  410   Z4=Zt
+  412   Xm=X3
+  414   Zm=Z3
+  416   Xn=X2
+  418   Zn=Z2
+  420   gosub 1300
+  422   X2=X4
+  424   Z2=Z4
+  426   X3=Xt
+  428   Z3=Zt
+  430   Icon=Icon+1
+  432   if Icon=Ind1 then goto 440
+  434   goto 251
+  440   Xx(Ibb)=Xt
+  442   Zz(Ibb)=Zt
+  450   Big=N
+  452   Little=abs(Zt)
+  454   gosub 917
+  456   D=Gcd2
+  458   if D>1 then goto 1500
+  460   if Ibb=30 then goto 470
+  462   Ibb=Ibb+1
+  464   Aa=Aa+1
+  466   goto 149
+  470   Aa=Aa-29
+  472   Ibb=1
+  474   goto 114
+  500   I=I+1
+  504   goto 350
+  600   print "found"
+  603   print " prime divisor = ",Gcd2
+  604   end
+  700   print "combination of 2's and 3's"
+  702   end
+  800   if B<0 then goto 804
+  802   goto 810
+  804   B=B+A
+  810   U=1
+  811   D=A
+  812   if B=0 then goto 888
+  813   V1=0
+  814   V3=B
+  815   if V3=0 then goto 828
+  816   Qq=int(D/V3)
+  817   T3=D-Qq*V3
+  818   T1=U-Qq*V1
+  819   U=V1
+  820   D=V3
+  821   V1=T1
+  822   V3=T3
+  823   goto 815
+  828   if D>1 then goto 890
+  830   V=(D-A*U)/B
+  831   goto 860
+  840   V=0
+  850   A=A
+  860   if U=0 then goto 870
+  862   if U<0 then goto 870
+  863   V=V*(1-A)
+  864   V=int(V)
+  865   A=A
+  866   Temp=int(V/A)
+  869   V=V-Temp*A
+  870   A=A
+  872   goto 890
+  888   V=B
+  890   return
+  917   Big=N
+  918   Little=int(Little)
+  919   Temp=int(Big/Little)
+  920   Rem1=Big-Little*Temp
+  922   if Rem1=0 then goto 940
+  924   Big=Little
+  926   Little=Rem1
+  928   goto 918
+  940   Gcd2=Little
+  942   A=A
+  950   return
+ 1000   Temp=int(X3/N)
+ 1002   X3=X3-Temp*N
+ 1004   Temp=int(Y3/N)
+ 1006   Y3=Y3-Temp*N
+ 1007   A=A
+ 1008   A=A
+ 1009   A=A
+ 1010   return
+ 1100   A=A
+ 1102   end
+ 1150   if abs(Xt)<N then goto 1156
+ 1152   Itemp=int(Xt/N)
+ 1154   Xt=Xt-Itemp*N
+ 1156   if abs(Zt)<N then goto 1162
+ 1158   Itemp=int(Zt/N)
+ 1160   Zt=Zt-Itemp*N
+ 1162   return
+ 1200   Xsq=Xn*Xn
+ 1202   Zsq=Zn*Zn
+ 1204   Xz=Xn*Zn
+ 1206   Xt=Xsq-Zsq
+ 1208   Xt=Xt*Xt
+ 1210   Zt=4*Xz*(Xsq+Aa*Xz+Zsq)
+ 1212   gosub 1150
+ 1214   return
+ 1300   Xmm=Xm-Zm
+ 1302   Xmp=Xm+Zm
+ 1304   Xnm=Xn-Zn
+ 1306   Xnp=Xn+Zn
+ 1308   Prod1=Xmm*Xnp
+ 1310   Prod2=Xmp*Xnm
+ 1312   Xt=Prod1+Prod2
+ 1314   Zt=Prod1-Prod2
+ 1316   gosub 1150
+ 1318   Xt=Z1*Xt*Xt
+ 1320   Zt=X1*Zt*Zt
+ 1322   gosub 1150
+ 1324   return
+ 1500   D=int(D)
+ 1502   print "endwell prime =",Prx1
+ 1504   print "prime divisor found on curve",Aa
+ 1506   print "prime divisor =",D
+ 1508   Fact2=int(N/D)
+ 1510   print "other factor =",Fact2
+ 1512   end

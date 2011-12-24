@@ -1,0 +1,92 @@
+    1   dim Prod(226)
+    2   input "public key1";N
+    4   input "public key2";Qk
+    6   input "scrambled code";Incod
+    8   input "first factor";Fact1
+   10   input "second factor";Fact2
+   12   goto 732
+  510   Q1=N
+  511   N1=Qk
+  512   Pn=Qk
+  513   Iy=Incod
+  514   Ipow=2
+  518   if Ipow>Pn then goto 523
+  520   Ipow=Ipow*2
+  522   goto 518
+  523   Ie=int(Ipow/2)
+  524   N1=N1-Ie
+  525   if Ie=1 then goto 541
+  526   Ie=int(Ie/2)
+  527   Iy=Iy*Iy
+  528   if Iy<N then goto 532
+  529   Itemp=int(Iy/N)
+  530   Iy=Iy-Itemp*N
+  532   if N1<Ie then goto 525
+  534   N1=N1-Ie
+  535   Iy=Iy*Incod
+  536   if Iy<N then goto 525
+  537   Itemp=int(Iy/N)
+  538   Iy=Iy-Itemp*N
+  539   goto 525
+  541   Bprod=Iy
+  543   goto 604
+  560   Pn=Pn-int(Bigi/2)
+  561   Prod(I)=Prep
+  563   Coun=Coun+1
+  565   I=I+1
+  567   goto 527
+  590   Bprod=Prod(1)
+  592   if Coun=1 then goto 604
+  593   I=2
+  594   Bprod=Bprod*Prod(I)
+  596   Temp=int(Bprod/Q1)
+  598   Rem1=Bprod-Temp*Q1
+  600   Bprod=Rem1
+  601   I=I+1
+  602   if I<Coun+1 then goto 594
+  604   print "original code",Bprod
+  606   end
+  732   if Fact1>Fact2 then goto 750
+  738   A=Fact2-1
+  740   B=Fact1-1
+  742   gosub 810
+  744   goto 760
+  750   A=Fact1-1
+  752   B=Fact2-1
+  754   gosub 810
+  760   Carmt=(A*B)/D
+  762   Carm=int(Carmt)
+  764   A=Carm
+  766   B=Qk
+  768   gosub 810
+  770   Qk=V
+  772   goto 510
+  810   U=1
+  811   D=A
+  812   if B=1 then goto 888
+  813   V1=0
+  814   V3=B
+  815   if V3=0 then goto 830
+  816   Qq=int(D/V3)
+  817   T3=D-Qq*V3
+  818   T1=U-Qq*V1
+  819   U=V1
+  820   D=V3
+  821   V1=T1
+  822   V3=T3
+  823   goto 815
+  830   V=(D-A*U)/B
+  831   goto 860
+  840   V=0
+  850   print "uv",U,V
+  860   if U=0 then goto 870
+  862   if U<0 then goto 870
+  863   V=V*(1-A)
+  864   V=int(V)
+  865   print "va",V,A
+  866   Temp=int(V/A)
+  869   V=V-Temp*A
+  870   print "funny",U,V
+  872   goto 890
+  888   V=B
+  890   return

@@ -1,0 +1,13 @@
+   10   *Polpm1(N,B,Ubnd,&F,&G)
+   20   ' Pollard p-1 method of factoring n using base b.
+   30   ' Based upon the Pascal version.  16 April 1990.
+   50   local Cc%=20,Count=3,I%=0,T
+   60   if N<2 then F=0;G=0; return endif
+   70   B=modpow(B,4,N)
+   80   while Count<Ubnd
+   90   B=modpow(B,Count,N):inc I%
+  100   if I%@Cc%=0 then I=0:T=gcd(B-1,N)
+  110   :if T>1 then F=T:G=N\F:return endif endif
+  120   inc Count
+  130   wend
+  140   F=-1:G=-1:return ' End of Subroutine Polpm1

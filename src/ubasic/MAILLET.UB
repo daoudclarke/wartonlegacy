@@ -1,0 +1,49 @@
+   10   'MAILLET
+   20   'Maillet's determinant
+   30   'cf. Rev Numb Th LeVEQUE, C20-18 by Carlitz & Olson
+   40                   'sample of calculation of integer determinants
+   50   word 26
+   60   cls:print "Maillet's determinant"
+   70   input "prime (79>P>2)";P
+   80   if P>prmdiv(P) then print "not a prime.":goto 70
+   90   print
+  100   N=(P-1)\2:dim A(N-1,N-1)
+  110   for R=1 to N
+  120    for S=1 to N
+  130       A(R-1,S-1)=R*modinv(S,P)@P
+  140    next S
+  150   next R
+  160   Dt#=fnDeterminant(&A(),N)
+  170   H=abs(Dt#)\(P^(N-1))
+  180   print "Maillet's det =";Dt#
+  190   print "relative class number =";H
+  200   if res then print "error"
+  210   end
+  220   '
+  230   'compute determinant of integer matrix
+  240   'DT=deteminant of A(N-1,N-1)
+  250   '   matrix A( , ) will be destryed
+  260   *Determinant(&A(),N)
+  270      local I%,J%,J1%,PT%,P,Q,R,S,W,Dt#
+  280   Dt#=1
+  290   for PT%=0 to N-1
+  300      for J%=PT% to N-1
+  310         if A(PT%,J%) then cancel for:goto 330
+  320      next:Dt#=0:cancel for:goto 490
+  330      W=A(PT%,J%):J1%=J%
+  340      for J%=J%+1 to N-1:Q=A(PT%,J%)
+  350         if Q then if Q<W then W=Q:J1%=J%
+  360      next
+  370      if J1%<>PT% then neg Dt#
+  380         :swap block A(PT%..N-1,PT%),block A(PT%..N-1,J1%)
+  390      W=A(PT%,PT%)
+  400      for I%=PT%+1 to N-1
+  410         Q=A(I%,PT%)\W
+  420         for J%=PT% to N-1:A(I%,J%)=A(I%,J%)-A(PT%,J%)*Q:next
+  430         if res then neg Dt#
+  440            :swap block A(PT%,PT%..N-1),block A(I%,PT%..N-1)
+  450            :cancel for:goto 390
+  460      next
+  470      Dt#=Dt#*W
+  480   next
+  490   return(Dt#)

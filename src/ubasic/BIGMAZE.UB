@@ -1,0 +1,158 @@
+   10   'Draw a maze
+   20   'Pascal version from
+   30   'H. Okumura: Computer Algorithm Handbook
+   40   'with addendum by J. Iwase
+   50   Smode%=823
+   60   if #sys(1)<>1 and #sys(1)<>7 then print "This machine is not supported.":end
+   70   console 0,*,0:screen Smode%:cls 3
+   80   Xmax%=370:Ymax%=270:'maximum
+   90   '
+  100   word -(Ymax%\16+1)
+  110   MaxCan=Xmax%*Ymax%\4
+  120   if and{Xmax%<160,Ymax%<95} then Bsize=4 else Bsize=2
+  130   if Smode%>=800 then Xoff=(800-Xmax%*Bsize)\2:Yoff=20
+  140                :else Xoff=(640-Xmax%*Bsize)\2:Yoff=20
+  150   dim Map(Xmax%)
+  160   dim CanX%(MaxCan),CanY%(MaxCan),DirX%(MaxCan)
+  170   dim DirY%(MaxCan)
+  180   randomize
+  190   '
+  200   Map(0)=2^(Ymax%+1)-1:Map(Xmax%)=Map(0)
+  210   Map(1)=Map(0):Map(Xmax%-1)=Map(0)
+  220   Map(2)=1+2+2^(Ymax%-1)+2^Ymax%
+  230   for I=3 to Xmax%-2:Map(I)=Map(2):next
+  240   X=2:for Y=4 to Ymax%-2:gosub *Dot(X,Y):next
+  250   X=Xmax%-2:for Y=2 to Ymax%-4:gosub *Dot(X,Y):next
+  260   Y=2:for X=2 to Xmax%-2:gosub *Dot(X,Y):next
+  270   Y=Ymax%-2:for X=2 to Xmax%-2:gosub *Dot(X,Y):next
+  280   Ncan=0
+  290   for I=2 to Xmax%\2-2
+  300     gosub *InsCan(I*2,2)
+  310     gosub *InsCan(I*2,Ymax%-2)
+  320   next
+  330   for J=2 to Ymax%\2-2
+  340     gosub *InsCan(2,J*2)
+  350     gosub *InsCan(Xmax%-2,J*2)
+  360   next
+  370   Ndir=4
+  380   DirX%(1)=2:DirY%(1)=0
+  390   DirX%(2)=0:DirY%(2)=2
+  400   DirX%(3)=-2:DirY%(3)=0
+  410   DirX%(4)=0:DirY%(4)=-2
+  420   while Ncan>0
+  430     gosub *Selcan(&I,&J)
+  440     repeat
+  450       Ndir=4
+  460       repeat
+  470         gosub *SelDir(&DI,&DJ)
+  480         Ok=1-bit(J+DJ,Map(I+DI))
+  490       until or{Ok,Ndir=0}
+  500       if Ok then
+  510         :gosub *Dot(I+DI\2,J+DJ\2)
+  520         :I+=DI:J+=DJ
+  530         :gosub *Dot(I,J)
+  540         :gosub *InsCan(I,J)
+  550     until not Ok
+  560   wend
+  570   goto 870
+  580   '
+  590   *Dot(X,Y)
+  600   Map(X)=bitset(Y,Map(X))
+  610   line (Bsize*X+Xoff,Bsize*Y+Yoff)-(Bsize*X+Xoff+Bsize-1,Bsize*Y+Yoff+Bsize-1),3,"bf"
+  620   return
+  630   '
+  640   *InsCan(I,J)
+  650   inc Ncan
+  660   CanX%(Ncan)=I:CanY%(Ncan)=J
+  670   return
+  680   '
+  690   *SelCan(&I,&J)
+  700   local R
+  710   R=int(Ncan*rnd)+1
+  720   I=CanX%(R):J=CanY%(R)
+  730   CanX%(R)=CanX%(Ncan):CanY%(R)=CanY%(Ncan)
+  740   dec Ncan
+  750   return
+  760   '
+  770   *SelDir(&I,&J)
+  780   local R
+  790   R=int(Ndir*rnd)+1
+  800   I=DirX%(R):J=DirY%(R)
+  810   DirX%(R)=DirX%(Ndir):DirY%(R)=DirY%(Ndir)
+  820   DirX%(Ndir)=I:DirY%(Ndir)=J
+  830   dec Ndir
+  840   return
+  850   '             Iwase wrote the program below
+  860   '             principle: fill to dead end
+  870   'cls
+  880   glocate 0,0
+  890   if #sys(0)=81 then
+  900     :gprint "何かキーを押してください。迷路を解きます。"
+  910     :else gprint "Push any key to solve the maze."
+  920   while inkey="":wend
+  930   glocate 0,0:gprint spc(44);
+  940   Map(2)=bitreset(3,Map(2))
+  950   Map(Xmax%-2)=bitreset(Ymax%-3,Map(Xmax%-2)):'Ent and Exit -> 0
+  960   for I=0 to Xmax%:'                           Outer -> 1
+  970       for J=0 to 1
+  980           Map(I)=bitreset(J,Map(I))
+  990       next J
+ 1000       for J=Ymax%-1 to Ymax%
+ 1010           Map(I)=bitreset(J,Map(I))
+ 1020       next J
+ 1030   next I
+ 1040   for J=0 to Ymax%
+ 1050       for I=0 to 1
+ 1060           Map(I)=bitreset(J,Map(I))
+ 1070       next I
+ 1080       for I=Xmax%-1 to Xmax%
+ 1090           Map(I)=bitreset(J,Map(I))
+ 1100       next I
+ 1110   next J
+ 1120   '
+ 1130   'for I=0 to Xmax:for J=0 to Ymax:if bit(J,Map(I)) then gosub *Fil(I,J)
+ 1140   'next J:next I                          'check where 1 is set
+ 1150   'while inkey$="" goto 880:wend
+ 1160   '
+ 1170   '$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+ 1180   '$$$$$$$$$ MAIN ROUTINE TO SOLVE THE MAZE $$$$$$$$$$$$$$$$$$$$$$$$$$$
+ 1190   '$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+ 1200   '
+ 1210   for K=6 to Ymax%
+ 1220       for J=3 to K-3
+ 1230           gosub *Routine
+ 1240       next J
+ 1250   next K
+ 1260   for K=Ymax%+1 to Xmax%
+ 1270       for J=3 to Ymax%-3
+ 1280           gosub *Routine
+ 1290       next J
+ 1300   next K
+ 1310   for K=Xmax%+1 to Xmax%+Ymax%-6
+ 1320       for J=K-Xmax%+3 to Ymax%-3
+ 1330           gosub *Routine
+ 1340       next J
+ 1350   next K
+ 1360   end
+ 1370   *Routine
+ 1380     I=K-J
+ 1390     if fnCheck(I,J)<3 then goto 1470
+ 1400     Ii=I:Jj=J
+ 1410     gosub *Fil(Ii,Jj)
+ 1420     if bit(Jj,Map(Ii-1))=0 then Ii=Ii-1:goto 1460
+ 1430     if bit(Jj+1,Map(Ii))=0 then Jj=Jj+1:goto 1460
+ 1440     if bit(Jj,Map(Ii+1))=0 then Ii=Ii+1:goto 1460
+ 1450     if bit(Jj-1,Map(Ii))=0 then Jj=Jj-1:goto 1460
+ 1460     if fnCheck(Ii,Jj)=3 then goto 1410
+ 1470   return
+ 1480   '
+ 1490   *Fil(X,Y)
+ 1500   Map(X)=bitset(Y,Map(X))
+ 1510   line (Bsize*X+Xoff,Bsize*Y+Yoff)-(Bsize*X+Xoff+Bsize-1,Bsize*Y+Yoff+Bsize-1),5,"bf"
+ 1520   return
+ 1530   '
+ 1540   fnCheck(I,J):'                returns 3 if dead end
+ 1550     local Temp%=0
+ 1560     if bit(J,Map(I)) then 1580
+ 1570     Temp%=bit(J,Map(I-1))+bit(J+1,Map(I))+bit(J,Map(I+1))+bit(J-1,Map(I))
+ 1580   return(Temp%)

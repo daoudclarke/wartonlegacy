@@ -1,0 +1,257 @@
+    1   dim Fx(80),Fy(80)
+    2   input "prime modulus";N
+    3   input "target x";Targx
+    4   input "target y";Targy
+    5   input "curve number";Aa
+    6   input "cardinality of curve";Ppc
+    8   Ix2=677
+   10   goto 1600
+   66   X1=3
+   68   X2=3
+   70   Y1=6
+   72   Y2=6
+   74   A=A
+  123   Q1=Q
+  124   if Q1>0 then goto 131
+  125   Q1=3
+  131   A=A
+  136   Ee=1
+  138   if Ee>Q1 then goto 146
+  140   Ee=Ee*2
+  142   goto 138
+  146   Ee=Ee/2
+  147   A=A
+  148   Q1=Q1-Ee
+  150   if Ee=1 then goto 300
+  152   Ee=Ee/2
+  154   A=A
+  156   Dy=Y2*2
+  158   A=A
+  160   Temp=int(Dy/N)
+  162   Dy=Dy-Temp*N
+  164   if Dy=0 then goto 360
+  184   A=N
+  186   B=Dy
+  187   gosub 1050
+  188   gosub 800
+  190   if D>1 then goto 1500
+  191   Cc=V
+  220   A=A
+  222   M1=3*X2*X2+Aa
+  223   gosub 1300
+  224   M1=M1*Cc
+  225   gosub 1300
+  226   Xt=(-2)*X2+M1*M1
+  227   gosub 1400
+  228   Yt=(-1)*Y2+M1*(X2-Xt)
+  230   gosub 1000
+  232   X2=Xt
+  234   Y2=Yt
+  235   if Isw1>3 then goto 1622
+  236   if Q1<Ee then goto 150
+  238   Q1=Q1-Ee
+  240   Dx=X1-X2
+  242   Temp=int(Dx/N)
+  244   Bb=Dx-Temp*N
+  245   A=A
+  246   A=A
+  247   if Bb=0 then goto 360
+  248   A=N
+  249   B=Bb
+  259   gosub 800
+  260   Cc=V
+  261   M1=(Y1-Y2)*Cc
+  262   Xt=(-1)*X1-1*X2+M1*M1
+  264   Yt=-1*Y1+M1*(X1-Xt)
+  265   A=A
+  266   gosub 1000
+  268   X2=Xt
+  270   Y2=Yt
+  271   if Isw1=1 then goto 1622
+  272   if Isw1=3 then goto 1622
+  274   goto 150
+  290   Ac=nxtprm(Ab)
+  292   if Ac>Prn then goto 400
+  300   A=A
+  302   X1=X2
+  304   Y1=Y2
+  306   if Isw1=0 then goto 1606
+  308   goto 1638
+  360   print "neutral element"
+  362   A=A
+  364   A=A
+  366   stop
+  370   if Ac>Prn*25 then goto 400
+  371   Ab=Ac
+  372   if Isw1=1 then goto 380
+  374   Isw1=1
+  376   Q1=Ab-Q
+  377   Qpre=Ab
+  378   goto 131
+  380   Q1=Ab-Qpre
+  382   Qpre=Ab
+  390   goto 131
+  400   Aa=Aa+30
+  402   goto 64
+  500   I=I+1
+  504   goto 350
+  600   print "found"
+  603   print " prime divisor = ",Gcd2
+  604   end
+  700   print "combination of 2's and 3's"
+  702   end
+  800   if B<0 then goto 804
+  802   goto 810
+  804   B=B+A
+  810   U=1
+  811   D=A
+  812   if B=0 then goto 888
+  813   V1=0
+  814   V3=B
+  815   if V3=0 then goto 828
+  816   Qq=int(D/V3)
+  817   T3=D-Qq*V3
+  818   T1=U-Qq*V1
+  819   U=V1
+  820   D=V3
+  821   V1=T1
+  822   V3=T3
+  823   goto 815
+  828   if D>1 then goto 890
+  830   V=(D-A*U)/B
+  831   goto 860
+  840   V=0
+  850   A=A
+  860   if U=0 then goto 870
+  862   if U<0 then goto 870
+  863   V=V*(1-A)
+  864   V=int(V)
+  865   A=A
+  866   Temp=int(V/A)
+  869   V=V-Temp*A
+  870   A=A
+  872   goto 890
+  888   V=B
+  890   return
+  917   Big=N
+  918   Little=int(Little)
+  919   Temp=Big\Little
+  920   Rem1=Big-Little*Temp
+  922   if Rem1=0 then goto 940
+  924   Big=Little
+  926   Little=Rem1
+  928   goto 918
+  940   Gcd2=Little
+  942   A=A
+  950   return
+ 1000   Temp=int(Xt/N)
+ 1002   Xt=Xt-Temp*N
+ 1004   Temp=int(Yt/N)
+ 1006   Yt=Yt-Temp*N
+ 1007   A=A
+ 1008   Ccoun=Ccoun+1
+ 1009   if Ccoun<181 then goto 1012
+ 1010   A=A
+ 1012   return
+ 1050   if B>0 goto 1058
+ 1052   B=B+N
+ 1058   return
+ 1100   A=A
+ 1102   end
+ 1200   if Prod2<N then goto 1204
+ 1201   Ttem=int(Prod2/N)
+ 1202   Prod2=Prod2-Ttem*N
+ 1204   return
+ 1300   if M1<N then goto 1304
+ 1301   Ttem=int(M1/N)
+ 1302   M1=M1-Ttem*N
+ 1304   A=A
+ 1306   return
+ 1350   if Cc(30)<N then goto 1354
+ 1351   Ttem=int(Cc(30)/N)
+ 1352   Cc(30)=Cc(30)-Ttem*N
+ 1354   return
+ 1400   if Xt<N then goto 1410
+ 1402   Ttem=int(Xt/N)
+ 1404   Xt=Xt-Ttem*N
+ 1410   return
+ 1500   D=int(D)
+ 1502   print "endwell prime =",Prx1,Ab
+ 1504   print "prime divisor found on curve",Aa
+ 1506   print "prime divisor =",D
+ 1508   Fact2=int(N/D)
+ 1510   print "other factor =",Fact2
+ 1512   end
+ 1590   Isw1=4
+ 1592   goto 156
+ 1600   Q=Ix2
+ 1601   Loopl=1
+ 1602   Isw1=0
+ 1604   goto 66
+ 1606   Fx(1)=X2
+ 1608   Fy(1)=Y2
+ 1609   A=A
+ 1610   X1=X2
+ 1612   Y1=Y2
+ 1614   X2=Targx
+ 1616   Y2=Targy
+ 1618   Isw1=1
+ 1619   if X1=X2 then goto 1590
+ 1620   goto 240
+ 1622   Fx(Loopl)=X2
+ 1623   A=A
+ 1624   Fy(Loopl)=Y2
+ 1626   Isw1=2
+ 1628   Itemp=Ix2*Ix2+1
+ 1630   Itemp2=int(Itemp/Ppc)
+ 1632   Ix2=Itemp-Itemp2*Ppc
+ 1634   Q=Ix2
+ 1636   goto 66
+ 1638   Loopl=Loopl+1
+ 1639   A=A
+ 1640   if Loopl>80 then goto 1700
+ 1642   Ij=1
+ 1643   A=A
+ 1644   if Fx(Ij)=X2 then goto 1680
+ 1646   goto 1652
+ 1650   A=A
+ 1652   Ij=Ij+1
+ 1654   if Ij=Loopl then goto 1660
+ 1656   goto 1643
+ 1660   Isw1=3
+ 1662   X1=X2
+ 1664   Y1=Y2
+ 1666   X2=Targx
+ 1668   Y2=Targy
+ 1669   if X1=X2 then goto 1590
+ 1670   goto 240
+ 1680   print "ij",Ij,"loopl",Loopl,"fy",Fy(Ij),"y2",Y2
+ 1681   Ix2=677
+ 1682   Jj=1
+ 1683   if Ij=Jj then goto 1690
+ 1684   Itemp=Ix2*Ix2+1
+ 1685   Itemp2=int(Itemp/Ppc)
+ 1686   Ix2=Itemp-Ppc*Itemp2
+ 1687   Jj=Jj+1
+ 1688   if Ij=Jj then goto 1690
+ 1689   goto 1684
+ 1690   Jx2=677
+ 1691   Jj=1
+ 1692   if Jj=Loopl then goto 1704
+ 1694   Itemp=Jx2*Jx2+1
+ 1695   Itemp2=int(Itemp/Ppc)
+ 1696   Jx2=Itemp-Ppc*Itemp2
+ 1697   Jj=Jj+1
+ 1698   if Jj=Loopl then goto 1703
+ 1699   goto 1694
+ 1700   print "run terminated"
+ 1702   stop
+ 1703   if Fy(Ij)=Y2 then goto 1709
+ 1704   Itemp=(Ppc-Jx2)-Ix2
+ 1705   Itemp2=int(Itemp/Ppc)
+ 1706   Pow=Itemp-Itemp2*Ppc
+ 1707   print "ix2",Ix2,"jx2",Jx2,"pow",Pow
+ 1708   stop
+ 1709   Itemp=Jx2-Ix2
+ 1710   goto 1705
+ 1711   "ccc2"

@@ -1,0 +1,13 @@
+    8   N=106
+   10   Ii=11
+   12   Temp=Ii^2
+   14   Temp2=int(Temp/N)
+   16   Rem1=Temp-Temp2*N
+   18   if Rem1=37 then goto 30
+   20   Ii=Ii+1
+   22   if Ii<107 then goto 12
+   24   goto 40
+   30   print Ii,Rem1
+   32   end
+   40   print "nogo"
+   42   end

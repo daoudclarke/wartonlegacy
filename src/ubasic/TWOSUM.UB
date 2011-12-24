@@ -1,0 +1,14 @@
+ 1080   *Twosum(P,&A,&B)
+ 1090   ' Expresses p = a^2 + b^2, for p=1 (mod 4) and prime.
+ 1095   ' Expects p to be prime - primality is not tested.
+ 1100   ' Modeled on the Pascal version.  27 April 1990
+ 1110   local T,Te,G,Sqrtp
+ 1120   if P@4<>1 then A=0:B=0:return endif
+ 1125   Sqrtp=isqrt(P):if (res=0) then A=0:B=0:return endif
+ 1130   T=1:repeat inc T until kro(T,P)=-1
+ 1140   G=modpow(T,(P-1)\4,P):if P\2<G then G=P-G endif
+ 1160   A=P@G
+ 1170   if A=1 then B=G else
+ 1190   :while Sqrtp<A:Te=G:G=A:A=Te@G wend
+ 1200   :if A=0 then B=0 else:B=G@A endif endif
+ 1210   return ' End of subroutine TwoSum

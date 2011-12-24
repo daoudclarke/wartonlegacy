@@ -1,0 +1,17 @@
+ 1170   *Chinese(N%,&A(),&B(),&M(),&Soln,& modulus )
+ 1180   ' Chinese remaindering algorithm, modeled on the Pascal version.
+ 1190   ' 21 August 1990
+ 1200   local C,Ca,Te,Ta,I%,Aa,Bb
+ 1210   if N%<=0 then modulus=0:return endif
+ 1220   gosub *Fcgcd(A(1),M(1),&C,&Ca)
+ 1230   Te=B(1)\C:if res then modulus=0:return endif
+ 1240   Soln=Te*Ca:modulus=M(1)\C
+ 1250   for I%=2 to N%
+ 1260   Aa=A(I%)* modulus:Bb=B(I%)-A(I%)*Soln
+ 1270   gosub *Fcgcd(Aa,M(I%),&C,&Ca)
+ 1280   Te=Bb\C:if res then modulus=0:cancel for:return endif
+ 1290   Soln=Soln+ modulus *Te*Ca
+ 1300   modulus=modulus *(M(I%)\C)
+ 1310   Soln=Soln@ modulus
+ 1320   next I%
+ 1330   return ' End of subroutine Chinese

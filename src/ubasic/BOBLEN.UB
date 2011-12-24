@@ -1,0 +1,8 @@
+   10   N=10^23
+   12   U=1/3
+   13   print U
+   14   V=(8/9)^(1/3)
+   15   print V
+   16   N1=V*(log(N))^(1/3)*(log(log(N)))^(1-U)
+   18   N2=exp(N1)
+   20   print N2

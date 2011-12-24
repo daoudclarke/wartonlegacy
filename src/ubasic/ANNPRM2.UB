@@ -1,0 +1,106 @@
+    3   input "number";N
+    7   Isw1=0
+    8   gosub 300
+    9   gosub 200
+   10   Ifg=2
+   11   Ipow=2
+   12   Iy=Ifg
+   13   Iy2=Iy
+   14   if Ipow>Nk goto 20
+   16   Ipow=Ipow*2
+   18   goto 14
+   20   Ie=int(Ipow/2)
+   21   Ike=Ie
+   22   N1=Nk
+   23   Iy=Ifg
+   24   N1=N1-Ie
+   25   Iy2=Iy
+   26   if Ie=1 then goto 100
+   28   Ie=int(Ie/2)
+   30   Iy=Iy*Iy
+   32   Itemp=int(Iy/N)
+   34   Irem1=Iy-Itemp*N
+   36   Iy=Irem1
+   38   if N1<Ie then goto 26
+   40   N1=N1-Ie
+   42   Iy=Iy*Iy2
+   44   Itemp=int(Iy/N)
+   46   Irem1=Iy-Itemp*N
+   48   Iy=Irem1
+   50   goto 26
+  100   if Isw1=1 then goto 104
+  101   if Iy=N-1 then goto 140
+  102   if Iy>1 goto 110
+  103   goto 130
+  104   Little=Iy
+  105   gosub 917
+  106   if Gcd2>1 then goto 150
+  107   print N,"is prime"," base=",Ifg
+  108   end
+  110   print N,"is composite","iy",Iy,"nk=",Nk
+  112   N=N+Diff
+  114   goto 9
+  120   end
+  130   print N,"is possibly prime","base=",Ifg
+  131   Ie=Ike
+  132   Ifg=Ifg+1
+  134   goto 22
+  140   if Isw1=1 then goto 104
+  141   print "iy",Iy
+  142   Isw1=1
+  144   Ie=Ike3
+  145   print "ike3",Ike3,"ike",Ike,"mk",Mk
+  146   N1=Mk
+  147   goto 23
+  150   Ifg=Ifg+1
+  152   Ie=Ike
+  154   Isw1=0
+  156   goto 22
+  200   A=A
+  202   Ipow=2
+  203   goto 216
+  204   if Ipow>Mk then goto 210
+  206   Ipow=Ipow*2
+  208   goto 204
+  210   Ike3=int(Ipow/2)
+  212   return
+  216   Ab=2
+  218   if N<104 then goto 238
+  220   Itemp=N
+  221   Prx1=nxtprm(Ab)
+  222   Itemp2=int(Itemp/Prx1)
+  223   Irem1=Itemp-Itemp2*Prx1
+  224   if Irem1=0 then goto 250
+  226   Ab=Prx1
+  228   if Ab=103 then goto 238
+  230   goto 221
+  238   Nk=(N-1)/2
+  240   Mk=(N-1)/5
+  242   goto 204
+  250   print N,"is composite"
+  252   N=N+Diff
+  260   goto 216
+  300   Itemp=N-1
+  302   Jcon=0
+  304   Itemp2=int(Itemp/10)
+  306   Irem1=Itemp-Itemp2*10
+  308   if Irem1>0 then goto 320
+  310   Jcon=Jcon+1
+  311   if Itemp2<10 then goto 320
+  312   Itemp=Itemp2
+  314   goto 304
+  320   Diff=10^Jcon
+  322   print "diff",Diff
+  323   A=A
+  324   return
+  917   Big=N
+  920   Itemp=int(Big/Little)
+  921   A=A
+  922   Irem1=Big-Itemp*Little
+  924   if Irem1=0 then goto 940
+  926   Big=Little
+  928   Little=Irem1
+  930   goto 920
+  940   Gcd2=Little
+  942   return
+ 1000   print "annprm2"

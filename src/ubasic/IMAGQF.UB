@@ -1,0 +1,32 @@
+   10   'IMAGQF version 1.4
+   20   '
+   30   print:print " * Class number of imaginary quadratic fields"
+   35         print "   (by the analytic formula)"
+   40   loop
+   50    print:input "Absolute value inside the square root=";N
+   60    if N<=0 then end
+   70    if N<4 then H=1:goto 110
+   80    if N>=2^32 then print "Too big.":jump
+   90    if fnSqDiv(N)>1 then print "Square factor exists.":jump
+  100    H=fnClassImqf2(N)
+  110    print "Class number =";H
+  120    **
+  130   endloop
+  140   '
+  150   fnClassImqf2(N)
+  160   local D,Stp,H,X
+  170    if N@4=3 then D=N:Stp=1 else D=4*N:Stp=2
+  180    clr H
+  190    for X=1 to D\2 step Stp
+  200       H=H+kro(-D,X)
+  210    next
+  220    H=H\(2-kro(-D,2))
+  230   return(H)
+  240   '
+  250   ' get a square divisor
+  260   '
+  270   fnSqDiv(N)
+  280   local Sd
+  290    Sd=prmdiv(N):N=N\Sd
+  300    if N=1 then Sd=1 else if N@Sd then 290
+  310   return(Sd)

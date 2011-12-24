@@ -1,0 +1,21 @@
+   10   'EULER v1.4
+   30   word -*:point -210:clr time
+   40   print:print "Computation of EULER constant by 1000 digits"
+   50   if exist("BERNTBL.UBD") then open "BERNTBL" for input as #1
+   60   :else print "RUN after making BERNTBL by BERNOULL program"
+   70     :beep:end
+   80   Bits=10:N=2^Bits
+   90   C=0
+  100   for I=1 to N-1
+  110      C=C+1/I
+  120   next
+  130   C=C-log(N)+1/(2*N)
+  140   M=2:Shift0=2*Bits:Shift1=Shift0
+  150   repeat
+  160      input #1,B1,B2
+  170      B=sft(B1/(B2*M),-Shift1):C=C+B:M=M+2:Shift1=Shift1+Shift0
+  180      input #1,B1,B2
+  190      B=sft(B1/(B2*M),-Shift1):C=C-B:M=M+2:Shift1=Shift1+Shift0
+  200   until B=0
+  210   print:print using(,1000),C
+  220   print time:end

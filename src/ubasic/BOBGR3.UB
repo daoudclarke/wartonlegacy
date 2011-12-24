@@ -1,0 +1,454 @@
+    1   dim D1(20),Ip(20),Ib(20),Idiff(20),Jdiff(20),Kdiff(20)
+    2   input "enter code";N
+    3   input "what is the likely maximum prime as approx. power of 10";Nr
+    4   Nr=10^Nr*2.2
+    5   Pow=log(log(Nr))
+    6   Pow=(log(Nr)*Pow)^0.5
+    7   L1=exp(Pow)
+    8   L1=L1^(1/(2^0.5))
+    9   Ebig=log(L1)
+   10   Prn=L1
+   11   Nje=1/(2^0.5)
+   16   Igb=4
+   18   K=0
+   22   Ic=0
+   23   K=K+1
+   24   gosub 760
+   25   N1=N*K
+   26   Igb=nxtprm(Igb)
+   27   Ibigsw=0
+   28   A=A
+   30   Itemp=int(N1/4)
+   31   Irem=N1-Itemp*4
+   32   if Irem=3 then goto 38
+   34   D1=-4*N1
+   36   goto 40
+   38   D1=-1*N1
+   40   Itemp=abs(D1)
+   41   Itemp2=int(Itemp/(4*Igb))
+   42   A=A
+   43   Irem=Itemp-Itemp2*Igb*4
+   44   if Irem=0 then goto 26
+   45   Ib=0
+   46   Ib=Ib+1
+   47   Itemp=Ib*Ib-D1
+   48   Itemp2=int(Itemp/(4*Igb))
+   49   Irem=Itemp-Itemp2*4*Igb
+   50   if Irem=0 then goto 53
+   51   if Ib<Igb-1 then goto 46
+   52   goto 26
+   53   Icz=0
+   54   A=A
+   55   A=A
+   56   A=A
+   58   A=A
+   60   Dn=D1
+   61   gosub 774
+   62   F1=Igb
+   64   F2=Ib
+   66   F3=(Ib*Ib-Dn)/(4*Igb)
+   67   A=A
+   68   G1=F1
+   70   G2=F2
+   72   G3=F3
+  110   Ab=2
+  111   I=1
+  114   Prx1=nxtprm(Ab)
+  115   Prx2=Ab
+  116   Ab=Prx1
+  118   if Ab>Prn then goto 1000
+  119   Ipre1=F1
+  120   Ipre2=F2
+  121   Q=Ab
+  122   Ipre3=F3
+  123   Q1=Q
+  124   A=A
+  125   L=int(L1/Q)
+  128   if Q1>L then goto 131
+  129   Q1=Q1*Q
+  130   goto 128
+  131   print K,Q1
+  136   Ee=1
+  138   if Ee>Q1 then goto 146
+  140   Ee=Ee*2
+  142   goto 138
+  146   Ee=Ee/2
+  147   A=A
+  148   Q1=Q1-Ee
+  150   if Ee=1 then goto 300
+  152   Ee=Ee/2
+  154   Ff1=G1
+  156   Ff2=G2
+  158   Ff3=G3
+  160   Gg1=G1
+  162   Gg2=G2
+  164   Gg3=G3
+  166   gosub 400
+  167   print "fine3"
+  236   if Q1<Ee then goto 150
+  238   Q1=Q1-Ee
+  240   Ff1=F1
+  242   Ff2=F2
+  244   Ff3=F3
+  246   Gg1=G1
+  248   Gg2=G2
+  250   Gg3=G3
+  252   gosub 400
+  272   goto 150
+  300   if Ibigsw=1 then goto 1220
+  301   if Ic=20 then goto 590
+  302   Ic=Ic+1
+  304   F1=G1
+  306   F2=G2
+  308   F3=G3
+  310   goto 114
+  350   stop
+  352   goto 22
+  360   Aa=Aa+1
+  362   print "i",I
+  364   A=A
+  366   goto 56
+  380   print "limit reached"
+  382   end
+  400   if Ff1>Gg1 then goto 404
+  402   goto 422
+  404   Itemp1=Ff1
+  406   Itemp2=Ff2
+  408   Itemp3=Ff3
+  410   Ff1=Gg1
+  412   Ff2=Gg2
+  414   Ff3=Gg3
+  416   Gg1=Itemp1
+  418   Gg2=Itemp2
+  420   Gg3=Itemp3
+  422   S1=(Ff2+Gg2)/2
+  424   N1=Gg2-S1
+  425   A=Gg1
+  426   B=Ff1
+  428   gosub 800
+  429   Iu=U
+  430   Iv=V
+  431   Id=D
+  432   if D>1 then goto 436
+  433   Aw=-1*U*N1
+  434   Id1=D
+  435   goto 1400
+  436   Itemp=int(S1/D)
+  437   Irem=S1-Itemp*D
+  438   Id1=D
+  439   if Irem>0 then goto 452
+  440   Aw=-1*U*N1
+  442   Id1=D
+  444   Ff1=Ff1/Id1
+  446   Gg1=Gg1/Id1
+  448   S1=S1/Id1
+  450   A=A
+  451   goto 1400
+  452   A=S1
+  454   B=D
+  456   gosub 800
+  458   Id1=D
+  460   if Id1=1 then goto 468
+  462   Ff1=Ff1/Id1
+  463   Gg1=Gg1/Id1
+  464   S1=S1/Id1
+  466   Id=Id/Id1
+  468   Iu1=U
+  470   Iv1=V
+  472   Itemp=int(Ff3/Id)
+  473   Ff3=Ff3-Itemp*Id
+  474   Itemp=int(Gg3/Id)
+  476   Gg3=Gg3-Itemp*Id
+  478   Ll=-1*Iu1*(Iu*Ff3+Iv*Gg3)
+  480   Itemp=int(Ll/Id)
+  482   Ll=Ll-Itemp*Id
+  484   Aw=-1*Iu*(N1/Id)+Ll*(Ff1/Id)
+  486   Itemp=int(Aw/Ff1)
+  488   Aw=Aw-Ff1*Itemp
+  490   Aw1=Ff1-Aw
+  492   if Aw1<Aw then goto 496
+  494   goto 498
+  496   Aw=-1*Aw1
+  498   goto 1400
+  499   A=A
+  500   if Ir=Hh1 then goto 510
+  502   if Ir<Hh1 then goto 510
+  504   Ir=Ir-2*Hh1
+  506   Iqq=Iqq+1
+  510   Hh3=Hh3-((Hh2+Ir)*Iqq)/2
+  512   Hh2=Ir
+  514   if Hh1>Hh3 then goto 518
+  516   goto 530
+  518   Hh2=-1*Hh2
+  520   Itemp=Hh1
+  522   Hh1=Hh3
+  524   Hh3=Itemp
+  526   goto 1542
+  530   if Hh1<Hh3 then goto 538
+  532   if Hh2=0 then goto 538
+  534   if Hh2>0 then goto 538
+  536   Hh2=-1*Hh2
+  538   G1=Hh1
+  540   G2=Hh2
+  542   G3=Hh3
+  543   print "fine","ggs",Gg1,Gg2,Gg3,"ffs",Ff1,Ff2,Ff3
+  544   Icz=Icz+1
+  545   if Icz<3 then goto 547
+  546   stop
+  547   A=A
+  550   return
+  590   Gtem1=G1
+  592   Gtem2=G2
+  594   Gtem3=G3
+  600   E1=0
+  602   if G2=0 then goto 700
+  604   if G1=G2 then goto 710
+  606   if G1=G3 then goto 730
+  608   if E1<Ebig then goto 620
+  610   Ic=0
+  612   G1=Gtem1
+  614   G2=Gtem2
+  616   G3=Gtem3
+  617   if Ibigsw=1 then goto 1094
+  618   goto 114
+  620   E1=E1+1
+  622   Ff1=G1
+  624   Ff2=G2
+  626   Ff3=G3
+  628   Gg1=G1
+  630   Gg2=G2
+  632   Gg3=G3
+  634   gosub 400
+  642   goto 602
+  700   if G1<K+1 then goto 22
+  701   print "factor found",int(G1)
+  702   print "cofactor=",int(G3)
+  703   print "gs",G1,G2,G3
+  704   end
+  710   Itemp=int(Hh2/2)
+  711   if G1<K+1 then goto 22
+  712   Irem=Hh2-Itemp*2
+  714   if Irem=1 then goto 722
+  716   Fact1=int(Hh2/2)
+  718   Fact2=2*Hh3-Fact1
+  720   goto 750
+  722   Fact1=Hh2
+  724   Fact2=4*Hh3-Hh2
+  726   goto 750
+  730   Itemp=int(Hh2/2)
+  731   if G1<K+1 then goto 22
+  732   Irem=Hh2-Itemp*2
+  734   if Irem=1 then goto 742
+  736   Fact1=Itemp+Hh1
+  738   Fact2=Hh1-Itemp
+  740   goto 750
+  742   Fact1=2*Hh1-Hh2
+  744   Fact2=2*Hh1+Hh2
+  750   print "factor found=",int(Fact1)
+  752   print "cofactor=",int(Fact2)
+  753   print "gs",G1,G2,G3
+  754   end
+  760   Nv=Nr*K*4
+  762   Pow=log(log(Nv))
+  764   Pow=(log(Nv)*Pow)^0.5
+  766   L1=exp(Pow)
+  768   L1=L1^Nje
+  770   Ebig=log(L1)
+  772   Prn=L1
+  773   return
+  774   Inz=int(abs(Dn/4))
+  775   Lbig=Inz^(1/4)
+  776   Lbig=int(Lbig)
+  777   print "lbig",Lbig,"dn",Dn,"inz",Inz
+  778   A=A
+  780   return
+  800   if B<0 then goto 804
+  802   goto 810
+  804   B=B+A
+  810   U=1
+  811   D=A
+  812   if B=0 then goto 888
+  813   V1=0
+  814   V3=B
+  815   if V3=0 then goto 828
+  816   Qq=int(D/V3)
+  817   T3=D-Qq*V3
+  818   T1=U-Qq*V1
+  819   U=V1
+  820   D=V3
+  821   V1=T1
+  822   V3=T3
+  823   goto 815
+  828   A=A
+  830   V=(D-A*U)/B
+  831   goto 890
+  840   V=0
+  850   goto 890
+  860   if U=0 then goto 870
+  862   if U<0 then goto 870
+  863   V=V*(1-A)
+  864   V=int(V)
+  865   A=A
+  866   Temp=int(V/A)
+  869   V=V-Temp*A
+  870   A=A
+  872   goto 890
+  888   V=B
+  890   return
+  917   Big=N
+  918   if Little=0 then goto 944
+  919   Temp=int(Big/Little)
+  920   Rem1=Big-Little*Temp
+  921   print "litle",Little
+  922   if Rem1=0 then goto 940
+  924   Big=Little
+  926   Little=Rem1
+  928   goto 918
+  940   Gcd2=Little
+  942   goto 950
+  944   Gcd2=0
+  950   return
+ 1000   Icur1=F1
+ 1001   Ibigsw=1
+ 1002   Icur2=F2
+ 1003   A=A
+ 1004   Icur3=F3
+ 1006   Ff1=Ipre1
+ 1008   Ff2=Ipre2
+ 1010   Ff3=Ipre3
+ 1012   Gg1=Ipre1
+ 1014   Gg2=Ipre2
+ 1016   Gg3=Ipre3
+ 1017   Ic=0
+ 1018   gosub 400
+ 1020   Idiff(1)=G1
+ 1022   Jdiff(1)=G2
+ 1024   Kdiff(1)=G3
+ 1026   Ff1=G1
+ 1028   Ff2=G2
+ 1030   Ff3=G3
+ 1032   Gg1=G1
+ 1034   Gg2=G2
+ 1036   Gg3=G3
+ 1038   gosub 400
+ 1040   Idiff(2)=G1
+ 1042   Jdiff(2)=G2
+ 1044   Kdiff(2)=G3
+ 1046   Icon=2
+ 1048   Ff1=Idiff(1)
+ 1050   Ff2=Jdiff(1)
+ 1052   Ff3=Kdiff(1)
+ 1054   Gg1=G1
+ 1056   Gg2=G2
+ 1058   Gg3=G3
+ 1060   gosub 400
+ 1062   Icon=Icon+1
+ 1064   Idiff(Icon)=G1
+ 1066   Jdiff(Icon)=G2
+ 1068   Kdiff(Icon)=G3
+ 1070   if Icon=20 then goto 1076
+ 1072   goto 1048
+ 1076   Pdiff=Ab-Prx2
+ 1077   Prx2=Ab
+ 1078   Pdiff2=int(Pdiff/2)
+ 1080   if Pdiff2>20 then goto 1200
+ 1081   A=A
+ 1082   Ff1=Icur1
+ 1084   Ff2=Icur2
+ 1086   Ff3=Icur3
+ 1088   Gg1=Idiff(Pdiff2)
+ 1090   Gg2=Jdiff(Pdiff2)
+ 1092   Gg3=Kdiff(Pdiff2)
+ 1093   gosub 400
+ 1094   Icur1=G1
+ 1095   Icur2=G2
+ 1096   Icur3=G3
+ 1097   if Ic=400 then goto 1210
+ 1098   if Ab>Prn*80 then goto 22
+ 1099   Ab=nxtprm(Prx2)
+ 1100   Ic=Ic+1
+ 1102   goto 1076
+ 1200   Q1=Pdiff
+ 1201   G1=Ipre1
+ 1202   F1=G1
+ 1203   G2=Ipre2
+ 1204   F2=G2
+ 1205   G3=Ipre3
+ 1206   F3=G3
+ 1208   goto 131
+ 1210   Ic=0
+ 1211   print "k",K,"ab",Ab
+ 1212   goto 590
+ 1220   Ff1=Icur1
+ 1222   Ff2=Icur2
+ 1224   Ff3=Icur3
+ 1226   Gg1=G1
+ 1228   Gg2=G2
+ 1230   Gg3=G3
+ 1232   gosub 400
+ 1234   goto 1094
+ 1300   V=0
+ 1302   D=A
+ 1304   IV2=1
+ 1306   IV3=B
+ 1308   Iz=0
+ 1310   if abs(IV3)>Lbig then goto 1324
+ 1312   Itemp=int(Iz/2)
+ 1314   Irem=Iz-Itemp*2
+ 1316   if Irem=0 then goto 1398
+ 1318   IV2=-1*IV2
+ 1320   IV3=-1*IV3
+ 1322   goto 1398
+ 1324   Iq=int(D/IV3)
+ 1326   It3=D-Iq*IV3
+ 1328   It2=V-Iq*IV2
+ 1330   V=IV2
+ 1332   D=IV3
+ 1334   IV2=It2
+ 1336   IV3=It3
+ 1338   Iz=Iz+1
+ 1340   goto 1310
+ 1398   return
+ 1400   A=Ff1
+ 1402   B=Aw
+ 1403   A=A
+ 1404   gosub 1300
+ 1405   Id3=D
+ 1406   if Iz>0 then goto 1500
+ 1407   A=A
+ 1408   Qb1=Gg1*IV3
+ 1410   Qb2=Qb1+N1
+ 1411   A=A
+ 1412   Fb=Qb2/Id3
+ 1414   Gb=(IV3*S1+Gg3)/Id3
+ 1415   A=A
+ 1416   Hh1=Id3*Gg1
+ 1418   Hh3=IV3*Id3+Gb*Id1
+ 1420   Hh2=2*Qb1+Gg2
+ 1421   A=A
+ 1422   A=A
+ 1423   goto 1536
+ 1500   Bb=(Gg1*Id3+N1*V)/Ff1
+ 1501   print "bb",Bb
+ 1502   Qb1=Bb*IV3
+ 1504   Qb2=Qb1+N1
+ 1506   Fb=Qb2/Id3
+ 1508   Eb=(S1*Id3+Gg3*V)/Ff1
+ 1510   Qb3=Eb*IV2
+ 1512   Qb4=Qb3-S1
+ 1513   A=A
+ 1514   Gb=Qb4/V
+ 1515   A=A
+ 1516   if Id1=1 then goto 1530
+ 1518   IV2=Id1*IV2
+ 1520   V=Id1*V
+ 1530   Hh1=Id3*Bb+Eb*V
+ 1532   Hh3=IV3*Fb+Gb*IV2
+ 1534   Hh2=Qb1+Qb2+Id1*(Qb3+Qb4)
+ 1536   if Hh1*(-1)<Hh2 then goto 1540
+ 1538   goto 1542
+ 1540   if Hh2<Hh1+1 then goto 514
+ 1542   Itemp=int(Hh2/(2*Hh1))
+ 1544   Ir=Hh2-Itemp*2*Hh1
+ 1546   Iqq=Itemp
+ 1548   goto 500

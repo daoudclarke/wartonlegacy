@@ -1,0 +1,90 @@
+    2   dim Arr(10)
+   10   P=5261829949
+   11   Ming=10^100
+   12   Irt1=3835003207
+   14   Irt2=P-Irt1
+   16   Aa=28350
+   18   Incr=46080
+   19   goto 90
+   20   Invcc=V
+   22   Arr(1)=1
+   24   Arr(2)=7
+   26   Arr(3)=11
+   28   Arr(4)=13
+   30   Arr(5)=17
+   32   Arr(6)=19
+   34   Arr(7)=23
+   36   Arr(8)=29
+   37   for J=1 to 785
+   38   for I=1 to 8
+   39   A=P
+   40   A=A
+   41   A=A
+   42   Invcc=Invcc
+   43   Itemp=(-1)*Aa+Irt1*((J-1)*30+Arr(I))
+   44   Itemp=Itemp*Invcc
+   46   Itemp2=int(Itemp/P)
+   48   Irem=Itemp-P*Itemp2
+   49   A=A
+   50   if Irem>Ming then goto 52
+   51   goto 70
+   52   Itemp=(-1)*Aa+Irt2*((J-1)*30+Arr(I))
+   54   Itemp=Itemp*Invcc
+   56   Itemp2=int(Itemp/P)
+   58   Irem=Itemp-P*Itemp2
+   60   if Irem>Ming then goto 78
+   61   Ming=Irem
+   62   Iming=I
+   64   Jming=J
+   65   goto 78
+   68   A=A
+   70   Ming=Irem
+   71   Iming=I
+   72   Jming=J
+   74   goto 52
+   78   next I
+   79   next J
+   80   print "j",Jming,"i",Iming,"min",Ming
+   81   Ind2=30*(Jming-1)+Arr(Iming)
+   82   print "bigstep",Ming,"small step",Ind2,"startexp",Aa,"p",P
+   84   stop
+   86   print "j",J,"i",I,"irem",Irem,"irt2"
+   88   stop
+   90   A=P
+   92   B=Incr
+   94   gosub 800
+   96   print "v",V
+   98   goto 20
+  800   if B<0 then goto 804
+  802   goto 810
+  804   B=B+A
+  810   U=1
+  811   D=A
+  812   if B=0 then goto 888
+  813   V1=0
+  814   V3=B
+  815   if V3=0 then goto 828
+  816   Qq=int(D/V3)
+  817   T3=D-Qq*V3
+  818   T1=U-Qq*V1
+  819   U=V1
+  820   D=V3
+  821   V1=T1
+  822   V3=T3
+  823   goto 815
+  828   if D>1 then goto 890
+  830   V=(D-A*U)/B
+  831   goto 860
+  840   V=0
+  850   A=A
+  860   if U=0 then goto 870
+  862   if U<0 then goto 870
+  863   V=V*(1-A)
+  864   V=int(V)
+  865   A=A
+  866   Temp=int(V/A)
+  869   V=V-Temp*A
+  870   A=A
+  872   goto 890
+  888   V=B
+  890   return

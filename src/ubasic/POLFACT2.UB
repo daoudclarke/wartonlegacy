@@ -1,0 +1,213 @@
+   10   'POLFACT2 VER 2.0
+   20   console ,,0
+   30   randomize
+   40   print
+   50   print " * Polynomial factorization modulo a prime *"
+   60   print " * gives irreducible factors explicitly    *"
+   70   print " * use x or X for a variable               *"
+   80   print " * example : x^3+2*x^2+3*x+4               *":print
+   90   '
+  100   strinput "f(x)=";W#
+  110   U0#=""
+  120   I%=instr2(W#,"xX")
+  130   if I% then U0#+=left(W#,I%-1)+"_X":W#=mid(W#,I%+1,*):goto 120
+  140   U0#=val(U0#+W#)
+  150   print:print "f(X)=";U0#
+  160   Autosw%=0
+  170   *ModP
+  180     print:print "--------------------------------------------"
+  190     if Autosw% then P=prm(Autosw%):inc Autosw%:goto 250
+  200     input "Mod P=";P
+  210     if P=0 then end
+  220     :elseif P<0 then Autosw%=-P:goto 190
+  230     if P<>prmdiv(P) then print
+  240       :print "not a prime":beep:goto *ModP
+  250     print "   modulo ";P:print
+  260     X#=fnPolfact2(U0#,P)
+  270     if len(X#)=0 then print " constant":goto *Modp
+  280     gosub *PrintPoly(X#)
+  290   goto *Modp
+  300   '
+  310   *PrintPoly(X#)
+  320   local I%,W#
+  330   if member(X#,1)>1 then print member(X#,1);
+  340   for I%=2 to len(X#) step 2
+  350     W#="("+str(member(X#,I%))+")"
+  360     if member(X#,I%+1) then W#+="^"+mid(str(member(X#,I%+1)+1),2,*)
+  370     if I%<len(X#)-1 then W#+=" * "
+  380     if posx then if posx+len(W#)>79 then print
+  390     print W#;
+  400   next:print
+  410   return
+  420   '
+  430   '
+  440   fnPolfact2(U0#,P)
+  450   local I%,Deg%,U#=0,Ans#=pack()
+  460   dim Z#(deg(U0#))
+  470   modulus=P
+  480   for I%=0 to deg(U0#):coeff(U#,I%)=coeff(U0#,I%)@P:next
+  490   if deg(U#)<=0 then return(Ans#)
+  500   C=coeff(U#,deg(U#)):Ans#=pack(C):U#/=C:'RemoveConstFactor
+  510   gosub *RemoveMultiFactor:'U# -> U# * MF#
+  520   '
+  530   'get product of factors for each degree
+  540   '
+  550   gosub *MakeZPZ
+  560   Deg%=1
+  570   *DegreeLoop
+  580     X#=monic(gcd(U#,Z#))
+  590     if deg(X#) then Ans#+=fnIrredFactor(X#)
+  600       :U#\=X#
+  610     if deg(U#)<=2*Deg%+1 then 660
+  620     gosub *RaiseZPZ
+  630     inc Deg%
+  640   goto *DegreeLoop
+  650   '
+  660   if deg(U#) then Ans#+=U#
+  670   gosub *SortResult(&Ans#)
+  680   '
+  690   ' get multiple factors
+  700   '
+  710   X#=pack(member(Ans#,1))
+  720   for I%=2 to len(Ans#)
+  730     E%=0:Z#=member(Ans#,I%)
+  740     if deg(MF#) then
+  750       :while MF#@Z#=0:MF#\=Z#:inc E%:wend
+  760     X#+=pack(Z#,E%)
+  770   next
+  780   modulus=0
+  790   return(X#)
+  800   '
+  810   ' power of polynomial mod U#
+  820   '
+  830   fnPolyPower(Z#,E#)
+  840   local I%,W#
+  850   if E#=0 then return(poly(1))
+  860   W#=Z#
+  870   for I%=len(E#)-2 to 0 step -1
+  880     W#=W#^2@U#
+  890     if bit(I%,E#) then W#=W#*Z#@U#
+  900   next
+  910   return(W#)
+  920   '
+  930   ' remove multiple factors
+  940   '
+  950   *RemoveMultiFactor
+  960   MF#=U#
+  970   DU#=diff(U#):if deg(DU#)=0 then jump
+  980   if DU#=0 then W#=U#:U#=1:goto 1070:'p æ‘½€Ž®
+  990   G#=monic(gcd(U#,DU#))
+ 1000   if deg(G#)=0 then jump:'‘½dˆö”‚È‚µ
+ 1010   :else U#\=G#:W#=G#
+ 1020   repeat:'‘½dˆö”‚©‚ç p æˆö”‚ð‚Æ‚è‚¾‚·
+ 1030     G#=monic(gcd(U#,W#))
+ 1040     W#\=G#
+ 1050   until deg(G#)=0
+ 1060   if deg(W#)<=0 then jump:'p æˆö”‚È‚µ
+ 1070   G#=0:for I%=0 to deg(W#)\P:coeff(G#,I%)=coeff(W#,I%*P):next
+ 1080   U#*=G#:'1 æ‚¾‚¯–ß‚·
+ 1090   goto 970
+ 1100   **
+ 1110   MF#\=U#
+ 1120   return
+ 1130   '
+ 1140   ' Get Irreducible Factors
+ 1150   '	find factors of Deg% degree
+ 1160   '
+ 1170   fnIrredFactor(F#)
+ 1180   local I%,G#,U#,PowNeg#,W#,Z#,Ans#=pack(),Tmp#
+ 1190   if deg(F#)=Deg% then return(pack(F#))
+ 1200   U#=F#
+ 1210   Tmp#=pack(F#)
+ 1220   repeat
+ 1230     W#=fnRndPoly(2*Deg%-1)
+ 1240     if P=2 then Z#=W#:for I%=1 to Deg%-1:Z#=Z#^2@U#:W#+=Z#:next
+ 1250     :else W#=fnWPD(W#,Deg%)+poly(1)
+ 1260     U#=poly(1)
+ 1270     for I%=1 to len(Tmp#)
+ 1280       F#=member(Tmp#,I%)
+ 1290       if F#=0 then 1370
+ 1300       G#=monic(gcd(F#,W#))
+ 1310       if and{0<deg(G#),deg(G#)<deg(F#)} then
+ 1320         :F#\=G#
+ 1330         :if deg(F#)=Deg% then Ans#+=F#:F#=0 else U#*=F# endif
+ 1340         :member(Tmp#,I%)=F#
+ 1350         :if deg(G#)=Deg% then Ans#+=G# else Tmp#+=G#:U#*=G# endif
+ 1360       :else U#*=F#
+ 1370     next
+ 1380   until U#=poly(1)
+ 1390   return(Ans#)
+ 1400   '
+ 1410   fnRndPoly(Deg%)
+ 1420   local W#
+ 1430   Deg%=2+int(rnd*rnd*Deg%)
+ 1440   for I%=0 to Deg%
+ 1450     coeff(W#,I%)=int(rnd*P)
+ 1460   next
+ 1470   return(W#)
+ 1480   '
+ 1490   ' Sort result
+ 1500   '
+ 1510   *SortResult(&X#)
+ 1520   local I%,J%,W#,W1#,W2#
+ 1530   W#=X#:X#=pack(member(W#,1))
+ 1540   for I%=2 to len(W#)-1
+ 1550     Ptr%=I%:W1#=member(W#,I%)
+ 1560     for J%=I%+1 to len(W#)
+ 1570       W2#=member(W#,J%)
+ 1580       if fnPolycmp(W1#,W2#)>0 then Ptr%=J%:W1#=W2#
+ 1590     next
+ 1600     X#+=W1#:if Ptr%<>I% then W1#=member(W#,I%):member(W#,Ptr%)=W1#
+ 1610   next
+ 1620   X#+=member(W#,len(W#))
+ 1630   return
+ 1640   '
+ 1650   fnPolyCmp(W1#,W2#)
+ 1660   local I%
+ 1670   if deg(W1#)>deg(W2#) then return(1)
+ 1680   if deg(W1#)<deg(W2#) then return(-1)
+ 1690   for I%=deg(W1#) to 0 step -1
+ 1700     if coeff(W1#,I%)>coeff(W2#,I%) then cancel for:return(1)
+ 1710     if coeff(W1#,I%)<coeff(W2#,I%) then cancel for:return(-1)
+ 1720   next
+ 1730   return(0)
+ 1740   '
+ 1750   ' MAKE Z^P-Z
+ 1760   '
+ 1770   *MakeZPZ
+ 1780   local I%,W#
+ 1790   if deg(U#)>P then Z#=_X^P:goto 1860
+ 1800   W#=poly(0,1):Z#=poly(1)
+ 1810   for I%=0 to len(P)-2
+ 1820     if bit(I%,P) then Z#=Z#*W#@U#
+ 1830     W#=W#^2@U#
+ 1840   next
+ 1850   Z#=Z#*W#@U#
+ 1860   W#=Z#:Z#(1)=Z#
+ 1870   for I%=2 to deg(U#):W#=W#*Z#@U#:Z#(I%)=W#:next
+ 1880   Z#=(Z#-poly(0,1))@U#
+ 1890   return
+ 1900   '
+ 1910   ' MAKE Z^(P^deg)-Z from Z^(P^(deg-1))-Z
+ 1920   '
+ 1930   *RaiseZPZ
+ 1940   local I%,W#
+ 1950   W#=Z#+poly(0,1)
+ 1960   Z#=poly(coeff(W#,0))
+ 1970   for I%=1 to deg(W#):Z#+=Z#(I%)*coeff(W#,I%):next
+ 1980   Z#=(Z#-poly(0,1))@U#
+ 1990   return
+ 2000   '
+ 2010   ' MAKE W#^((P^deg%-1)\2)
+ 2020   '
+ 2030   fnWPD(W#,Deg%)
+ 2040   local I%,J%,V#,X#
+ 2050   W#=fnPolyPower(W#,(P-1)\2)
+ 2060   V#=W#
+ 2070   for I%=1 to Deg%-1
+ 2080     X#=poly(coeff(V#,0))
+ 2090     for J%=1 to deg(V#):X#+=Z#(J%)*coeff(V#,J%):next
+ 2100     V#=X#
+ 2110     W#=W#*V#@U#
+ 2120   next
+ 2130   return(W#)

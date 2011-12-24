@@ -1,0 +1,73 @@
+    8   Minq=10^200
+   10   input "public key1";N
+   12   input "first factor";Fact1
+   14   input "second factor";Fact2
+   16   input "first trial key";Qtr
+   18   input "key limit";Llim
+   20   Itemp=int(Qtr/2)
+   22   Irem=Qtr-Itemp*2
+   24   if Irem=1 then goto 50
+   26   Qtr=Qtr+1
+   50   A=Fact1-1
+   52   B=Fact2-1
+   54   gosub 810
+   60   Carmt=(A*B)/D
+   62   Carm=int(Carmt)
+   64   A=Carm
+   66   B=Qtr
+   68   gosub 810
+   69   D=int(D)
+   70   if D>1 then goto 80
+   72   Q1=Qtr
+   74   print "public key2",Q1,"no. of fixed points =",Minq
+   76   goto 200
+   80   Qtr=Qtr+2
+   82   goto 66
+  200   A=Fact1-1
+  202   B=Qtr-1
+  206   gosub 810
+  208   Gcdp=D
+  212   A=Fact2-1
+  214   gosub 810
+  216   Gcdq=D
+  220   Nfp=(1+Gcdp)*(1+Gcdq)
+  222   if Nfp<Minq then goto 230
+  224   goto 232
+  230   Minpk=Qtr
+  231   Minq=Nfp
+  232   if Qtr>Llim-1 then goto 240
+  234   Qtr=Qtr+2
+  236   goto 50
+  240   print "min. no. of fixed points in interval =",Minq
+  241   print "public key2",Minpk
+  242   end
+  810   U=1
+  811   D=A
+  812   if B=1 then goto 888
+  813   V1=0
+  814   V3=B
+  815   if V3=0 then goto 830
+  816   Qq=int(D/V3)
+  817   T3=D-Qq*V3
+  818   T1=U-Qq*V1
+  819   U=V1
+  820   D=V3
+  821   V1=T1
+  822   V3=T3
+  823   goto 815
+  830   V=(D-A*U)/B
+  831   goto 860
+  840   V=0
+  850   print "uv",U,V
+  860   if U=0 then goto 870
+  862   if U<0 then goto 870
+  863   V=V*(1-A)
+  864   V=int(V)
+  865   print "va",V,A
+  866   Temp=int(V/A)
+  869   V=V-Temp*A
+  870   print "funny",U,V
+  872   goto 890
+  888   V=B
+  890   return
+  892   print "bobtot2"

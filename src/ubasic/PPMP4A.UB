@@ -1,0 +1,120 @@
+   10   'PPMP4A version 2.1
+   20   '
+   30   '  factorization by PPMPQS
+   40   '        1991-93 by Yuji KIDA
+   50   '
+   60   'This matrix reduction method is based on the following papers:
+   70   'B.LaMacchia and A.Odlyzko: Solving large sparse linear systems
+   80   '    over finite fields., preprint.
+   90   'C.Pomerance and J.Smith: Reduction of huge, sparse matrices over
+  100   '    finite fields via created catastrophes., preprint.
+  110   '
+  120   word -23:point -2
+  130   '
+  140   DataDrv$=""
+  150   goto 250
+  160   '
+  170   *SetDriveData
+  180     ' set HDD drive numbers:0=current,1=A,2=B,...
+  190     Drv1%=0:Drv2%=0
+  200     ' set size for each drive ( must be even)
+  210     SZ1=(SZ\2)\2*2
+  220     SZ2=SZ-SZ1
+  230   return
+  240   '
+  250   Pc$#=version
+  260   if instr(Pc$#,"PC9801") then PC=0
+  270   :elseif instr(Pc$#,"IBM-PC") then PC=1
+  280   :elseif instr(Pc$#,"FMR") then PC=2
+  290   :else PC=10
+  300   '
+  310   'enable 20-31 bit address lines
+  320   if PC=0 then
+  330     :out 0xf2,0
+  340     :out 0xf2,0
+  350   :elseif PC=1 then
+  360     :out 0x64,0xd1:while bit(1,inp(0x64)) wend
+  370     :out 0x60,0xdf:while bit(1,inp(0x64)) wend
+  380     :out 0x64,0xff:while bit(1,inp(0x64)) wend
+  390   :elseif PC=2 then
+  400     :out 0x24,1
+  410     :out 0x24,1
+  420   :else
+  430     :print "not yet supported":end
+  440   :endif
+  450   '
+  460   print:print "4. reduce to the smaller matrix"
+  470   '
+  480   open DataDrv$+"PPMPDAT1" for input as #1
+  490   input #1,MSG$
+  500   input #1,N
+  510   input #1,SZ:NP=SZ-1
+  520   input #1,SieveWidth
+  530   input #1,KX:WN=N*KX
+  540   input #1,IniLog
+  550   input #1,Scale
+  560   input #1,CutLog
+  570   close #1
+  580   '
+  590   dim CT%(256)
+  600   dim MP%(10000)
+  610   bload "PPMP4A",MP%(P,F#,DataDrv$)
+  620   '
+  630   MP%(0)=0:MP%(1)=SZ\2:call MP%()
+  640   '
+  680   print "4a. make the history file";:locate 56:print date
+  690   print MSG$
+  700   MP%(0)=1:call MP%()
+  710   if MP%(0)=-1 then print "PPMPPRMS.UBD is needed":beep:stop:end
+  720   '
+  730   MP%(0)=2:call MP%()
+  740   if MP%(0)=-1 then print "PPMPDCMP.UBD is needed":beep:stop:end
+  750   '
+  760   clr time
+  770   MP%(0)=3:call MP%():'   decide inactive columns
+  780   Inactives=MP%(0)
+  790   HeavyWeight=MP%(1)
+  800   print chr(13);" (";Inactives;",";HeavyWeight;") ";
+  810   'print "inactive columns, heavy weight =";Inactives;HeavyWeight
+  820   if HeavyWeight=0 then *Done
+  830   '
+  840   repeat
+  850     MP%(0)=4:call MP%():'       find rows with 1 element column
+  860     MP%(0)=5:call MP%():'       delete those rows
+  870     Weight0=MP%(0):Weight1=MP%(1)
+  880     'print "columns with 0 or 1 nonzero element ";Weight0;Weight1
+  890   until Weight1=0
+  900   if Weight0=SZ then *Done
+  910   '
+  920   MP%(0)=8:call MP%():'       delete excess rows
+  930   'print "deleted excess rows =";MP%(0)
+  940   if MP%(0)>0 then 840
+  950   '
+  960   MP%(0)=6:call MP%():'       GAUSSIAN elimination weight 1
+  970   Sw%=MP%(0):if Sw%=-1 then print "disk error":beep:stop:end
+  980   if Sw% then 840
+  990   MP%(0)=7:call MP%():'       GAUSSIAN elimination weight 2
+ 1000   Sw%=MP%(0):if Sw%=-1 then print "disk error":beep:stop:end
+ 1010   if Sw% then 840 else 770
+ 1020   '
+ 1030   *Done
+ 1040   print
+ 1050   MP%(0)=9:call MP%():'      make reduced factor base file
+ 1060   MatrixSize=MP%(0)
+ 1070   if MatrixSize=-1 then print "disk error":beep:stop:end
+ 1080   if MatrixSize=-2 then print "data error":beep:stop:end
+ 1090   SZ=MatrixSize*2
+ 1100   gosub *SetDriveData
+ 1110   MP%(0)=10:call MP%():XMEMsize=MP%(0):'     get extended memory size
+ 1120   kill "ppmpdrv+":open "ppmpdrv" for output as #1
+ 1130     print #1,XMEMsize
+ 1140     print #1,DataDrv$
+ 1150     print #1,Drv1%,SZ1
+ 1160     print #1,Drv2%,SZ2
+ 1170   close #1
+ 1180   '
+ 1190   run "ppmp4b"
+ 1200   end
+ 1210   '
+ 1220   beep:print "disk error":stop
+ 1230   end

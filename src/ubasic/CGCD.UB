@@ -1,0 +1,13 @@
+   10   *Cgcd(A,B,&C,&Ca,&Cb)
+   20   ' Gcd with coefficients.  c is the gcd of a and b.
+   30   ' ca*a + cb*b = c     2 May  1990
+   40   local R,Q,T,Af,Bf,B1
+   50   Ca=1:B1=0:Af=A:Bf=B
+   60   while B
+   70   T=B:Q=A\B:B=res
+   80   R=Ca-Q*B1:Ca=B1:B1=R:A=T
+  100   wend
+  110   C=A
+  120   if Bf then T=C-Ca*Af:Cb=T\Bf else Cb=0 endif
+  160   if C<0 then neg C:neg Ca:neg Cb endif
+  170   return:' End of procedure Cgcd.

@@ -1,0 +1,24 @@
+  600   N=30053021
+  602   Coun=0
+  604   I=2
+  606   Tempb=N*I
+  608   Nsq=int(Tempb^0.5)
+  610   Nsq2=Nsq*Nsq
+  612   J=1
+  614   Cc=Tempb-Nsq2-Nsq*J
+  616   Diss=J^2-4*Cc
+  618   if abs(Diss)>1000 then goto 624
+  620   Coun=Coun+1
+  622   print "hit",I,J,Cc,Diss,Coun
+  624   J2=J*(-1)
+  626   Cc2=Tempb-Nsq2-Nsq*J2
+  628   Diss2=J^2-4*Cc2
+  630   if abs(Diss2)>1000 then goto 634
+  632   Coun=Coun+1
+  633   print "hit2",Nsq,J2,Cc2,Diss2,Coun
+  634   J=J+1
+  636   if J<10 then goto 614
+  638   I=I+1
+  640   if I<11201 then goto 606
+  642   print "endwell",Coun
+  644   end

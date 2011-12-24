@@ -1,0 +1,494 @@
+   10   '
+   20   '         "APRT-CLE" is the extended version of "APRT-CL"
+   30   '      Cohen-Lenstra version of Adleman-Pomerance-Rumely Test
+   40   '                  programmed by Koichiro Akiyama
+   50   '                             1988 2 12
+   60   '
+   70   '            modified for UBASIC version 7 by Yuji KIDA
+   80   '                       1989 1 31 & 1989 3 30
+   90   '                      amended by Frank O'Hara
+  100   '                             1990 1 28
+  110   '       extended to 844 digits using extra memories by Yuji KIDA
+  120   '                             1991 9 30
+  130   '  extended to 844 digits WITHOUT using extra memories by Frank O'Hara
+  140   '                             1991 12 13
+  150   '                     rearranged by Yuji KIDA
+  160   '                             1992 1 24
+  170   '
+  180   word -200
+  190   NPmax%=6:PWmax%=32:PWmax1%=PWmax%-1:Prms32767%=3512
+  200   NQmax%=136:Qmax%=30241
+  210   LEVELmax%=11
+  220   dim Indx%(Qmax%),F%(Qmax%)
+  230   dim P%(NPmax%),Qmem%(NQmax%),Q%(NQmax%),G%(NQmax%),Inv%(PWmax1%)
+  240   dim NP%(LEVELmax%),NQ%(LEVELmax%),T(LEVELmax%)
+  250   dim JS(PWmax1%),JW(PWmax1%),JX(PWmax1%)
+  260   dim J0(PWmax1%),J1(PWmax1%),J2(PWmax1%)
+  270   dim J(1,PWmax1%)
+  280   '
+  290   input "Test number  N=";N
+  300   if N<2 then end
+  310   clr time
+  320   '
+  330   gosub *GetAllPrimes
+  340   gosub *GetPrimes2Test
+  350   if LEVELnow%=-1 then
+  360     :print:print "This number is too large.":end
+  370   '
+  380   print:print "Preparatory test"
+  390   W=prmdiv(N)
+  400   if W=N then *YesPrime
+  410   if W<>0 then *FindFactor
+  420   print "    Pass !";
+  430   '
+  440   '     Main test
+  450   '
+  460   *MainStart
+  470   for I%=1 to NP%
+  480     P%=P%(I%)
+  490     clr SW%,TestedQs%
+  500     print:print:print "Main test  for P=";P%
+  510     if P%>2 then
+  520       :if modpow(N,P%-1,P%^2)<>1 then SW%=1
+  530     for J%=TestedQs%+1 to TestingQs%
+  540       Q=Q%(J%):G%=G%(J%)
+  550       K%=fnPowerIndex(P%,Q-1)
+  560       if K%=0 then 760
+  570       print "   for Q=";Q;
+  580       PK%=P%^K%:PL%=(P%-1)*P%^(K%-1):PM%=P%^(K%-1)
+  590       gosub *GetIndexTable
+  600       gosub *GetFxTable
+  610       '
+  620       gosub *PrepareJacobis
+  630       gosub *CalcJacobiPQVs:'     J(v,p,q)
+  640       gosub *CalcJPQ0uJPQV:'      J(0,p,q)^u*J(v,p,q)
+  650       H%=fnMatchingRoot:'          J = zeta^H%
+  660       if H%=-1 then cancel for,for:goto *NotPrime
+  670       '
+  680       if SW%=1 then 760
+  690       if H%@P%=0 then 760
+  700       if P%<>2 then SW%=1:goto 760
+  710       if K%<>1 then 740
+  720       if N@4=1 then SW%=1:goto 760
+  730       goto 760
+  740       if modpow(Q,(N-1)\2,N)<>N-1 then cancel for,for:goto *NotPrime
+  750       SW%=1
+  760     next J%
+  770     if SW%=0 then TestedQs%=TestingQs%:goto *TestMoreQs
+  780   next I%
+  790   goto *Final
+  800   '
+  810   *TestMoreQs
+  820     if TestingQs%<NQ%(LEVELnow%) then
+  830       :print "retry";
+  840       :inc TestingQs%:Q=Q%(TestingQs%)
+  850       :U=T:repeat S*=Q:U=U\Q until res
+  860       :goto 530
+  870     cancel for
+  880   if LEVELnow%=LEVELmax% then *CannotTell
+  890   print "retry from the beginning";
+  900   inc LEVELnow%:T=T(LEVELnow%):NP%=NP%(LEVELnow%)
+  910   S=2
+  920   for J%=1 to NQ%(LEVELnow%)
+  930     Q=Q%(J%)
+  940     U=T:repeat S*=Q:U=U\Q until res
+  950     if S^2>N then TestingQs%=J%:cancel for:goto *MainStart
+  960   next
+  970   print "Program error !":stop:end
+  980   '
+  990   *Final
+ 1000   W=fnFinalTest
+ 1010   if and{1<W,W<N} then *FindFactor
+ 1020   '
+ 1030   *YesPrime
+ 1040   print "    Pass !"
+ 1050   print:print N;"is prime."
+ 1060   goto *End
+ 1070   '
+ 1080   *NotPrime
+ 1090   print:print "    Fail !"
+ 1100   print:print N;"is not prime."
+ 1110   goto *End
+ 1120   '
+ 1130   *FindFactor
+ 1140   print "    Fail !"
+ 1150   print:print N;"is a multiple of";W;"."
+ 1160   goto *End
+ 1170   '
+ 1180   *CannotTell
+ 1190   print "    Fail !"
+ 1200   print:print "I'm sorry !"
+ 1210   print "    I can't tell whether this number is prime or not."
+ 1220   print:print "test number=";N
+ 1230   print:print "Please try another test."
+ 1240   goto *End
+ 1250   '
+ 1260   *End
+ 1270   print time
+ 1280   end
+ 1290   '
+ 1300   *GetAllPrimes
+ 1310     for I%=1 to NPmax%:P%(I%)=prm(I%):next
+ 1320     NQall%=1:Qmem%(1)=2
+ 1330     T=2^5*3^3*5^2*7*11*13
+ 1340       gosub *GetallQs(T)
+ 1350     TestingQs%=1:Q%(1)=2:G%(1)=1
+ 1360     T(1)=2^2*3:NP%(1)=2
+ 1370       gosub *GetQsGs(T(1)):NQ%(1)=TestingQs%
+ 1380     T(2)=2^2*3*5:NP%(2)=3
+ 1390       gosub *GetQsGs(T(2)):NQ%(2)=TestingQs%
+ 1400     T(3)=2^2*3^2*5:NP%(3)=3
+ 1410       gosub *GetQsGs(T(3)):NQ%(3)=TestingQs%
+ 1420     T(4)=2^2*3^2*5*7:NP%(4)=4
+ 1430       gosub *GetQsGs(T(4)):NQ%(4)=TestingQs%
+ 1440     T(5)=2^3*3^2*5*7:NP%(5)=4
+ 1450       gosub *GetQsGs(T(5)):NQ%(5)=TestingQs%
+ 1460     T(6)=2^4*3^2*5*7:NP%(6)=4
+ 1470       gosub *GetQsGs(T(6)):NQ%(6)=TestingQs%
+ 1480     T(7)=2^4*3^3*5*7:NP%(7)=4
+ 1490       gosub *GetQsGs(T(7)):NQ%(7)=TestingQs%
+ 1500     T(8)=2^4*3^3*5*7*11:NP%(8)=5
+ 1510       gosub *GetQsGs(T(8)):NQ%(8)=TestingQs%
+ 1520     T(9)=2^4*3^3*5^2*7*11:NP%(9)=5
+ 1530       gosub *GetQsGS(T(9)):NQ%(9)=TestingQs%
+ 1540     T(10)=2^5*3^3*5^2*7*11:NP%(10)=5
+ 1550       gosub *GetQsGs(T(10)):NQ%(10)=TestingQs%
+ 1560     T(11)=2^5*3^3*5^2*7*11*13:NP%(11)=6:'11=LEVELmax%
+ 1570       gosub *GetQsGs(T(11)):NQ%(11)=TestingQs%
+ 1580   return
+ 1590   '
+ 1600   *GetPrimes2Test
+ 1610     for I%=1 to LEVELmax%
+ 1620       S=2
+ 1630       for J%=1 to NQ%(I%)
+ 1640         Q=Q%(J%)
+ 1650         U=T(I%):repeat S*=Q:U=U\Q until res
+ 1660         if S^2>N then
+ 1670           :LEVELnow%=I%:TestingQs%=J%
+ 1680           :T=T(LEVELnow%):NP%=NP%(LEVELnow%)
+ 1690           :cancel for,for:goto 1730
+ 1700       next
+ 1710     next
+ 1720     LEVELnow%=-1:'     too big
+ 1730   return
+ 1740   '
+ 1750   *PrepareJacobis
+ 1760     block J0(0..PK%-1)=0
+ 1770     block J1(0..PK%-1)=0
+ 1780      if P%>2 then
+ 1790       :gosub *JacobiSum(1,1)
+ 1800       :return
+ 1810     if K%=1 then return
+ 1820     '
+ 1830     gosub *JacobiSum(1,1)
+ 1840     block JW(0..PK%-1)=0
+ 1850     if K%=2 then return
+ 1860     '
+ 1870     block JW(0..PM%-1)=block J0(0..PM%-1)
+ 1880     gosub *JacobiSum(2,1)
+ 1890     block JS(0..PM%-1)=block J0(0..PM%-1)
+ 1900     gosub *JS_JW:gosub *NormalizeJS
+ 1910     block J1(0..PM%-1)=block JS(0..PM%-1)
+ 1920     gosub *JacobiSum(3*2^(K%-3),2^(K%-3))
+ 1930     block JW(0..PK%-1)=0
+ 1940     block JS(0..PM%-1)=block J0(0..PM%-1)
+ 1950     gosub *JS_2:gosub *NormalizeJS
+ 1960     block J2(0..PM%-1)=block JS(0..PM%-1)
+ 1970   return
+ 1980   '
+ 1990   '     J(p,q,v)              ( J(v,i) )
+ 2000   '
+ 2010   *CalcJacobiPQVs
+ 2020     local I%
+ 2030     block J(0..1,1..PK%-1)=0
+ 2040     block J(0..1,0)=1
+ 2050     VK%=N@PK%
+ 2060     gosub *GetInverseTable
+ 2070     if P%=2 then 2290
+ 2080     for IV%=0 to 1
+ 2090       for X%=1 to PK%-1
+ 2100         block JS(0..PK%-1)=block J0(0..PK%-1)
+ 2110         if X%@P%=0 then 2260
+ 2120         if IV%=0 then E=X%:goto 2150
+ 2130         E=(VK%*X%)\PK%
+ 2140         if E=0 then 2260
+ 2150         gosub *JS_E
+ 2160         block JW(0..PK%-1)=0
+ 2170         InvX%=Inv%(X%)
+ 2180         for I%=0 to PK%-1
+ 2190           S%=(I%*InvX%)@PK%
+ 2200           JW(S%)+=JS(I%)
+ 2210         next
+ 2220         gosub *NormalizeJW
+ 2230         block JS(0..PK%-1)=block J(IV%,0..PK%-1)
+ 2240         gosub *JS_JW
+ 2250         block J(IV%,0..PK%-1)=block JS(0..PK%-1)
+ 2260       next
+ 2270     next
+ 2280     return
+ 2290     if K%=1 then J(0,0)=Q:J(1,0)=1:return
+ 2300     if K%>2 then 2500
+ 2310   '
+ 2320   '     J(2,q,v) k=2             ( J(v,i) )
+ 2330   '
+ 2340     if VK%=1 then J(1,0)=1
+ 2350     for I%=0 to 1
+ 2360       JS(I%)=J0(I%)
+ 2370     next
+ 2380     gosub *JS_2
+ 2390     if VK%<>3 then 2430
+ 2400     for I%=0 to 1
+ 2410       J(1,I%)=JS(I%)
+ 2420     next
+ 2430     for I%=0 to 1
+ 2440       J(0,I%)=JS(I%)*Q
+ 2450     next
+ 2460     return
+ 2470   '
+ 2480   '     J(2,q,v) k>2             ( J(v,i) )
+ 2490   '
+ 2500     for IV%=0 to 1
+ 2510       for X%=1 to PK%-1 step 2
+ 2520         block JS(0..PM%)=block J1(0..PM%)
+ 2530         if or{X%@8=5,X%@8=7} then 2690
+ 2540         if IV%=0 then E=X%
+ 2550         :else E=(VK%*X%)\PK%
+ 2560            :if E=0 then 2690
+ 2570         gosub *JS_E
+ 2580         block JW(0..PK%-1)=0
+ 2590         InvX%=Inv%(X%)
+ 2600         for I%=0 to PK%-1
+ 2610           S%=(I%*InvX%)@PK%
+ 2620           JW(S%)+=JS(I%)
+ 2630         next
+ 2640         gosub *NormalizeJW
+ 2650         block JS(0..PK%-1)=block J(IV%,0..PK%-1)
+ 2660         gosub *NormalizeJS
+ 2670         gosub *JS_JW
+ 2680         block J(IV%,0..PK%-1)=block JS(0..PK%-1)
+ 2690       next X%
+ 2700       if or{IV%=0,VK%@8=1,VK%@8=3} then 2770
+ 2710       block JW(0..PK%-1)=0
+ 2720       block JS(0..PK%-1)=0
+ 2730       block JW(0..PM%-1)=block J2(0..PM%-1)
+ 2740       block JS(0..PM%-1)=block J(IV%,0..PM%-1)
+ 2750       gosub *JS_JW
+ 2760       block J(IV%,0..PM%-1)=block JS(0..PM%-1)
+ 2770     next IV%
+ 2780   return
+ 2790   '
+ 2800   '     J(0,p,q)^u*J(v,p,q)
+ 2810   '
+ 2820   *CalcJPQ0uJPQV
+ 2830     local I%,J%
+ 2840     block JS(0..PK%-1)=0
+ 2850     U=N\PK%
+ 2860     block JS(0..PL%-1)=block J(0,0..PL%-1)
+ 2870     E=U:gosub *JS_E
+ 2880     block JW(0..PK%-1)=0
+ 2890     for I%=0 to PL%-1
+ 2900       for J%=0 to PL%-1
+ 2910         S%=(I%+J%)@PK%
+ 2920         JW(S%)=(JW(S%)+JS(I%)*J(1,J%))@N
+ 2930       next
+ 2940     next
+ 2950     gosub *NormalizeJW
+ 2960     for I%=0 to PL%-1
+ 2970       JW(I%)@=N
+ 2980     next
+ 2990   return
+ 3000   '
+ 3010   fnMatchingRoot
+ 3020     local I%,J%,H%=-1
+ 3030     W=0
+ 3040     for I%=0 to PL%-1
+ 3050       W+=JW(I%)
+ 3060     next
+ 3070     if W=1 then
+ 3080       :for I%=0 to PL%-1
+ 3090          :if JW(I%)=1 then H%=I%:cancel for:goto 3230:endif
+ 3100       :next
+ 3110     '
+ 3120     if W<>(N-1)*(P%-1) then H%=-1:goto 3230
+ 3130     for I%=0 to PM%-1
+ 3140       if JW(I%)=N-1 then cancel for:goto 3180
+ 3150     next
+ 3160     H%=-1:goto 3230
+ 3170     '
+ 3180     for J%=1 to P%-2
+ 3190       S%=I%+J%*PM%
+ 3200       if JW(S%)<>N-1 then H%=-1:cancel for:goto 3230
+ 3210     next
+ 3220     H%=I%+PL%:'        =i%+(P%-1)*P%^(K%-1)
+ 3230   return(H%)
+ 3240   '
+ 3250   fnFinalTest
+ 3260     local I%,J%,T1%,T2%,R
+ 3270     R=1
+ 3280     T1%=T\10000:T2%=T@10000
+ 3290     for I%=1 to T1%
+ 3300       for J%=1 to 10000
+ 3310         R=R*N@S
+ 3320         if R=1 then cancel for,for:goto 3420
+ 3330         if and{N@R=0,R<N} then cancel for,for:goto 3420
+ 3340       next
+ 3350     next
+ 3360     for I%=1 to T2%
+ 3370       R=R*N@S
+ 3380       if R=1 then cancel for:goto 3420
+ 3390       if and{N@R=0,R<N} then cancel for:goto 3420
+ 3400     next
+ 3410     R=1
+ 3420   return(R)
+ 3430   '
+ 3440   '     table of index            x=G%^Indx%(x)@Q
+ 3450   '
+ 3460   *GetIndexTable
+ 3470     local I%
+ 3480     W%=1
+ 3490     for I%=1 to Q-1
+ 3500       W%=W%*G%@Q
+ 3510       Indx%(W%)=I%
+ 3520     next
+ 3530   return
+ 3540   '
+ 3550   '     table of F(x)             G%^F%(x)=1-G%^x
+ 3560   '
+ 3570   *GetFxTable
+ 3580     local I%
+ 3590     W%=1
+ 3600     for I%=1 to Q-2
+ 3610       W%=W%*G%@Q
+ 3620       F%(I%)=Indx%((1-W%)@Q)
+ 3630     next
+ 3640   return
+ 3650   '
+ 3660   '     Jacobi sum
+ 3670   '
+ 3680   *JacobiSum(A%,B%)
+ 3690     local I%,J%,K%
+ 3700     block J0(0..PL%-1)=0
+ 3710     for I%=1 to Q-2
+ 3720       J%=(A%*I%+B%*F%(I%))@PK%
+ 3730       if J%<PL% then inc J0(J%)
+ 3740       :else for K%=1 to P%-1:dec J0(J%-K%*PM%):next
+ 3750     next
+ 3760   return
+ 3770   '
+ 3780   '     table of inverses mod P^k         Inv%(x)*x@PK% = 1
+ 3790   '
+ 3800   *GetInverseTable
+ 3810     local I%
+ 3820     for I%=1 to PK%-1
+ 3830       if I%@P% then Inv%(I%)=modinv(I%,PK%) else Inv%(I%)=0
+ 3840     next
+ 3850   return
+ 3860   '
+ 3870   '     JS=JS^E
+ 3880   '
+ 3890   *JS_E
+ 3900     local I%
+ 3910     if E=1 then 3970
+ 3920     block JW(0..PL%-1)=block JS(0..PL%-1)
+ 3930     for I%=len(E)-2 to 0 step -1
+ 3940       gosub *JS_2
+ 3950       if bit(I%,E) then gosub *JS_JW
+ 3960     next
+ 3970   return
+ 3980   '
+ 3990   '     JS=JS*JW
+ 4000   '
+ 4010   *JS_JW
+ 4020     local I%,J%,K%
+ 4030     for I%=0 to PL%-1
+ 4040       for J%=0 to PL%-1
+ 4050         K%=(I%+J%)@PK%
+ 4060         JX(K%)=(JX(K%)+JS(I%)*JW(J%))@N
+ 4070       next
+ 4080     next
+ 4090     block JS(0..PK%-1)=block JX(0..PK%-1)
+ 4100     block JX(0..PK%-1)=0
+ 4110     gosub *NormalizeJS
+ 4120   return
+ 4130   '
+ 4140   '     JS=JS^2
+ 4150   '
+ 4160   *JS_2
+ 4170     local I%,J%,K%
+ 4180     for I%=0 to PL%-1
+ 4190       K%=2*I%@PK%
+ 4200       JX(K%)=(JX(K%)+JS(I%)^2)@N
+ 4210     next
+ 4220     for I%=0 to PL%-1
+ 4230       for J%=I%+1 to PL%-1
+ 4240         K%=(I%+J%)@PK%
+ 4250         JX(K%)=(JX(K%)+2*JS(I%)*JS(J%))@N
+ 4260       next
+ 4270     next
+ 4280     block JS(0..PK%-1)=block JX(0..PK%-1)
+ 4290     block JX(0..PK%-1)=0
+ 4300     gosub *NormalizeJS
+ 4310   return
+ 4320   '
+ 4330   '     normalize coefficient of JS
+ 4340   '
+ 4350   *NormalizeJS
+ 4360     local I%,J%
+ 4370     for I%=PL% to PK%-1
+ 4380       if JS(I%) then JW=JS(I%)
+ 4390         :for J%=1 to P%-1
+ 4400           :JS(I%-J%*PM%)-=JW
+ 4410         :next
+ 4420         :clr JS(I%)
+ 4430     next
+ 4440   return
+ 4450   '
+ 4460   '     normalize coefficient of JW
+ 4470   '
+ 4480   *NormalizeJW
+ 4490     local I%,J%
+ 4500     for I%=PL% to PK%-1
+ 4510       if JW(I%) then JW=JW(I%)
+ 4520         :for J%=1 to P%-1
+ 4530            :JW(I%-J%*PM%)-=JW
+ 4540         :next
+ 4550         :clr JW(I%)
+ 4560     next
+ 4570   return
+ 4580   '
+ 4590   'GENSHI version 1.4
+ 4600   fnGenshi(P)
+ 4610     local Gen=1,N=P-1,Nw,Div,SW%
+ 4620     repeat
+ 4630       inc Gen:Nw=N:SW%=1
+ 4640       repeat
+ 4650         Div=prmdiv(Nw)
+ 4660         repeat:Nw=Nw\Div:until res:Nw=Nw*Div+res
+ 4670         if modpow(Gen,N\Div,P)=1 then SW%=0:Nw=1
+ 4680       until Nw=1
+ 4690     until SW%
+ 4700   return(Gen)
+ 4710   '
+ 4720   *GetAllQs(T)
+ 4730     local I%,Q
+ 4740     for I%=2 to Prms32767%
+ 4750       Q=prm(I%)
+ 4760       if T@(Q-1)=0 then
+ 4770         :inc NQall%:Qmem%(NQall%)=Q
+ 4780     next
+ 4790   return
+ 4800   '
+ 4810   *GetQsGs(T)
+ 4820     local I%,Q
+ 4830     for I%=2 to NQall%
+ 4840       Q=Qmem%(I%)
+ 4850       if and{Q<>0,T@(Q-1)=0} then
+ 4860         :inc TestingQs%
+ 4870         :Q%(TestingQs%)=Q:G%(TestingQs%)=fnGenshi(Q):Qmem%(I%)=0
+ 4880     next
+ 4890   return
+ 4900   '
+ 4910   fnPowerIndex(P%,X)
+ 4920     local K%=-1
+ 4930       repeat inc K%:X=X\P% until res
+ 4940   return(K%)

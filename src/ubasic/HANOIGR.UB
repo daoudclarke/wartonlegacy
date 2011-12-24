@@ -1,0 +1,47 @@
+   10   'TOWER OF HANOI(graphic version)
+   20   ' for UBASIC86 version 7
+   30   '
+   40   screen 23:console 0,*,0:cls 3
+   50   N0=12:'number of disks
+   60   dim B%(3),Col(N0)
+   70   Col=1
+   80   for I=1 to N0
+   90     if Col=8 then inc Col
+  100     Col(I)=Col:inc Col
+  110   next
+  120   gosub *DisplayInit
+  130   B%(1)=N0
+  140   gosub *Hanoi(N0,1,2,3)
+  150   locate 0,0
+  160   end
+  170   '
+  180   *Hanoi(N,Src,Wrk,Dst)
+  190     if N=1 then gosub *Move(1,Src,Dst)
+  200           :else gosub *Hanoi(N-1,Src,Dst,Wrk)
+  210                :gosub *Move(N,Src,Dst)
+  220                :gosub *Hanoi(N-1,Wrk,Src,Dst)
+  230   return
+  240   '
+  250   *DisplayInit
+  260     local I
+  270     Btmlin=108+16*N0
+  280     line (118,100)-(122,Btmlin),7,"bf"
+  290     line (318,100)-(322,Btmlin),7,"bf"
+  300     line (518,100)-(522,Btmlin),7,"bf"
+  310     line (10,Btmlin)-(630,Btmlin+2),7,"bf"
+  320     for I=1 to N0
+  330       line (120-I*8,92+I*16)-(120+I*8,107+I*16),Col(I),"bf"
+  340     next
+  350   return
+  360   '
+  370   *Move(N,Src,Dst)
+  380     local I1,I2,J1,J2,K
+  390     inc Stp:glocate 16*8,0:gprint "STEP=";Stp;
+  400     glocate 28*8,0:gprint "Move disk";N;"from";Src;"to";Dst;
+  410     I1=Src:J1=B%(Src):dec B%(Src)
+  420     inc B%(Dst):I2=Dst:J2=B%(Dst)
+  430     line (Src*200-N0*8-80,108+(N0-J1)*16)-(Src*200+N0*8-80,123+(N0-J1)*16),0,"bf"
+  440     line (Src*200-82,108+(N0-J1)*16)-(Src*200-78,123+(N0-J1)*16),7,"bf"
+  450     line (Dst*200-80-N*8,108+(N0-J2)*16)-(Dst*200-80+N*8,123+(N0-J2)*16),Col(N),"bf"
+  460     'for I1=0 to (12-N0)*200:next:'timer
+  470   return

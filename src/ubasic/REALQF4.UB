@@ -1,0 +1,189 @@
+   10   ' REALQF4  based on REALQF version 2.3
+   20   ' 1st version         by Y.KIDA
+   30   ' corrected & revised by A.KUDO & Y.KIDA
+   35   '注意 "ema の領域が一杯／異常です" と出る場合は S%= の右辺を
+   36   '     小さくしてください
+   40   '
+   50   word 3
+   60   OF=2^23:CR%=2^15-1
+   70   XF=65533:S%=3:UN%=200
+   80   print "ema";:for I=0 to S%:print I;:dim ema(I;XF+1):next:print
+   90   dim F(S%),Y(S%)
+  100   print:print "実二次体の基本単数及び類数";
+  110   print "  (既約二次無理数を";XF*(S%+1);"個まで登録)"
+  120   print "単数は標準整数基の係数で表示"
+  130   *INPUT:print:input "ルートの中身=";M
+  140   clr time
+  150   if M<2 then end
+  160   if M-185>2^37 then print "大き過ぎます":goto 130
+  170   if and{M@8<>1,M-93>2^36} then print "大き過ぎます":goto 130
+  180   if and{M@4<>1,M-23>2^34} then print "大き過ぎます":goto 130
+  190   if fnSqDiv(M)>1 then print "平方因子があります":goto 130
+  200   gosub *RealQuadratic(M):if F%=2 goto 230
+  210   if UB# then print "基本単数は (";UA#;",";UB#;")"
+  220   print "類数は     ";H
+  230   print "( F=";F;")";tab(20);time
+  240   goto *INPUT
+  250   '
+  260   'PART1
+  270   '
+  280   *RealQuadratic(M)
+  290   D=M:if M@4<>1 then D=4*M
+  300   '
+  310   'PART 2 : 既約二次無理数を登録(半数のみ)
+  320   '
+  330   QD=isqrt(D)
+  340   A=QD:if odd(D-A) then A=A-1
+  350   DA#=pack(0):DD#=DA#:F0=1:F=0:IP=0:S=0:F%=0
+  360   loop
+  370     if A<=0 goto *EXPAND_IN
+  380     IA=(QD-A)\2:Y=(D-A^2)\4
+  390     QY=isqrt(Y):W=Y:Z=1:P=1:Q=0:goto 430
+  400     '
+  410     '必要な素因数(1を含む)と被除数を取得
+  420     '
+  430     while Z<=IA:P=prmdiv(W):if P>QY goto 800 endif:Z*=P:W\=P:wend
+  440     loop
+  450       inc IP:member(DA#,IP)=P:member(DD#,IP)=Z:Q=P
+  460       P=prmdiv(W):if P=W goto 490
+  470       Z*=P:W\=P:if P=Q then member(DD#,IP)=Z:goto 460
+  480     endloop
+  490     if P>QY then 530 else Z=Y:if P=Q then dec IP endif:goto 550
+  500     '
+  510     '取得した最後の素数を含む既約二次無理数を登録
+  520     '
+  530     P=member(DA#,IP):Z=member(DD#,IP):dec IP
+  540     J=Z:if odd(Z) then P=P*2 endif:goto 560
+  550     J=QY-QY@P:if odd(Z) then J=J-P*even(J):P=P*2
+  560     if CR%<P goto *ENTR1
+  570     for C=J to IA+1 step -P:if Z@C goto 600
+  580       if F=XF gosub *CheckEma:if F%=2 then cancel for:goto 1670
+  590       inc F:ema(S;F)=A*OF+2*C
+  600     next
+  610     if IP then 650 else 790
+  620     '
+  630     '取得した残りの素数を含む既約二次無理数を登録
+  640     '
+  650     P=member(DA#,IP):Z=member(DD#,IP):dec IP
+  660     if Z<=QY then J=Z:if odd(Z) then P=P*2 endif:goto 680
+  670     J=QY-QY@P:if odd(Z) then J=J-P*even(J):P=P*2
+  680     FI=F0
+  690     if CR%<P goto *ENTR2
+  700     for C=J to IA+1 step -P:if Z@C goto 770
+  710       if F=XF gosub *CheckEma:if F%=2 then cancel for:goto 1670
+  720       X=A*OF+2*C
+  730       while FI<=F:if X<ema(S;FI) then inc FI else 750 endif:wend
+  740       inc FI:inc F:ema(S;F)=X:goto 770
+  750       inc FI:inc F
+  760       for I=F to FI step -1:ema(S;I)=ema(S;I-1):next:ema(S;I)=X
+  770     next
+  780     if IP then 650
+  790     F0=F+1
+  800     A=A-2
+  810   endloop
+  820   '
+  830   *ENTR1
+  840     while IA<J:if Z@J goto 870
+  850       if F=XF gosub *CheckEma:if F%=2 goto 1670
+  860       inc F:ema(S;F)=A*OF+2*J
+  870       J=J-P
+  880     wend
+  890     goto 610
+  900   '
+  910   *ENTR2
+  920     while IA<J:if Z@J goto 990
+  930       if F=XF gosub *CheckEma:if F%=2 goto 1670
+  940       X=A*OF+2*J
+  950       while FI<=F:if X<ema(S;FI) then inc FI else 970 endif:wend
+  960       inc FI:inc F:ema(S;F)=X:goto 990
+  970       inc FI:inc F
+  980       for I=F to FI step -1:ema(S;I)=ema(S;I-1):next:ema(S;I)=X
+  990       J=J-P
+ 1000     wend
+ 1010     goto 780
+ 1020   '
+ 1030   *CheckEma
+ 1040     if S=S% then 1090
+ 1050     inc S:FF=F0-1
+ 1060     if XF>FF then block ema(S;1..XF-FF)=block ema(S-1;F0..XF)
+ 1070     F(S-1)=FF:ema(S-1;F0)=0:F=XF-FF:FI=FI-FF:F0=1:goto 1190
+ 1080     '
+ 1090     if F% then 1180
+ 1100     F(S)=XF:F%=1
+ 1110     for L=1 to S
+ 1120       FF=XF-F(L-1):if FF=0 goto 1160
+ 1130       block ema(L-1;F(L-1)+1..XF)=block ema(L;1..FF)
+ 1140       block ema(L;1..F(L)-FF)=block ema(L;FF+1..F(L))
+ 1150       ema(L-1;XF+1)=0:F(L-1)=XF:F(L)=F(L)-FF
+ 1160     next
+ 1170     if FF then F0=F0-FF:FI=FI-FF:F=F-FF:goto 1190
+ 1180     F=F+S*XF:F%=2:print "配列要素数が足りません"
+ 1190   return
+ 1200   '
+ 1210   'PART 3 : 連分数展開して分類
+ 1220   '         最初は基本単数も同時に計算
+ 1230   '
+ 1240   *EXPAND_IN
+ 1250   F(S)=F:ema(S;F+1)=0:Y(S)=0:F=F(0)
+ 1260   for I=1 to S:Y(I-1)=ema(I;1):F=F+F(I):next
+ 1270   H=0:Q=0:II=1:N=1
+ 1280   X0=ema(Q;II):A=X0\OF:C=res
+ 1290   UA#=A:UB#=1:UC#=C
+ 1300   '
+ 1310   loop
+ 1320     C0=C:A=QD-(A+QD)@C:C=(D-A^2)\C
+ 1330     if C>C0 goto 1390:'登録しなかった分
+ 1340     X=A*OF+C
+ 1350     if X=X0 goto *EXP1_END:'展開が循環
+ 1360     P=Q:while X<=Y(P):inc P:wend:L=1:R=F(P)
+ 1370     while R>L+12:I=(L+R)\2:if ema(P;I)>X then L=I+1 else R=I:endif:wend
+ 1380     while X<>ema(P;L):inc L:wend:inc ema(P;L):'同じ類にあるものは抹消
+ 1390     WA#=UA#*A+UB#*D:WB#=UA#+UB#*A:WC#=UC#*C
+ 1400     G#=gcd(WA#,gcd(WB#,WC#))
+ 1410     UA#=WA#\G#:UB#=WB#\G#:UC#=WC#\G#
+ 1420     inc N:if N>UN% then UA#=0:UB#=0:goto 1450
+ 1430   endloop
+ 1440   '
+ 1450   loop
+ 1460     C0=C:A=QD-(A+QD)@C:C=(D-A^2)\C:if C>C0 goto 1510
+ 1470     X=A*OF+C:if X=X0 goto *ALLDONE?
+ 1480     P=Q:while X<=Y(P):inc P:wend:L=1:R=F(P)
+ 1490     while R>L+12:I=(L+R)\2:if ema(P;I)>X then L=I+1 else R=I:endif:wend
+ 1500     while X<>ema(P;L):inc L:wend:inc ema(P;L)
+ 1510     inc N
+ 1520   endloop
+ 1530   '
+ 1540   *EXP1_END
+ 1550   if D@4 then
+ 1560     :if UC#<>2 then UA#=2*UA#:UB#=2*UB# endif
+ 1570     :UA#=(UA#-UB#)\2
+ 1580   :else
+ 1590     :if UC#=1 then UB#=2*UB# else UA#=UA#\2 endif
+ 1600   :endif
+ 1610   '
+ 1620   *ALLDONE?
+ 1630   repeat:inc II:until even(ema(Q;II))
+ 1640   if II<=F(Q) goto *NEXT_CLASS
+ 1650   if Q<S then inc Q:II=0:goto 1630
+ 1660   inc H:if N@2 then H=-H
+ 1670   return
+ 1680   '
+ 1690   *NEXT_CLASS
+ 1700   inc H:X0=ema(Q;II):A=X0\OF:C=res
+ 1710   '
+ 1720   loop
+ 1730     repeat:C0=C:A=QD-(A+QD)@C:C=(D-A^2)\C:until C<=C0
+ 1740     X=A*OF+C:if X=X0 goto *ALLDONE?
+ 1750     P=Q:while X<=Y(P):inc P:wend:L=1:R=F(P)
+ 1760     while R>L+12:I=(L+R)\2:if ema(P;I)>X then L=I+1 else R=I:endif:wend
+ 1770     while X<>ema(P;L):inc L:wend:inc ema(P;L)
+ 1780   endloop
+ 1790   '
+ 1800   ' get a square divisor
+ 1810   '
+ 1820   fnSqDiv(N)
+ 1830     local SD
+ 1840     SD=prmdiv(N):if SD=0 then 1860 else if SD=N then SD=1:goto 1870
+ 1850     N=N\SD:if N@SD then 1840 else 1870
+ 1860     SD=isqrt(N):if SD^2<>N then SD=1
+ 1870   return(SD)

@@ -1,0 +1,147 @@
+   90   B=0
+   92   input "discriminant";D
+   93   Dcr=D
+   94   A=1
+   95   D=D*4
+   96   print A
+   98   L=30
+  100   F=D^0.5
+  102   Dd=int(F)
+  104   E=0
+  106   R=1
+  108   P=B
+  110   Q=2*A
+  112   Q1=(D-P^2)/Q
+  114   S1=Dd+P
+  116   AA=int(S1/Q)
+  118   Rem1=int(S1)-AA*Q
+  120   P1=P
+  122   P=Dd-Rem1
+  124   T=Q
+  126   Q=Q1-AA*(P-P1)
+  128   Q1=T
+  130   R=R*(P+F)/Q
+  132   if R<2^30 then goto 140
+  133   R=R/(2^L)
+  134   E=E+1
+  140   if Q=2*A then goto 150
+  141   Aaa=2*A
+  142   print "aaa",Q,Aaa
+  144   goto 114
+  150   Temp=int(B/(2*A))
+  152   Rem2=B-Temp*2*A
+  153   print "p",P,"b",B
+  154   Temp=int(P/(2*A))
+  155   Rem3=P-Temp*2*A
+  156   print "rem2","rem3",Rem2,Rem3
+  157   if Rem2=Rem3 then goto 160
+  158   goto 114
+  160   R=log(R)+E*L*log(2)
+  162   print R
+  163   Regu=R
+  300   if Regu<D^0.25 then goto 378
+  302   H1=(D^0.5)/(2*Regu)
+  304   Hh=0
+  306   Cc=0
+  308   Kk=0
+  310   Pl=1
+  311   Prod=1
+  314   Begl=500*K
+  316   Endl=500*(K+1)
+  318   Jj=0
+  319   print "jj",Jj
+  320   P=nxtprm(Pl)
+  324   gosub 400
+  326   Temp=(1-K/P)
+  328   Prod=Prod*Temp
+  330   Pl=P
+  332   Jj=Jj+1
+  333   if Jj<500 then goto 319
+  334   H1=H1/Prod
+  336   Htem=int(H1)
+  338   Htem2=H1-Htem
+  340   if Htem2<0.5 then goto 350
+  342   M=Htem+1
+  344   goto 352
+  350   M=Htem
+  352   Kk=Kk+1
+  354   if abs(M-H1)>0.1 then goto 374
+  356   if M=Hh then goto 368
+  357   Cc=1
+  358   Hh=M
+  359   goto 311
+  360   print Hh
+  362   goto 380
+  368   Cc=Cc+1
+  369   if Cc<6 then goto 311
+  370   print "class number =",Hh,"for discriminant =",Dcr
+  372   goto 380
+  374   Cc=0
+  376   goto 311
+  378   print "algorithm unsuitable"
+  380   end
+  400   D=D
+  401   P=P
+  402   De=int(D/2)
+  404   Pe=int(P/2)
+  406   De2=D-De*2
+  408   Pe2=P-Pe*2
+  410   if De2=0 then goto 414
+  412   goto 416
+  414   if Pe2=0 then goto 512
+  416   V=0
+  417   Pe=P
+  418   Ii=0
+  419   print "pefirst",Pe
+  420   Pe2=int(Pe/2)
+  422   Pe3=Pe-Pe2*2
+  424   if Pe3=1 then goto 432
+  426   Pe=Pe2
+  428   V=V+1
+  429   Ii=Ii+1
+  430   if Ii<50 then goto 419
+  432   Ve=int(V/2)
+  434   Ve2=V-Ve*2
+  436   if Ve2=0 then goto 450
+  438   Ae=(D^2-1)/8
+  440   Ae1=int(Ae/2)
+  442   Ae2=Ae-Ae1*2
+  444   Ae3=Ae2+2
+  446   K=(-1)^Ae3
+  448   goto 451
+  450   K=1
+  451   De=D
+  452   if De=0 then goto 510
+  453   V=0
+  454   Ii=0
+  456   De1=int(De/2)
+  458   De2=De-De1*2
+  460   if De2=1 then goto 470
+  462   V=V+1
+  464   De=De1
+  465   Ii=Ii+1
+  466   if Ii<50 then goto 456
+  470   Ve=int(V/2)
+  472   Ve2=V-Ve*2
+  474   if Ve2=0 then goto 486
+  476   Ae=(Pe^2-1)/8
+  478   Ae2=int(Ae/2)
+  480   Ae3=Ae-Ae2*2
+  482   Ae3=Ae3+2
+  484   K=(-1)^Ae3*K
+  486   Ae2=((De-1)*(Pe-1))/4
+  488   Ae3=int(Ae2/2)
+  490   Ae4=Ae2-Ae3*2
+  492   Ae4=Ae4+2
+  494   K=(-1)^Ae4*K
+  496   R=abs(De)
+  497   print "r",R,Pe
+  498   Temp=int(Pe/R)
+  500   De=Pe-Temp*R
+  502   Pe=R
+  503   print "pe",Pe,De
+  504   goto 452
+  510   if Pe=1 then goto 513
+  512   K=0
+  513   print K,Pe
+  514   return

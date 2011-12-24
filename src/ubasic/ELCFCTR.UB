@@ -1,0 +1,41 @@
+  100   *ELCFCTR(N,C1,C2,A,&F)
+  110   ' Elliptic curve method to factor N, returning a factor in F.
+  140   ' 13 March 1990
+  150   local Ub=1000,Cc=10,C3=1,B,Sc1s,Sc3s,Sc1b,Sc3b,Sta,Ste,St,Stee
+  160   local Ssta,Sst,Stt,Te,I,K,Sk,Si,Sj
+  180   dim Bit%(400)
+  200   B=(C2*C2-C1*C1*C1-A*C1)@N
+  210   F=gcd(4*A*A*A+27*B*B,N)
+  220   if F<>1 then return endif
+  230   K=1:Sc1s=C1:Sc3s=C3
+  240   while and{K<Ub,F=1}
+  250   for I=1 to Cc
+  260   inc K:Sk=K:Sj=-1
+  270   repeat inc Sj:Sk=Sk\2:Bit%(Sj)=res until Sk=0
+  280   Sta=Sc1s*Sc1s:Ste=Sc3s*Sc3s:Stee=A*Ste
+  290   Te=(Sta-Stee)@N:St=B*Ste*Sc3s
+  300   Sc1b=(Te*Te-8*St*Sc1s)@N
+  310   Te=(St+Sc1s*(Stee+Sta))@N
+  320   Sc3b=(4*Te*Sc3s)@N
+  330   for Si=Sj-1 to 0 step -1
+  340   Ste=Sc3s*Sc3b:St=(Sc1s*Sc1b-Ste*A)@N
+  350   Sta=(B*Ste*(Sc1s*Sc3b+Sc3s*Sc1b))@N
+  360   Sst=((St*St-4*Sta)*C3)@N
+  370   Te=(Sc1b*Sc3s-Sc1s*Sc3b)@N
+  380   Ssta=(Te*Te*C1)@N
+  400   if Bit%(Si)=0 then
+  410   :Sta=Sc1s*Sc1s:Ste=Sc3s*Sc3s:Stee=Ste*A
+  420   :Te=(Sta-Stee)@N:St=B*Ste*Sc3s
+  430   :Stt=(Te*Te-8*St*Sc1s)@N
+  440   :Te=(St+Sc1s*(Sta+Stee))@N
+  450   :Sc3s=(4*Sc3s*Te)@N
+  460   :Sc1s=Stt:Sc1b=Sst:Sc3b=Ssta
+  470   :else Sta=Sc1b*Sc1b:Ste=Sc3b*Sc3b:Stee=Ste*A
+  480   :Te=(Sta-Stee)@N:St=B*Ste*Sc3b
+  490   :Stt=(Te*Te-8*St*Sc1b)@N
+  500   :Te=(St+Sc1b*(Stee+Sta))@N
+  510   :Sc3b=(4*Te*Sc3b)@N
+  520   :Sc1b=Stt:Sc1s=Sst:Sc3s=Ssta endif
+  530   next Si:C1=Sc1s:C3=Sc3s:next I
+  540   F=gcd(Sc3s,N)
+  550   wend:return ' End of subroutine ELCFCTR

@@ -1,0 +1,21 @@
+   10   'PI   version 2.0
+   20   print "Computaion of PI"
+   30   input "How many digits (10<=  <=2500)=";Digit%
+   40   if Digit%=0 then end
+   50   if or{Digit%<10,Digit%>2500} then 30
+   60   Digit2%=int(Digit%*0.208)+2
+   70   word -(Digit2%+2)
+   80   point -Digit2%
+   90   print:print Digit%;"digits"
+  100   clr time
+  110   print:print using(,Digit%),4*fnPIsub(5)-fnPIsub(239)
+  120   print time
+  130   end
+  140   '
+  150   fnPIsub(X)
+  160   local D=X^2,W#=4*X,Atan#=0,K=1
+  170   while W#
+  180      W#=W#/D:Atan#=Atan#+W#/K:K=K+2
+  190      W#=W#/D:Atan#=Atan#-W#/K:K=K+2
+  200   wend
+  210   return(Atan#)

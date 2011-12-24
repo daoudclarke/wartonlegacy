@@ -1,0 +1,16 @@
+ 4440   *Lambda(&P(),&M(),K,&Lam)
+ 4450   ' P() and M() are input parameters. This computes the smallest
+ 4460   ' universal exponent.  Modeled on the Pascal version.
+ 4470   ' 10 May 1990
+ 4480   local I,J,Ii,T,Te
+ 4490   if K=0 then Lam=0:return endif
+ 4500   Ii=1:Lam=1
+ 4510   if P(1)=2 then
+ 4520   :if M(1)=2 then Lam=2 else for I=1 to M(1)-2:Lam=2*Lam next I endif
+ 4530   :Ii=2 endif
+ 4540   for J=Ii to K
+ 4550   Te=1:T=P(J)
+ 4560   for I=1 to M(J)-1:Te*=T next I
+ 4570   T=T-1:Te*=T:T=Lam*Te
+ 4580   Te=gcd(Lam,Te):Lam=T\Te
+ 4590   next J:return ' End of subroutine Lambda.

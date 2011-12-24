@@ -1,0 +1,248 @@
+    1   dim Prod(150)
+    2   Icon=0
+    3   Lprx1=100000
+    4   N1=908309571742911139718930431296865108016652780097
+    5   N2=int(sqrt(N1))
+    6   P=3
+    8   Itemp=int(N1/P)
+   10   Irem1=N1-Itemp*P
+   12   if Irem1>0 goto 20
+   14   Ag=nxtprm(P)
+   16   P=Ag
+   18   goto 8
+   20   Aa=Irem1
+   23   Precod=P-1
+   25   I=0
+   26   Temp=int(Precod/2)
+   28   Rem1=Precod-Temp*2
+   30   if Temp=0 then goto 46
+   32   if Rem1>0 then goto 40
+   34   Precod=Temp
+   36   I=I+1
+   38   if I<200 then goto 26
+   40   Q=Precod
+   42   E=I
+   44   goto 48
+   46   Q=1
+   47   E=I
+   48   I=1
+   49   print "qs",Q
+   50   N=1
+   52   N=N*607
+   54   Temp=int(N/1000)
+   56   Rem1=N-1000*Temp
+   58   N=Rem1
+   60   D=N
+   62   gosub 400
+   63   if K=-1 then goto 68
+   64   I=I+1
+   66   if I<1000 then goto 52
+   68   Pn=Q
+   69   Aas=N
+   70   gosub 516
+   72   Z=Bprod
+   73   print "zz",Z
+   76   Y=Z
+   78   R=E
+   80   Pn=(Q-1)/2
+   81   print "pn",Pn,Aa
+   82   Aas=Aa
+   84   gosub 516
+   86   X=Bprod
+   87   print X
+   88   Temp=Aa*X*X
+   90   Temp2=int(Temp/P)
+   91   Rem1=Temp-Temp2*P
+   92   B=Rem1
+   93   print "bbb",B
+   94   Temp=Aa*X
+   96   Temp2=int(Temp/P)
+   98   X=Temp-Temp2*P
+  100   Temp=int(B/P)
+  102   Rem1=B-P*Temp
+  104   if Rem1=1 then goto 200
+  106   I=1
+  108   M=1
+  110   Pow=2^M
+  111   goto 700
+  112   Rem2=Bprod
+  113   print "rem2",Rem2
+  118   if Rem2=1 then goto 130
+  120   M=M+1
+  122   goto 110
+  130   if M=R then goto 180
+  132   Pow=2^(R-M-1)
+  133   goto 800
+  134   T=Bprod
+  142   Y=T*T
+  144   Temp=int(Y/P)
+  146   Rem1=Y-Temp*P
+  148   Y=Rem1
+  150   Temp=int(M/P)
+  152   Rem1=M-P*Temp
+  154   M=Rem1
+  156   R=Rem1
+  158   Temp=X*T
+  160   Temp2=int(Temp/P)
+  162   Rem1=Temp-Temp2*P
+  164   X=Rem1
+  166   Temp=B*Y
+  168   Temp2=int(Temp/P)
+  170   Rem1=Temp-Temp2*P
+  172   B=Rem1
+  174   goto 100
+  180   print "no square root exists"
+  182   goto 850
+  200   Ix=P-X
+  201   print "square root =",X,"or",Ix
+  202   goto 900
+  400   D=D
+  401   P=P
+  402   De=int(D/2)
+  404   Pe=int(P/2)
+  406   De2=D-De*2
+  408   Pe2=P-Pe*2
+  410   if De2=0 then goto 414
+  412   goto 416
+  414   if Pe2=0 then goto 512
+  416   V=0
+  417   Pe=P
+  418   Ii=0
+  419   print "pefirst",Pe
+  420   Pe2=int(Pe/2)
+  422   Pe3=Pe-Pe2*2
+  424   if Pe3=1 then goto 432
+  426   Pe=Pe2
+  428   V=V+1
+  429   Ii=Ii+1
+  430   if Ii<50 then goto 419
+  432   Ve=int(V/2)
+  434   Ve2=V-Ve*2
+  436   if Ve2=0 then goto 450
+  438   Ae=(D^2-1)/8
+  440   Ae1=int(Ae/2)
+  442   Ae2=Ae-Ae1*2
+  444   Ae3=Ae2+2
+  446   K=(-1)^Ae3
+  448   goto 451
+  450   K=1
+  451   De=D
+  452   if De=0 then goto 510
+  453   V=0
+  454   Ii=0
+  456   De1=int(De/2)
+  458   De2=De-De1*2
+  460   if De2=1 then goto 470
+  462   V=V+1
+  464   De=De1
+  465   Ii=Ii+1
+  466   if Ii<50 then goto 456
+  470   Ve=int(V/2)
+  472   Ve2=V-Ve*2
+  474   if Ve2=0 then goto 486
+  476   Ae=(Pe^2-1)/8
+  478   Ae2=int(Ae/2)
+  480   Ae3=Ae-Ae2*2
+  482   Ae3=Ae3+2
+  484   K=(-1)^Ae3*K
+  486   Ae2=((De-1)*(Pe-1))/4
+  488   Ae3=int(Ae2/2)
+  490   Ae4=Ae2-Ae3*2
+  492   Ae4=Ae4+2
+  494   K=(-1)^Ae4*K
+  496   R=abs(De)
+  497   print "r",R,Pe
+  498   Temp=int(Pe/R)
+  500   De=Pe-Temp*R
+  502   Pe=R
+  503   print "pe",Pe,De
+  504   goto 452
+  510   if Pe=1 then goto 513
+  512   K=0
+  513   print K,Pe
+  514   return
+  516   Coun=1
+  517   Q1=Pn
+  518   if Q1=0 then goto 604
+  520   I=1
+  522   Prod(I)=Aas
+  523   I=I+1
+  524   if I<151 then goto 522
+  526   I=1
+  527   Bigi=1
+  528   J=1
+  530   if Bigi>Pn then goto 560
+  532   if Bigi=Pn then goto 590
+  534   Prep=Prod(I)
+  535   Prod(I)=Prod(I)*Prod(I)
+  536   Temp=int(Prod(I)/P)
+  537   Rem1=Prod(I)-P*Temp
+  538   Prod(I)=Rem1
+  539   Bigi=Bigi*2
+  541   J=J+1
+  543   if J<151 then goto 530
+  544   print "jaze",J,I,Prep
+  545   end
+  560   Pn=Pn-int(Bigi/2)
+  561   print "i",I
+  562   Prod(I)=Prep
+  563   Coun=Coun+1
+  565   I=I+1
+  567   goto 527
+  590   Bprod=Prod(1)
+  592   if Coun=1 then goto 620
+  593   I=2
+  594   Bprod=Bprod*Prod(I)
+  596   Temp=int(Bprod/P)
+  598   Rem1=Bprod-Temp*P
+  600   Bprod=Rem1
+  601   I=I+1
+  602   if I<Coun+1 then goto 594
+  603   goto 620
+  604   Itemp=int(Aas/P)
+  606   Bprod=Aas-Itemp*P
+  620   return
+  700   Pn=Pow
+  702   Aas=B
+  704   gosub 516
+  706   goto 112
+  800   Pn=Pow
+  802   Aas=Y
+  804   gosub 516
+  806   goto 134
+  850   Ag=nxtprm(P)
+  852   P=Ag
+  854   goto 8
+  900   print N2
+  902   Icon=Icon
+  904   Isw1=0
+  906   Mm=int((N2-X)/P)
+  908   Mm=Mm-1
+  910   print "mm",Mm
+ 1002   Mm=Mm+1
+ 1003   Litt=(P*Mm+X)*(P*Mm+X)-N1
+ 1004   Litd=abs(Litt/P)
+ 1005   print "litd",Litd
+ 1006   Iab=1
+ 1007   print "know",P,Aa,X,Icon
+ 1008   Iprx1=nxtprm(Iab)
+ 1163   Iab=Iprx1
+ 1164   if Iprx1>Lprx1 goto 1190
+ 1166   Itemp=int(Litd/Iab)
+ 1168   Irem1=Litd-Itemp*Iab
+ 1170   if Itemp=0 then goto 1186
+ 1174   if Irem1>0 then goto 1008
+ 1176   Litd=Itemp
+ 1180   goto 1166
+ 1186   Icon=Icon+1
+ 1188   print "hitno",Icon,"mm",Mm,Litt
+ 1189   if Icon=4 then goto 1206
+ 1190   if Litt<0 then goto 1002
+ 1191   if Isw1=1 then goto 1200
+ 1192   Isw1=1
+ 1194   X=P-X
+ 1196   goto 906
+ 1200   Ag=nxtprm(P)
+ 1202   P=Ag
+ 1204   goto 8
+ 1206   stop

@@ -1,0 +1,96 @@
+   10   dim Mult1(20),Mult2(20),Mult3(20),Del(2)
+   20   input "discriminant";D
+   21   Pi=3.14159265358979
+   22   Mult1(1)=1
+   23   Sqrd=sqrt(D)
+   24   Idegm=0
+   25   Item=int(D/2)
+   26   Ib=D-Item*2
+   27   H=1
+   28   Bb=sqrt(abs(D/3))
+   29   Bb=int(Bb)
+   30   Tt=(Ib*Ib-D)/4
+   32   Aa=Ib
+   33   print "h",H
+   34   if Aa<1 then goto 90
+   36   if Aa=1 then goto 90
+   38   Item=int(Tt/Aa)
+   40   Irem=Tt-Aa*Item
+   42   if Irem>0 then goto 100
+   43   Ibig=abs(Item)
+   44   Little=abs(Aa)
+   45   gosub 540
+   46   goto 570
+   47   if Ib=Aa then goto 80
+   48   if Aa*Aa=Tt then goto 80
+   50   if Ib=0 then goto 80
+   62   H=H+2
+   64   A=A
+   72   goto 100
+   80   Idegn=1
+   82   Mult2(1)=1
+   84   Mult2(2)=-1*Jj
+   86   H=H+1
+   88   goto 64
+   90   Aa=1
+  100   Aa=Aa+1
+  102   if Aa*Aa<Tt then goto 38
+  104   if Aa*Aa=Tt then goto 38
+  106   Ib=Ib+2
+  108   if Ib<Bb then goto 30
+  110   if Ib=Bb then goto 30
+  112   print "discriminant",D,"class no.=",H
+  122   stop
+  390   Ibc=1
+  400   Iq=exp(2.0#i*Pi*Tau*Ibc)
+  401   print "iq",Iq
+  402   Icon=1
+  403   A=A
+  404   Isum=1
+  405   Pow1=(Icon*(3*Icon-1))/2
+  406   Pow2=(Icon*(3*Icon+1))/2
+  407   Jsum=Isum+(-1)^Icon*(Iq^Pow1+Iq^Pow2)
+  408   if abs(Jsum-Isum)<10^(-20) then goto 414
+  409   Icon=Icon+1
+  410   Isum=Jsum
+  411   print "jsum",Jsum
+  412   print "pow1",Pow1,"pow2",Pow2
+  413   goto 405
+  414   Del(Ibc)=Iq*Jsum^24
+  416   if Ibc=2 then goto 422
+  418   Ibc=Ibc+1
+  420   goto 400
+  422   Ff=Del(2)/Del(1)
+  424   Jj=((256*Ff+1)^3)/Ff
+  426   return
+  500   for I=1 to 20
+  502   Mult3(I)=0
+  504   Iic=1
+  506   Jjc=1
+  508   Mult3(Iic+Jjc-1)=Mult3(Iic+Jjc-1)+Mult1(Iic)*Mult2(Jjc)
+  510   if Jjc=Idegn+1 then goto 520
+  512   Jjc=Jjc+1
+  514   goto 508
+  520   if Iic=Idegm+1 then goto 530
+  522   Iic=Iic+1
+  524   goto 506
+  530   return
+  532   print "bobnegd"
+  540   Itemp=int(Ibig/Little)
+  542   Irem1=Ibig-Itemp*Little
+  544   if Irem1=0 then goto 560
+  546   Ibig=Little
+  547   Little=Irem1
+  548   goto 540
+  560   Igcd2=Little
+  562   return
+  570   if Igcd2>1 then goto 590
+  572   goto 47
+  574   Little=Igcd2
+  575   Ibig=abs(Ib)
+  576   gosub 540
+  578   if Igcd2>1 then goto 100
+  580   goto 47
+  590   if Ib=0 then goto 100
+  592   goto 574
+  594   print "bobnegd"

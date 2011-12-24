@@ -1,0 +1,75 @@
+    1   input "number";N
+    2   goto 100
+    3   Icnt1=1
+    4   Nrt=sqrt(N)
+    5   Icnt2=1
+    6   Nrt=int(Nrt)
+    8   Diff1=2*Nrt+1
+   10   Sq1=Nrt*Nrt+Diff1
+   12   Sq2=N+1
+   13   Diff2=1
+   14   if Sq2=Sq1 then goto 30
+   16   if Sq2>Sq1 then goto 24
+   18   Diff2=Diff2+2
+   19   Icnt2=Icnt2+1
+   20   Sq2=Sq2+Diff2
+   22   goto 14
+   24   Diff1=Diff1+2
+   26   Sq1=Sq1+Diff1
+   27   Icnt1=Icnt1+1
+   28   goto 14
+   30   print "icnt1",Icnt1,"icnt2",Icnt2,"sq2",Sq2
+   32   B=Nrt+Icnt1-Icnt2
+   34   print "factor",B,"co-factor",int(N/B)
+  100   input "r";Rr
+  102   Kk=Rr
+  103   A=A
+  104   Icnt1=1
+  106   Icnt2=1
+  108   Nrtb=sqrt(4*N*Kk)
+  109   Nrtb=int(Nrtb)
+  110   Limb=sqrt(N/Kk)/(4*(Kk+1))
+  111   Limb=int(Limb)+1
+  112   Diff1=2*Nrtb+1
+  113   Sq1=Nrtb*Nrtb+Diff1
+  114   Sq2=4*Kk*N+1
+  116   Diff2=1
+  118   if Sq2=Sq1 then goto 150
+  120   if Sq2>Sq1 then goto 144
+  122   A=A
+  124   Diff2=Diff2+2
+  126   Icnt2=Icnt2+1
+  128   Sq2=Sq2+Diff2
+  130   goto 118
+  144   if Icnt1=Limb then goto 200
+  145   Diff1=Diff1+2
+  146   Sq1=Sq1+Diff1
+  148   Icnt1=Icnt1+1
+  149   goto 118
+  150   print "kk",Kk,"sq1",Sq1,"sq2",Sq2,"nrtb",Nrtb
+  152   B=Nrtb+Icnt1-Icnt2
+  153   goto 250
+  154   print "factor",B,"co-factor",int(N/B),"icnt1",Icnt1,"icnt2",Icnt2
+  156   stop
+  200   Kk=Kk-1
+  201   print "kk",Kk
+  202   if Kk=0 then goto 300
+  204   goto 104
+  250   A=N
+  252   Qq=int(A/B)
+  254   Irem=A-Qq*B
+  256   if Irem=0 then goto 270
+  258   A=B
+  260   B=Irem
+  262   goto 252
+  270   goto 154
+  280   if Kk=100 then goto 200
+  282   if Kk=81 then goto 200
+  284   if Kk=64 then goto 200
+  285   if Kk=49 then goto 200
+  286   if Kk=36 then goto 200
+  287   if Kk=25 then goto 200
+  288   if Kk=16 then goto 200
+  290   if Kk=9 then goto 200
+  292   if Kk=4 then goto 200
+  293   goto 104

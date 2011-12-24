@@ -1,0 +1,75 @@
+   10   dim Loc1(201)
+   14   Limprx=100000
+   16   N=908309571742911139718930431296865108016652780097
+   18   Icon=0
+  100   K=1
+  102   Num=sqrt(N*K*10^800)
+  103   print "k",K
+  104   A0=int(Num/(10^400))
+  105   A=A
+  106   Rem2=Num-A0*10^400
+  107   if Rem2=0 then goto 210
+  108   Temp=int((10^800)/Rem2)
+  109   A1=int(Temp/(10^400))
+  110   Rem2=Temp-A1*10^400
+  113   A=A
+  114   Pn1=A1*A0+1
+  115   Pn2=A0
+  116   Qn2=1
+  118   Qn1=A1
+  120   Acurr2=A0
+  122   Acurr1=A1
+  123   A=A
+  124   I=1
+  125   if Rem2=0 then goto 210
+  126   Temp=(10^800)/Rem2
+  127   Acurr=int(Temp/(10^400))
+  128   Rem2=Temp-Acurr*10^400
+  129   A=A
+  130   Pcurr=Acurr*Pn1+Pn2
+  132   Qcurr=Acurr*Qn1+Qn2
+  133   Cfr=Pcurr/Qcurr
+  134   A=A
+  135   Pn2=Pn1
+  136   Qn2=Qn1
+  137   A=A
+  138   Pn1=Pcurr
+  140   Qn1=Qcurr
+  141   I=I+1
+  143   if Rem2=0 then goto 146
+  144   if I>250 then goto 210
+  146   Litd=Pcurr^2-Qcurr^2*N*K
+  147   Litd2=Litd
+  148   A=A
+  149   A=A
+  150   J=1
+  152   Loc1(J)=0
+  154   J=J+1
+  156   if J<201 then goto 152
+  158   Ab=1
+  160   J=1
+  162   Prx1=nxtprm(Ab)
+  163   if Prx1>Limprx then goto 200
+  164   Ab=Prx1
+  166   Temp=int(Litd/Ab)
+  168   Rem1=Litd-Temp*Ab
+  169   if Temp=0 then goto 186
+  170   if Rem1>0 then goto 162
+  172   Loc1(J)=Loc1(J)+1
+  174   Litd=Temp
+  178   goto 166
+  180   J=J+1
+  182   if J<201 then goto 162
+  184   goto 200
+  186   J=J
+  188   Icon=Icon+1
+  190   print "hitno",Icon,"k",K
+  200   if Rem2>0 then goto 126
+  210   K=K+1
+  212   if K<100 then goto 102
+  213   print "no of hits =",Icon
+  214   print "endwell"
+  216   end
+  300   Acurr=int(Acurr/(10^200))
+  302   print Acurr
+  304   goto 128

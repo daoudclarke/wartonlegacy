@@ -1,0 +1,292 @@
+   10   '
+   20   '   OTHELLO GAME for UBASIC
+   30   '
+   40   '  1984/03/10 for N88BASIC  by Yoichi KOYAMA
+   50   '  modified for UBASIC(98) 1989 by Yuji KIDA
+   60   '  1989/10/02 modified      by Yoichi KOYAMA
+   70   '  modified for UBASIC(AT) 1994 by Yuji KIDA
+   80   '  1994/04/20 for US        by Yoichi KOYAMA
+   90   '
+  100   word -6:point -2:screen 2
+  110   X#="":Y#=""
+  120   dim U(2),GT(2),P$(2),Q(800)
+  130   dim Oth%(34000)
+  140   bload "oth31",Oth%()
+  150   SG1=varptr(Oth%(0))\65536+res\16-2+0x20:defseg=SG1
+  160   U0=30:V0=30:DU=44:DV=44:RP=19:RR=5:UP=U0-DU\2:VP=V0-DV\2
+  170   XL=52:YY=15:YC=5:TY=1:TC=2:BP=1:STAT=1
+  180   TT=8:' CPU speed
+  190   dim Koma#(1,TT)
+  200   TILE$=chr(0xaa0000550000)
+  210   DM=0
+  220   CIN=0x1075:CCH=0x2000:CPL=0x3000:CFN=0x4000
+  230   CRV=0x5000:CMN=0x6000:CSC=0x7000
+  240   BD=0x1000:SP=0x0f00:ST=0x1220:PL=0x1600:PARM=0x80:WT=0x8a
+  250   restore 300
+  260   for H=WT to WT+26 step 2
+  270     read W:if W<0 then W=65536+W
+  280     pokew H,W
+  290   next H
+  300   data 1000,100,100,100,1000,-1200,-10,-20,-20,-10,80,-120,-80,-60
+  310   gosub *NOTE
+  320   *START
+  330     P$(1)="YOU":P$(2)="ME"
+  340     gosub *BOARD:Oth%(0)=CIN:call Oth%():Ttm=0
+  350     glocate XL*8,YY*16:gprint "level (1-5) ?";
+  360     L=asc(input$(0)+input$(-1))-asc("0")
+  370     if or{L<1,L>5} then 350
+  380     poke PARM,L:poke PARM+1,0:poke PARM+2,L+9:poke PARM+3,L+11
+  390     glocate (XL+4)*8,2*16:gprint "level : 1 2 3 4 5";
+  400     U=(XL+L*2)*8+75:line (U,32)-(U+15,48),2,"B"
+  410     if Ttm=0 then gosub *RANDOM
+  420     R1=RR:RR=2:TB=0:T=1:X=4:Y=4:gosub *PT1:X=5:Y=5:gosub *PT1
+  430     T=0:X=4:Y=5:gosub *PT1:X=5:Y=4:gosub *PT1:RR=R1
+  440     glocate (XL)*8,(YY-2)*16:gprint "BLACK(1) or WHITE(2)";
+  450     glocate XL*8,YY*16:gprint "Which do you choose ?";
+  460     TB=asc(input$(0)+input$(-1))-asc("0")
+  470     if and{TB<>1,TB<>2} then 440
+  480     glocate XL*8,(YY-2)*16:gprint spc(28);
+  490     glocate XL*8,YY*16:gprint spc(24);
+  500     glocate XL*8,YC*16:gprint "* "+P$(2)+" *"
+  510     glocate XL*8,YY*16:gprint "* "+P$(1)+" *"
+  520     T=TC:U=590:V=YC*16+20:gosub *PT0
+  530     T=TY:U=590:V=YY*16+20:gosub *PT0
+  540     K=0:G1=0:U(1)=2:U(2)=2
+  550     poke BD+0x44,3-TB:poke BD+0x55,3-TB
+  560     poke BD+0x45,TB:poke BD+0x54,TB
+  570     GT(1)=0:GT(2)=0:gosub *TM:GG=GTM
+  580     T=3-TB
+  590   goto *Branch
+  600   '
+  610   *BOARD
+  620     cls 3:U1=U0+8*DU:V1=V0+8*DV
+  630     line (U0-10,V0-10)-(U1+10,V1+10),4,"BF",TILE$
+  640     for Y=0 to 8:V=V0+Y*DV:line (U0,V)-(U1,V),1:next Y
+  650     for X=0 to 8:U=U0+X*DU:line (U,V0)-(U,V1),1:next X
+  660     for X=2 to 6 step 4:U=U0+X*DU
+  670       for Y=2 to 6 step 4:V=V0+Y*DV
+  680         line (U-2,V-2)-(U+2,V+2),1,"BF"
+  690       next
+  700     next
+  710     V=V0-28:gcolor 7
+  720     for X=1 to 8:U=UP+X*DU-8
+  730       glocate U,V:gprint chr(0x40+X);
+  740     next
+  750     U=U0-30
+  760     for Y=1 to 8:V=VP+Y*DV-7
+  770       glocate U,V:gprint chr(0x30+Y);
+  780     next
+  790     glocate XL*8,0:gprint "** Othello (ver.3.0) **";
+  800   return
+  810   '
+  820   *RANDOM
+  830     randomize
+  840     for I=0 to 56 step 4
+  850       A1=peek(I):A2=peek(I+1):A3=peek(I+2):A4=peek(I+3)
+  860       if rnd<0.5 then swap A1,A2
+  870       if rnd<0.5 then swap A3,A4
+  880       if rnd<0.5 then swap A1,A4
+  890       if rnd<0.5 then swap A2,A3
+  900       poke I,A1:poke I+1,A2:poke I+2,A3:poke I+3,A4
+  910     next I
+  920   return
+  930   '
+  940   *POSITION
+  950     X#=chr(0x40+(Z0@16))+chr(0x30+Z0\16)
+  960   return
+  970   '
+  980   *PT0
+  990     line (U,V)-(U+DU,V+DV),4,"BF",TILE$
+ 1000     U=U+DU\2:V=V+DV\2
+ 1010     CT=7-(T=TB)*7
+ 1020     view (U-RP,V-RP)-(U+RP,V+RP)
+ 1030     line (0,RP)-(2*RP,RP),CT
+ 1040     Koma#(CT\7,0)=get(0,0)-(2*RP,2*RP)
+ 1050     for J=1 to TT:Yratio=1/sin(pi(J/(2*TT)))
+ 1060       window (-1,-Yratio)-(1,Yratio)
+ 1070       circle (0,0),1,7-CT,"F",CT
+ 1080       Koma#(CT\7,J)=get(0,0)-(2*RP,2*RP)
+ 1090     next
+ 1100     view
+ 1110   return
+ 1120   *PT
+ 1130     beep BP:U=UP+X*DU:V=VP+Y*DV
+ 1140     CT=7-(T=TB)*7:beep 0
+ 1150     for J=TT to 0 step -1
+ 1160        put (U-RP,V-RP)=Koma#(1-CT\7,J)
+ 1170     next
+ 1180     for J=0 to TT
+ 1190        put (U-RP,V-RP)=Koma#(CT\7,J)
+ 1200     next
+ 1210   return
+ 1220   *PT1
+ 1230     beep BP:U=UP+X*DU:V=VP+Y*DV
+ 1240     CT=7-(T=TB)*7:beep 0
+ 1250     circle (U,V),RP,7-CT,"F",CT:for J=1 to RR*200:next J
+ 1260   return
+ 1270   '
+ 1280   *TM
+ 1290   Tm#=right(time,8)
+ 1300     GTM=val(mid(Tm#,1,2))*3600+val(mid(Tm#,4,2))*60+val(mid(Tm#,7,2))
+ 1310   return
+ 1320   '
+ 1330   *TCNV
+ 1340     gprint right(" "+str(GT1\60),2);"'";
+ 1350     gprint right(str(GT1@60),2);chr(0x22);
+ 1360   return
+ 1370   '
+ 1380   *CLOCK
+ 1390     gosub *TM:GD=GTM-GG:if GD<0 then GD=GD+86400
+ 1400     if T=1 then YT=YY else YT=YC
+ 1410     glocate (XL+14)*8,YT*16
+ 1420     GT1=GT(T)+GD:gosub *TCNV
+ 1430   return
+ 1440   '
+ 1450   *Branch
+ 1460   gosub *CLOCK:GG=GTM:GT(T)=GT1
+ 1470   T=3-T
+ 1480   Oth%(0)=CFN:call Oth%():if Oth%(0)=0 then *GAMEOV
+ 1490   glocate (XL+2)*8,23*16:gcolor 4
+ 1500   gprint "TURN :";str(U(1)+U(2)-3);:gcolor 7
+ 1510   if T=1 then gosub *YOU:else gosub *COMP
+ 1520   if PP<0 then *QUIT
+ 1530   if PP>0 then gosub *CHANGE
+ 1540   goto *Branch
+ 1550   '
+ 1560   *YOU
+ 1570   Oth%(0)=CPL+TY:call Oth%():PP=Oth%(0):goto 1600
+ 1580   beep
+ 1590   if inkey<>"" then 1580 else 1620
+ 1600   glocate XL*8,(YY+2)*16:gprint spc(20);
+ 1610   glocate XL*8,(YY+3)*16:gprint spc(20);
+ 1620   glocate XL*8,(YY+4)*16:gprint spc(20);
+ 1630   if PP>2 then 1690
+ 1640   if PP=0 then Y#="Please PASS(hit P). ":goto 1680
+ 1650   Y#="":if PP=1 then 1670
+ 1660   Z0=peek(PL+1):gosub *POSITION:Y#=X#+" and "
+ 1670   Z0=peek(PL):gosub *POSITION:Y#="Only "+Y#+X#+"."
+ 1680   glocate XL*8,(YY+2)*16:gcolor 2:gprint Y#;:gcolor 7
+ 1690   glocate XL*8,(YY+4)*16:gprint "Where? _   ";
+ 1700   Z1=((YY+4)*80+XL+7)*2
+ 1710   gosub *CLOCK:Y#=inkey:if Y#="" then 1710
+ 1720   X=(instr("aAbBcCdDeEfFgGhHpP"+chr(17),Y#)+1)\2:if X=0 then 1580
+ 1730   glocate (XL+7)*8,(YY+4)*16:gprint upper(Y#);
+ 1740   if X=9 then if PP=0 then *Ret:else 1580
+ 1750   if X=10 then PP=-1:glocate XL*8,(YY+3)*16:gprint spc(16):goto *Ret
+ 1760   gprint "_";
+ 1770   gosub *CLOCK:Y#=inkey:if Y#="" then 1770
+ 1780   Y=instr("12345678",Y#):if Y=0 then 1580
+ 1790   glocate (XL+8)*8,(YY+4)*16:gprint Y#;
+ 1800   Oth%(0)=CCH+T*256+Y*16+X:call Oth%()
+ 1810   if Oth%(0)=0 then 1580
+ 1820   gosub *Blink:if Y#=chr(13) then *Ret
+ 1830   if or{Y#="n",Y#="N"} then 1580 else 1820
+ 1840   *Blink
+ 1850     U=UP+X*DU:V=UP+Y*DV:CT=7-(T=TB)*7
+ 1860     view (U-RP,V-RP)-(U+RP,V+RP)
+ 1870     Ban#=get(0,0)-(2*RP,2*RP)
+ 1880     loop
+ 1890       for J=TT to 0 step -1
+ 1900         for JJ=0 to 400
+ 1910           Y#=inkey:if Y#<>"" then cancel for,for:goto 2030
+ 1920         next JJ
+ 1930         put (0,0)=Koma#(CT\7,J)
+ 1940       next J
+ 1950   '  paint (RP,RP),TILE$,3
+ 1960       for J=0 to TT
+ 1970         for JJ=0 to 400
+ 1980           Y#=inkey:if Y#<>"" then cancel for,for:goto 2030
+ 1990         next JJ
+ 2000         put (0,0)=Koma#(CT\7,J)
+ 2010       next J
+ 2020     endloop
+ 2030     put (0,0)=Ban#
+ 2040     view
+ 2050   *Ret
+ 2060   return
+ 2070   *COMP
+ 2080   glocate XL*8,(YC+2)*16:gprint "THINKING...   ";
+ 2090   gosub *TM:G3=GTM
+ 2100   Oth%(0)=CMN:call Oth%():Z0=Oth%(0):PP=peek(ST+1)
+ 2110   G1=peek(0x88)*65536+peek(0x87)*256+peek(0x86)
+ 2120   G2=(peek(ST+15)-0x80)+peek(ST+14)/256
+ 2130   gosub *TM:G3=GTM-G3:if G3<0 then G3=G3+86400
+ 2140   if STAT=0 then 2200
+ 2150   if G3<1 then G3=1
+ 2160   glocate XL*8,(YC+4)*16:gprint "|";using(7),G1;using(7),G3;" sec |";
+ 2170   if G1=0 then glocate XL*8,(YC+5)*16:gprint "| ------";:goto 2190
+ 2180   glocate XL*8,(YC+5)*16:gprint "|";using(4,2),G2;
+ 2190   glocate (XL+8)*8,(YC+5)*16:gprint using(7,2),G1/G3;"  |";
+ 2200   glocate XL*8,(YC+2)*16:gprint spc(16);
+ 2210   if inkey<>"" then 2210
+ 2220   if PP>0 then 2240
+ 2230   gcolor 6:glocate XL*8,(YC+2)*16:gprint "PASS.      ";:gcolor 7:return
+ 2240   glocate XL*8,(YC+2)*16:gcolor 7:gosub *POSITION:gprint "Put at ";X#;
+ 2250   Y=Z0\16:X=Z0@16
+ 2260   return
+ 2270   *CHANGE:' ( T,X,Y )
+ 2280     Oth%(0)=CCH+T*256+Y*16+X:call Oth%():H=SP:II=peek(ST+10)
+ 2290     poke BD+Y*16+X,T:gosub *PT1
+ 2300     for I=1 to II
+ 2310       H=H-2:Z=peek(H):Y=Z\16:X=Z@16
+ 2320       poke BD+Z,T:gosub *PT
+ 2330     next I
+ 2340     U(T)=U(T)+II+1:U(3-T)=U(3-T)-II
+ 2350   return
+ 2360   *GAMEOV
+ 2370   line (XL*8,YC*16)-(639,399),0,"BF"
+ 2380   if U(1)=0 then U(2)=64
+ 2390   if U(2)=0 then U(1)=64
+ 2400   glocate XL*8,(YC+1)*16:gprint "BLACK : ";P$(TB);:glocate (XL+12)*8
+ 2410   GT1=GT(TB):gosub *TCNV
+ 2420   glocate XL*8,(YC+3)*16:gprint "WHITE : ";P$(3-TB);:glocate (XL+12)*8
+ 2430   GT1=GT(3-TB):gosub *TCNV
+ 2440   Y#=mid(str(U(TB)),2,*)+":"+mid(str(U(3-TB)),2,*)+" ("+mid(str(abs(U(2)-U(1))),2,*)+")"
+ 2450   glocate XL*8,(YC+6)*16:gprint Y#;
+ 2460   if U(1)=U(2) then Y#="DRAW.":goto 2490
+ 2470   if U(1)>U(2) then T=1 else T=2
+ 2480   if P$(T)="ME" then Y#="I WIN. " else Y#="YOU WIN. "
+ 2490   glocate XL*8,(YC+8)*16:gprint Y#;
+ 2500   for Y=YY+1 to YY+4:glocate XL*8,Y*16:gprint spc(20):next Y
+ 2510   *QUIT
+ 2520   glocate XL*8,(YY+4)*16:gprint spc(20)
+ 2530   glocate XL*8,(YY+5)*16:gprint "Play again(y/n)?";
+ 2540   Y#=input$(-1)
+ 2550   if or{Y#="y",Y#="Y"} then *START
+ 2560   if and{Y#<>"n",Y#<>"N"} then 2520
+ 2570   screen 0,15,0:cls 3:screen 3:console:end
+ 2580   *NOTE
+ 2590   width 80,25:console 0,25,0
+ 2600   screen 0,15,0:cls 3
+ 2610   screen 2:color:color=(1,0):color=(7,0xd0d0d0)
+ 2620   gcolor 7:gsize 8,16,8,20
+ 2630   restore 2730
+ 2640   loop
+ 2650     read Y#:if Y#="@end" then 2680
+ 2660     gprint "       "+Y#
+ 2670   endloop
+ 2680   for II=0 to TT*20:for I=0 to 5000
+ 2690       if inkey=chr(13) then cancel for,for:goto 2710
+ 2700   next I:next II
+ 2710   cls:gsize
+ 2720   return
+ 2730   data " "
+ 2740   data "   ***  Othello ver.3.0  (UBASIC version)  ***"
+ 2750   data ""
+ 2760   data "1.    Level of Computer."
+ 2770   data "  level 1   ---   novice"
+ 2780   data "    | "
+ 2790   data "  level 5   ---   expert"
+ 2800   data ""
+ 2810   data "2.    How to input."
+ 2820   data "  When you decide where you put a piece, input a position"
+ 2830   data "  with an alphabet and a number( like 'd3'). A piece will"
+ 2840   data "  blink at the position, [Enter] if it is ok, otherwize [N]."
+ 2850   data "  Input [P] when you pass, [Ctrl]+[Q] when you'd like to"
+ 2860   data "  quit a game."
+ 2870   data ""
+ 2880   data "                               Oct. 1989   Yoichi Koyama"
+ 2890   data ""
+ 2900   data ""
+ 2910   data "  <[Enter] to start>"
+ 2920   data "@end"

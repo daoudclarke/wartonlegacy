@@ -1,0 +1,81 @@
+   10   dim Mi(8,23),Ni(8)
+   12   N=(10^7+19)*(10^8+7)*808333
+   13   Icnt=0
+   14   Prx1=2
+   15   Sx=int(sqrt(N))+1
+   16   for I=1 to 8
+   18   Prx1=nxtprm(Prx1)
+   20   Itemp=int(N/Prx1)
+   22   Irem=N-Itemp*Prx1
+   24   Ni(I)=Irem
+   26   next I
+   28   Prx1=2
+   30   for I=1 to 8
+   32   Prx1=nxtprm(Prx1)
+   34   for J=1 to Prx1
+   36   Itemp=int((J*J)/Prx1)
+   38   Irem=J*J-Prx1*Itemp
+   40   Mi(I,J)=Irem
+   42   next J
+   44   next I
+   45   X=int(sqrt(N))+1
+   46   Prx1=2
+   47   I=1
+   48   Prx1=nxtprm(Prx1)
+   52   Itemp=int(X/Prx1)
+   54   Irem=X-Prx1*Itemp
+   56   Itemp=Mi(I,Irem)-Ni(I)
+   57   if Itemp>-1 then goto 60
+   58   Itemp=Itemp+Prx1
+   59   A=A
+   60   K=1
+   61   A=A
+   62   if Itemp=Mi(I,K) then goto 73
+   67   if K=Prx1 then goto 70
+   68   K=K+1
+   69   goto 62
+   70   X=X+1
+   71   print "x",X,"sx",Sx
+   72   goto 79
+   73   if I=7 then goto 100
+   74   I=I+1
+   75   goto 48
+   76   Icnt=Icnt+1
+   77   X=X+1
+   78   print "x",X,"sx",Sx
+   79   if X=10000255255*19+1 then goto 90
+   80   goto 46
+   90   print "icnt",Icnt
+   92   stop
+  100   Icnt=Icnt+1
+  102   Sq=int(sqrt(X^2-N))
+  104   Sqq=Sq*Sq
+  106   if Sqq<X^2-N then goto 77
+  107   if Sqq>X^2-N then goto 77
+  108   A=N
+  110   B=X-Sq
+  120   Qq=int(A/B)
+  122   Irem=A-Qq*B
+  124   if Irem=0 then goto 130
+  126   A=B
+  128   Irem=B
+  129   goto 120
+  130   Igcd=B
+  131   if Igcd=1 then goto 77
+  132   Fact2=int(N/Igcd)
+  134   print "gcd",Igcd,"other factor",Fact2,"sx",Sx
+  136   stop
+  190   Imin=10^50
+  192   for I=1 to 1000000
+  194   Itemp=int(I/4)
+  196   Irem=I-4*Itemp
+  198   if Irem=2 then goto 214
+  200   A=A
+  202   A=A
+  204   Sq=int(sqrt(N*I))+1
+  206   Sqq=Sq*Sq-N*I
+  208   if Sqq>Imin+1 then goto 214
+  210   Imin=Sqq
+  212   Irow=I
+  214   next I
+  216   print "irow",Irow,"imin",Imin

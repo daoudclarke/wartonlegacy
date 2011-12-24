@@ -1,0 +1,11 @@
+  917   LITTLE=int(LITTLE)
+  918   BIG=int(BIG)
+  919   Temp=BIG\LITTLE
+  920   REM1=BIG-LITTLE*Temp
+  922   if REM1=0 then goto 940
+  924   BIG=LITTLE
+  926   LITTLE=REM1
+  928   goto 917
+  940   GCD2=LITTLE
+  942   print GCD2
+  950   return

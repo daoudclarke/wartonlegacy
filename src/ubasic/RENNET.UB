@@ -1,0 +1,17 @@
+   10   *Rennet(&Cf(),Leng,&A,&B,&C)
+   20   ' Periodic continued fraction to quadratic.
+   30   ' CF() is an input parameter - passed by reference for efficiency.
+   40   ' Modeled on the Pascal version.
+   45   ' 7 May 1990
+   50   local I,H1=0,H2=1,K1=1,K2=0,Te
+   60   if Leng<0 then A=0:B=0:C=0:return endif
+   70   if Leng=0 then A=1:B=0:C=-Cf(0):return endif
+   80   for I=1 to Leng
+   90   Te=H1+Cf(I)*H2:H1=H2:H2=Te
+  100   Te=K1+Cf(I)*K2:K1=K2:K2=Te
+  110   next I
+  120   A=H1:B=(H2-K1)-2*H1*Cf(0)
+  140   C=Cf(0)*(Cf(0)*H1-(H2-K1))-K2
+  150   Te=gcd(B,A):Te=gcd(C,Te)
+  160   A=A\Te:B=B\Te:C=C\Te
+  170   return ' End of subroutine Rennet.

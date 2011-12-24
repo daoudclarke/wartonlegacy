@@ -1,0 +1,3874 @@
+    
+
+      program boblqx 
+!     generalization 1 :program uses Gaussian integers
+!  homogeneous quadratic polynomials
+!     MPQS program applied to exponent recovery problem or discrete
+!     logarithm problem
+!     smaller sieving interval
+      
+      common karr(50),kbarr(50),kcarr(200),ipqt(50),irrr(50)
+      common mnum(50)
+      common ia5(5),ia4(5),ia3(5),ia2(5),ia1(5),ia0(5),m1(5),m2(5)
+      common ipr(65000),norma(50),gpr(40000),norma0(50)
+      common kara(50),karb(50),kard(50),karp(50),karv(50)
+      common ncom(50),iprar(50),iansar(50),narc(50)
+      common nfak,jfak(20),mntes1(50),mntes2(50),jfakin(20),iconarr(50)
+      common ijpow,ibase(50),jbase(50),itarg(50),jtarg(50)
+      common kfak,kfakin(20),kfreq(20),kjfakin(20)
+      dimension kr(10000,2),mm(20),mres(20),n(60),msqr(20)
+      dimension ic1(20),ic2(20),icinv1(20),im1(20),im2(20),icpr1(50)
+      dimension mmsq(50),mstem(20),zlog(10000),mmsq2(50)
+      dimension iaa1(10),iaa0(10)
+      dimension kkm(10000,4)
+      dimension numb1(60)
+      dimension itab(40),jtab(40),kiatm(50),kial(5),kibl(5)
+      dimension itemp1(50),itemp2(50)
+      dimension littr(20),iabp(50),iabpn(50),ity(50),icdarr(50)
+      dimension kndx(160000),ipdf(10,12),ipdff(12),jpdff(12)
+      dimension isize(12),jsize(12),ivecno(12),jvecno(12)
+      real krecarr(160000),lglm
+      do i=1,10
+      iaa1(i)=0
+      iaa0(i)=0
+      im1(i)=0
+      im2(i)=0
+      end do
+      iaa1(1)=0
+      iaa1(2)=1
+      iaa1(3)=1
+      iaa0(1)=0
+      iaa0(2)=1
+      iaa0(3)=10
+
+
+
+
+      do i=1,10
+      do jf=1,12
+      ipdf(i,jf)=0
+      end do
+      end do
+      do jf=1,12
+      ipdff(jf)=0
+      jpdff(jf)=0
+      isize(jf)=0
+      jsize(jf)=0
+      ivecno(jf)=0
+      jvecno(jf)=0
+      end do
+      ipdf(1,1)=0
+      ipdf(1,2)=1
+      ipdf(1,3)=2
+      ipdf(2,1)=0
+      ipdf(2,2)=1
+      ipdf(2,3)=3
+      ipdf(3,1)=0
+      ipdf(3,2)=1
+      ipdf(3,3)=5
+      ipdf(4,1)=0
+      ipdf(4,2)=1
+      ipdf(4,3)=19
+      ipdf(5,1)=0
+      ipdf(5,2)=1
+      ipdf(5,3)=137
+      ipdf(6,1)=0
+      ipdf(6,2)=1
+      ipdf(6,3)=2293
+      
+      ipdf(7,1)=0
+      ipdf(7,2)=2
+      ipdf(7,3)=6909
+      ipdf(7,4)=5501
+      ipdf(8,1)=0
+      ipdf(8,2)=5
+      ipdf(8,3)=22
+      ipdf(8,4)=1744
+      ipdf(8,5)=6833
+      ipdf(8,6)=635
+      ipdf(8,7)=9481
+      ipdf(9,1)=0
+      ipdf(9,2)=9
+      ipdf(9,3)=1234
+      ipdf(9,4)=5678
+      ipdf(9,5)=9012
+      ipdf(9,6)=3456
+      ipdf(9,7)=7890
+      ipdf(9,8)=1234
+       ipdf(9,9)=5678
+       ipdf(9,10)=9013
+       ipdf(9,11)=3649
+       ipdff(1)=1
+       ipdff(9)=1
+       
+       jpdff(1)=2
+       jpdff(2)=3
+       jpdff(3)=2
+       jpdff(4)=1
+       jpdff(5)=1
+       jpdff(6)=1
+       jpdff(7)=1
+       jpdff(8)=1
+
+
+
+
+
+      ic1(1)=0
+      ic1(2)=6
+      ic1(3)=4
+      ic1(4)=7123
+      ic1(5)=7871
+      ic1(6)=2481
+      ic1(7)=6783
+      ic1(8)=6490
+      ic2(1)=0
+      ic2(2)=6
+      ic2(3)=3
+      ic2(4)=7669
+      ic2(5)=8599
+      ic2(6)=6188
+      ic2(7)=5565
+      ic2(8)=8679
+      im1(1)=0
+      im1(2)=5
+      im1(3)=49
+      im1(4)=2041
+      im1(5)=1625
+      im1(6)=1741
+      im1(7)=7997
+      
+      im2(1)=0
+      im2(2)=5
+      im2(3)=2
+      im2(4)=1929
+      im2(5)=5973
+      im2(6)=8161
+      im2(7)=9227
+
+
+      mm(1)=0
+      mm(2)=4
+      mm(3)=4969
+      mm(4)=399
+      mm(5)=2763
+      mm(6)=8853
+      do jf=3,mm(2)+2
+      karr(jf-2)=mm(jf)
+      kbarr(jf-2)=mm(jf)
+      end do
+      ilen=mm(2)
+      ilen2=ilen
+      call mpmul(ilen,ilen2,ilen3)
+      do jf=1,ilen3
+      mmsq(jf+2)=kcarr(jf)
+      end do
+      mmsq(1)=0
+      mmsq(2)=ilen3
+
+
+
+
+      open(unit=4,file='gausf2',access='sequential')
+      icon=0
+      goto 11
+11    a=a
+!     open(unit=2,file='fquat',access='direct',form=&
+!     'formatted',recl=410,status='old')
+!     do ii=1,4
+!     read (2,72222,rec=ii)irecnn,iconq,(narr(ii,jf),jf=1,50),&
+!     (nbarr(ii,jk),jk=1,50)
+!     print *,'irecnn=',irecnn,'iconq',iconq,'a=',(narr(ii,jf),jf=1,&
+!     narr(ii,2)+2),'b=',(nbarr(ii,jk),jk=1,nbarr(ii,2)+2)
+!     end do
+!     close(unit=2)
+!     stop
+      do jf=1,20
+      jfakin(jf)=0
+      kjfakin(jf)=0
+      end do
+
+
+!     for 33 digit no itab1=250,for 36 digit no. itab1=350      
+      
+      itab(1)=500
+      itab(1)=250
+      itab(1)=350
+      itab(2)=1800
+      itab(3)=2000
+      itab(4)=2100
+      itab(5)=2250
+      itab(6)=1350
+      itab(7)=1500
+      itab(8)=1600
+      itab(9)=1750
+      itab(10)=1850
+      itab(11)=2000
+      itab(12)=2300
+      itab(13)=2600
+      itab(14)=2900
+      itab(15)=3200
+      itab(16)=3500
+      itab(17)=3800
+      itab(18)=4100
+      itab(19)=4400
+      itab(20)=4700
+      itab(21)=5000
+      itab(22)=5400
+      itab(23)=5800
+      itab(24)=6300
+      itab(25)=6800
+      itab(26)=7300
+      itab(27)=7750
+      itab(28)=8000
+      itab(29)=8000
+      itab(30)=8100
+      itab(31)=8300
+      itab(32)=8400
+      itab(33)=8600
+      itab(34)=8800
+      itab(35)=9200
+      itab(36)=9400
+      itab(37)=9600
+      itab(38)=9800
+
+!     for 33 digit prime jtab1=112,36 digit jtab1=110
+      jtab(1)=112
+      jtab(1)=110
+      jtab(2)=112
+      jtab(3)=111
+      jtab(4)=111
+      jtab(5)=110
+      jtab(6)=110
+      jtab(7)=109
+      jtab(8)=109
+      jtab(9)=108
+      jtab(10)=108
+      jtab(11)=107
+      jtab(12)=107
+      jtab(13)=106
+      jtab(14)=106
+      jtab(15)=105
+      jtab(16)=105
+      jtab(17)=103
+      jtab(18)=103
+      jtab(19)=102
+      jtab(20)=101
+      jtab(21)=100
+      jtab(22)=99
+      jtab(23)=99
+      jtab(24)=98
+      jtab(25)=97
+      jtab(26)=97
+      jtab(27)=96
+      jtab(28)=95
+      jtab(29)=94
+      jtab(30)=93
+      jtab(31)=92
+      jtab(32)=91
+      jtab(33)=91
+      jtab(34)=91
+      jtab(35)=91
+      jtab(36)=91
+      jtab(37)=91
+      jtab(38)=91
+
+      iprerec=0
+      iconq=1
+      ineq=1
+      ncom(1)=0
+      ncom(2)=2
+      ncom(3)=4
+      ncom(4)=878
+      iprar(1)=0
+      iprar(2)=3
+      iprar(3)=12
+      iprar(4)=3456
+      iprar(5)=7891
+      call bigb5(noyes)
+      print *,'ans',(iansar(jf),jf=1,iansar(2)+2)
+      print *,'noyes',noyes
+      
+      do i=1,10000
+      rel=i
+      zlog(i)= log10(rel)
+      end do
+      do jf=1,160000
+      krecarr(jf)=127.0
+      
+      end do
+      do jf=1,60
+      n(jf)=0
+      end do
+      irecpl=0
+      ktim=1
+      kkb=0
+      n(1)=0
+      print *,'length of number radix 10000'
+      read  *,n(2)
+      print *,'number'
+      read *,(n(jf),jf=3,n(2)+2)
+      
+      print *,'length of base radix 10000'
+      read *,jbase(2)
+      print *,'input base here'
+      read *,(jbase(jf),jf=3,jbase(2)+2)
+      jbase(1)=0
+      print *,'input target length radix 10000'
+      read *,jtarg(2)
+      print *,'input target'
+      read *,(jtarg(jf+2),jf=1,jtarg(2))
+      jtarg(1)=0
+      open(unit=7,file='gausparn',access='direct',form=&
+      'formatted',recl=780,status='old')
+      write(7,56,rec=1)(n(jf),jf=1,60),((ipdf(i,jf),jf=1,12),i=1,10),&
+     (ipdff(jf),jf=1,10),(jpdff(jf),jf=1,10),&
+     (ivecno(jf),jf=1,10)
+56    format(60i4,10(12i4),10i2,10i2,10i2)      
+      do jf=1,n(2)+2
+      karr(jf)=n(jf)
+      kbarr(jf)=n(jf)
+      end do
+      call mpadd(0)
+      do jf=1,kcarr(2)+2
+      numb1(jf)=kcarr(jf)
+      end do
+      rel=n(3)
+      vlg=log10(rel)
+      llg=int(vlg)
+      indy=(n(2)-1)*4+llg-38
+      if (n(2).lt.4)goto 62
+      if (indy.gt.38)goto 2
+      if (indy.le.0)goto 58
+      goto 59
+62    limprm=75
+      mimprm=116
+      indy=0
+      goto 63
+2     print *,'number too large to handle within a reasonable timeframe'
+      print *,'recommend using GRETA suite'
+      close(unit=7)
+      stop
+58    indy=1
+
+59    limprm=itab(indy)
+      mimprm=jtab(indy)
+63    a=a      
+      print *,'limprm',limprm,'mimprm',mimprm,'indy',indy
+! compute inverse of ic1 mod n      
+      
+      do jf=1,n(2)+2
+      kara(jf)=n(jf)
+      end do
+      do jf=1,ic1(2)+2
+      karb(jf)=ic1(jf)
+      end do
+      call mpgcd
+      do jf=1,karv(2)+2
+      icinv1(jf)=karv(jf)
+      end do
+      print *,'icinv1',(icinv1(jf),jf=1,icinv1(2)+2)
+      do jf=3,icinv1(2)+2
+      karr(jf-2)=icinv1(jf)
+      end do
+      ilen=icinv1(2)
+      do jf=3,ic2(2)+2
+      kbarr(jf-2)=ic2(jf)
+      end do
+      ilen2=ic2(2)
+      call mpmul(ilen,ilen2,ilen3)
+      do jf=1,ilen3
+      icpr1(jf+2)=kcarr(jf)
+      end do
+      icpr1(1)=ic2(1)
+      icpr1(2)=ilen3
+      print *,'icpr1',(icpr1(jf),jf=1,icpr1(2)+2)
+      
+
+
+
+
+
+      do jf=1,n(2)+2
+      ncom(jf)=n(jf)
+      end do
+      do jf=1,mmsq(2)+2
+      karr(jf)=mmsq(jf)
+      end do
+      do jf=1,n(2)+2
+      kbarr(jf)=n(jf)
+      end do
+      call mpadd(1)
+      do jf=1,kcarr(2)+2
+      mmsq2(jf)=kcarr(jf)
+      end do
+      
+      
+      
+      
+      
+      print *,'mm',(mm(jf),jf=1,mm(2)+2)
+      print *,'mmsq',(mmsq(jf),jf=1,mmsq(2)+2)
+      print *,'mmsq2',(mmsq2(jf),jf=1,mmsq2(2)+2)
+      print *,'n',(n(jf),jf=1,n(2)+2)
+      
+      limprm2=limprm+limprm+limprm/4
+!     for extra small numbers bypass square root phase      
+      if (n(2).lt.4)goto 60
+!     compute square root of 2 times n      
+60    a=a      
+      
+      open(unit=3,file ='recl.dat',access='direct',form =&
+      'formatted',recl=390000,status='old')
+!      open(unit=4,file='gpx1',access='sequential')
+
+      
+
+      read(3,5,rec=1) (ipr(i),i=1,65000)
+5     format(65000i6)      
+      
+      print *,'no of primes<800001=',ipr(1),ipr(2)
+      close(3)
+      print *,'limprm2',limprm2
+       
+      
+      
+
+
+
+
+
+
+      
+      
+      
+      iblim=0
+      iulim=2000
+      lprx1=100000
+      icon=0
+      isivl=2000
+      
+      
+      
+      
+      
+      
+      goto 4004
+4002  print *,'factor found early=2'
+      stop
+
+
+4004  iva=n(2)+2
+      iccn=0
+      
+      print *,'kr1s',(kr(jf,1),jf=2,11)
+      do jf=1,n(2)+2
+      karr(jf)=n(jf)
+      end do
+      kbarr(1)=0
+      kbarr(2)=1
+      kbarr(3)=1
+      call mpadd(1)
+      do jf=1,kcarr(2)+2
+      ncom(jf)=kcarr(jf)
+      
+      end do
+      goto 2512
+      iccn=0
+      do i=3,limprm2-150
+!      do i=3,13
+      
+      
+      
+      if (ipr(i).lt.10000)goto 2500
+      karp(1)=0
+      karp(2)=2
+      karp(3)=int(ipr(i)/10000)
+      karp(4)=ipr(i)-karp(3)*10000
+      goto 2502
+2500   karp(2)=1
+      karp(1)=0
+      karp(3)=ipr(i)
+2502  goto 2521
+      do jf=1,karp(2)+2
+      kara(jf)=karp(jf)
+      end do
+      do jf=1,ic1(2)+2
+      karb(jf)=ic1(jf)
+      end do
+      call mpgcd
+      do jf=1,karv(2)+2
+      icinv1(jf)=karv(jf)
+      end do
+      print *,'icinv1',(icinv1(jf),jf=1,icinv1(2)+2)
+      do jf=3,icinv1(2)+2
+      karr(jf-2)=icinv1(jf)
+      end do
+      ilen=icinv1(2)
+      do jf=3,ic2(2)+2
+      kbarr(jf-2)=ic2(jf)
+      end do
+      ilen2=ic2(2)
+      call mpmul(ilen,ilen2,ilen3)
+      do jf=1,ilen3
+      icpr1(jf+2)=kcarr(jf)
+      end do
+      icpr1(1)=ic2(1)
+      icpr1(2)=ilen3
+      print *,'icpr1',(icpr1(jf),jf=1,icpr1(2)+2)
+      do jf=3,icpr1(2)+2
+      karr(jf-2)=icpr1(jf)
+      end do
+      ilen=icpr1(2)
+      do jf=3,karp(2)+2
+      kbarr(jf-2)=karp(jf)
+      end do
+      ilen2=karp(2)
+      call mpdiv(ilen,ilen2,irlen,icont,iswq)
+      if (irlen.eq.0)goto 2600
+      do jf=1,irlen
+      kbarr(jf+2)=irrr(jf)
+      end do
+      kbarr(1)=icpr1(1)
+      kbarr(2)=irlen
+      if (kbarr(1).eq.1)goto 2601
+      do jf=1,karp(2)+2
+      karr(jf)=karp(jf)
+      end do
+      call mpadd(1)
+      do jf=1,kcarr(2)+2
+      kard(jf)=kcarr(jf)
+      end do
+      goto 2521
+2601  kbarr(1)=0
+      do jf=1,kbarr(2)+2
+      kard(jf)=kbarr(jf)
+      end do
+      goto 2521
+2600  kr(i,1)=0      
+      goto 2590
+2521  do jf=3,ncom(2)+2
+      karr(jf-2)=ncom(jf)
+      end do
+      do jf=3,karp(2)+2
+      kbarr(jf-2)=karp(jf)
+      end do
+      ilen=ncom(2)
+      ilen2=karp(2)
+      call mpdiv(ilen,ilen2,irlen,icont,iswq)
+      if (irlen.eq.0)goto 2590
+      do jf=1,irlen
+      kard(jf+2)=irrr(jf)
+      end do
+      kard(1)=0
+      kard(2)=irlen
+
+      call mpkron(k)
+      if (k.ne.1)goto 2590
+!      do jf=1,kard(2)+2
+!      ncom(jf)=kard(jf)
+!      end do
+      print *,'ncom',(ncom(jf),jf=1,ncom(2)+2)
+      print *,'i',i,'ipr',ipr(i),'k',k
+      ip=ipr(i)
+25901  call bwq5(ip,ians)
+      kr(i,1)=ians
+      kr(i,2)=ipr(i)-ians
+      iccn=iccn+1
+      print *,'kr',kr(i,1),'ipr',ipr(i),'iccn',iccn
+      if (iccn.eq.limprm)goto 2512
+2590   end do      
+!      print *,'loop too short'
+!      stop
+2512   print *,'square root phase finished'
+      iccn3=iccn
+      
+      
+      print *,'ipr',(ipr(jf),jf=2,13)
+      
+      do jf=3,n(2)+2
+      karr(jf-2)=n(jf)
+      end do
+      ilen=n(2)
+      kbarr(1)=500
+      ilen2=1
+      call mpdiv(ilen,ilen2,irlen,icont,iswq)
+      do jf=1,icont
+      mntes1(jf+2)=ipqt(jf)
+      end do
+      mntes1(1)=0
+      mntes1(2)=icont
+      kbarr(1)=2000
+      kbarr(2)=0
+      ilen2=2
+      call mpdiv(ilen,ilen2,irlen,icont,iswq)
+      do jf=1,icont
+      mntes2(jf+2)=ipqt(jf)
+      end do
+      mntes2(1)=0
+      mntes2(2)=icont
+      print *,'mntes1',(mntes1(jf),jf=1,mntes1(2)+2)
+      print *,'mntes2',(mntes2(jf),jf=1,mntes2(2)+2)
+      kr(2,1)=1
+      
+      
+      print *,'krs',(kr(jf,1),jf=3,20)
+461   a=a
+      
+      kr(2,1)=0
+      
+
+440   print *,'limprm2 at mid',limprm2
+      
+!     do i=3,limprm2
+!      if (kr(i,1).eq.999999)goto 5160
+!      if (kr(i,1).lt.kr(i,2))goto 5160
+!      itemp=kr(i,1)
+!      kr(i,1)=kr(i,2)
+!      kr(i,2)=itemp
+!5160  end do
+
+
+
+
+
+
+
+
+
+
+
+      irecnn=0
+      kia=0
+      kkb=0
+      ihitn=0
+      
+      
+      icdn=0
+      call sieve0(kia,kkb,irecnn,kkmx,icdn,iconq,limprm2)
+      goto 451
+      
+      
+451   a=a      
+      print *,'kr',(kr(jf,1),jf=2,11) 
+      print *,'kr2s',(kr(jf,2),jf=2,11)
+      print *,'ipr',(ipr(jf),jf=2,11)
+!      print *,'mr',(mr(jf,1),jf=1,20)
+!      print *,'mm',(mm(jf),jf=1,mm(2)+2)
+      
+
+
+
+
+
+
+
+
+
+!     change parameter      
+      do i=2,limprm2
+!      if (kr(i,1).eq.999999)goto 592
+      rel=ipr(i)
+      gpr(i)=log10(rel)
+      goto 594
+592   gpr(i)=99.0      
+594   end do      
+      rel=ipr(limprm)
+      lglm=log10(rel)
+      
+      
+      print *,'i',i
+      print *,'krs',(kr(jf,1),jf=1,50)
+      print *,'krs2',(kr(jf,2),jf=1,50)
+      
+      print *,'end y stage'
+!      open(unit=2,file='gpx2',access='direct',form=&
+!      'formatted',recl=410,status='old')
+      print *,'okk limprm',limprm
+      
+      
+55555 a=a
+      
+      
+
+!     start of big loop      
+     
+452   a=a      
+
+
+!      icdn=0
+      iblim=0
+      iulim=2000
+      lprx1=100000
+      icon=0
+      isivl=80000
+      isivlb=99000
+      ia=1
+      ib=1
+400   ia=1
+      ib=1
+
+      
+12349 a=a      
+
+
+      
+      print *,'kr13',kr(13,1)
+      print *,'kr3',kr(3,1)
+      print *,'kr19',kr(19,1)
+      
+      
+      print *,'ipr',(ipr(jf),jf=1,200)
+      
+!      call sieve(1,1,irecnn,kkmx,10)
+      
+      
+
+
+
+460   if(ia.eq.1)goto 300      
+      if (ib.eq.1)goto 300
+202   iabia=abs(ia)      
+      iabib=abs(ib)
+      if (iabib.gt.iabia)goto 220
+      ibig =iabia
+      little =iabib
+      call subgcd(ibig,little,igcd2)
+      if (igcd2.eq.1)goto 300
+      ia=ia+1
+      if (ia.gt.isivl)goto 3404
+      goto 460
+220   ibig=iabib
+      little=iabia
+      call subgcd(ibig,little,igcd2)
+      if (igcd2.eq.1)goto 300
+      ia =ia+1
+      if (ia.gt.isivl)goto 3404
+      goto 460
+      
+
+
+300   kia=ia
+      kib=ib
+      
+      kndx(ia*2-1)=1
+      
+
+3007  kia=ia *(-1)
+      
+      kndx(ia*2)=1
+3004  ia=ia+1
+      
+      if (ia.gt.isivl)goto 3404
+      goto 460
+
+3404  a=a     
+      
+!      print *,'phase 1 recno=',ib
+      do iz=2,limprm
+      if (ipr(iz).lt.10000) goto 9012
+      iprar(2)=2
+      iprar(3)=int(ipr(iz)/10000)
+      iprar(4)=ipr(iz)-iprar(3)*10000
+      goto 9014
+9012  iprar(2)=1      
+      iprar(3)=ipr(iz)
+9014  do iz2=1,1
+      do jf=3,im2(2)+2
+      karr(jf-2)=im2(jf)
+      end do
+      ilen=im2(2)
+      do jf=3,iprar(2)+2
+      kbarr(jf-2)=iprar(jf)
+      end do
+      ilen2=iprar(2)
+      call mpdiv(ilen,ilen2,irlen,icont,iswq)
+      if (irlen.eq.0)goto 1615 
+      do jf=1,irlen
+      karr(jf+2)=irrr(jf)
+      end do
+      karr(2)=irlen
+      karr(1)=im2(1)
+      if (im2(1).eq.0)goto 1802
+      do jf=1,iprar(2)+2
+      kbarr(jf)=iprar(jf)
+      end do
+      call mpadd(0)
+      do jf=1,kcarr(2)+2
+      karr(jf)=kcarr(jf)
+      end do
+1802  do jf=1,karr(2)+2
+      karb(jf)=karr(jf)
+      end do
+      do jf=1,iprar(2)+2
+      kara(jf)=iprar(jf)
+      end do
+      call mpgcd
+      do jf=3,karv(2)+2
+      karr(jf-2)=karv(jf)
+      end do
+      ilen=karv(2)
+      if (kib.lt.10000)goto 1804
+      kbarr(1)=kib/10000
+      kbarr(2)=kib-kbarr(1)*10000
+      ilen2=2
+      goto 1805
+1804  kbarr(1)=kib
+      ilen2=1
+1805 call mpmul(ilen,ilen2,ilen3)
+     do jf=1,ilen3
+      karr(jf)=kcarr(jf)
+      end do
+      ilen=ilen3
+      do jf=3,im1(2)+2
+      kbarr(jf-2)=im1(jf)
+      end do
+      ilen2=im1(2)
+      call mpmul(ilen,ilen2,ilen3)
+      do jf=1,ilen3
+      karr(jf)=kcarr(jf)
+      end do
+      ilen=ilen3
+      do jf=3,iprar(2)+2
+      kbarr(jf-2)=iprar(jf)
+      end do
+      ilen2=iprar(2)
+      call mpdiv(ilen,ilen2,irlen,icont,iswq)
+      if (irlen.eq.0)goto 1602
+      do jf=1,irlen
+      karr(jf+2)=irrr(jf)
+      end do
+      karr(1)=im1(1)
+      karr(2)=irlen
+      if (karr(1).eq.0)goto 1810
+      do jf=1,iprar(2)+2
+      kbarr(jf)=iprar(jf)
+      end do
+      call mpadd(0)
+      do jf=1,kcarr(2)+2
+      karr(jf)=kcarr(jf)
+      end do
+1810  if (karr(2).eq.1)goto 1812
+      if (karr(2).eq.0)goto 1602
+      markb=karr(3)*10000+karr(4)
+      goto 1603
+1812 markb=karr(3) 
+      goto 1603
+
+
+
+
+
+
+      if (kib.lt.10000)goto 9004
+      karr(1)=int(kib/10000)
+      karr(2)=kib-karr(1)*10000
+      ilen=2
+      goto 9006
+      
+      
+9004  karr(1)=kib
+      ilen=1
+9006  a=a      
+      do jf=3,im1(2)+2
+      kbarr(jf-2)=im1(jf)
+      end do
+      ilen2=im1(2)
+
+      
+9010  call mpmul(ilen,ilen2,ilen3)
+      ilen=ilen3
+      do jf=1,ilen3
+      karr(jf)=kcarr(jf)
+      end do
+      ilen2=iprar(2)
+      do jf=3,iprar(2)+2
+      kbarr(jf-2)=iprar(jf)
+      end do
+      
+      call mpdiv(ilen,ilen2,irlen,icont,iswq)
+      if (irlen.eq.0)goto 1602
+      if (irlen.eq.1)goto 1603
+      markb=irrr(1)*10000+irrr(2)
+      goto 1604
+1602   markb=0
+      goto 1604
+      
+1603  markbn=ipr(iz)-markb
+1604   markm=markb
+      markbn=ipr(iz)-markb
+16041  if ((markb.gt.80000).and.(markbn.gt.80000))goto 1615
+      if ((markb.gt.80000).or.(markb.eq.0))goto 1606
+      if (kndx(markb*2-1).ne.1)goto 1606
+      krecarr(markb*2-1)=krecarr(markb*2-1)-gpr(iz)
+1606   if ((markbn.gt.80000).or.(markbn.eq.0))goto 16062
+      if (kndx(markbn*2).ne.1)goto 16062
+      krecarr(markbn*2)=krecarr(markbn*2)-gpr(iz)
+16062  markb=markb+ipr(iz)
+      markbn=markbn+ipr(iz)
+      goto 16041
+
+1615   end do
+      end do
+      goto 668
+      
+
+     
+      do iz=2,limprm2
+      if (ipr(iz).lt.10000) goto 8012
+      iprar(2)=2
+      iprar(3)=int(ipr(iz)/10000)
+      iprar(4)=ipr(iz)-iprar(3)*10000
+      goto 8014
+8012  iprar(2)=1      
+      iprar(3)=ipr(iz)
+8014  do iz2=1,2
+      if (kr(iz,iz2).eq.999999)goto 615
+      if (kr(iz,iz2).eq.0)goto 602
+      if (kib.lt.10000)goto 8004
+      karr(1)=int(kib/10000)
+      karr(2)=kib-karr(1)*10000
+      ilen=2
+      goto 8006
+      
+      
+8004  karr(1)=kib
+      ilen=1
+8006  if (kr(iz,iz2).lt.10000)goto 8008      
+      kbarr(1)=int(kr(iz,iz2)/10000)
+      kbarr(2)=kr(iz,iz2)-kbarr(1)*10000
+      ilen2=2
+      goto 8010
+
+
+8008  kbarr(1)=kr(iz,iz2)
+      ilen2=1
+8010  call mpmul(ilen,ilen2,ilen3)
+      ilen=ilen3
+      do jf=1,ilen3
+      karr(jf)=kcarr(jf)
+      end do
+      ilen2=iprar(2)
+      do jf=3,iprar(2)+2
+      kbarr(jf-2)=iprar(jf)
+      end do
+      
+      call mpdiv(ilen,ilen2,irlen,icont,iswq)
+      if (irlen.eq.0)goto 602
+      if (irlen.eq.1)goto 603
+      markb=irrr(1)*10000+irrr(2)
+      goto 604
+602   markb=0
+      goto 604
+603   markb=irrr(1)
+      markbn=ipr(iz)-markb
+604   markm=markb
+      markbn=ipr(iz)-markb
+6041  if ((markb.gt.10000).and.(markbn.gt.10000))goto 605
+      if ((markb.gt.10000).or.(markb.eq.0))goto 606
+      if (kndx(markb*2-1).ne.1)goto 606
+      krecarr(markb*2-1)=krecarr(markb*2-1)-gpr(iz)
+606   if ((markbn.gt.10000).or.(markbn.eq.0))goto 6062
+      if (kndx(markbn*2).ne.1)goto 6062
+      krecarr(markbn*2)=krecarr(markbn*2)-gpr(iz)
+6062  markb=markb+ipr(iz)
+      markbn=markbn+ipr(iz)
+      goto 6041
+605   markl=markm-ipr(iz)
+      markln=ipr(iz)-markl
+6051  if ((markl.lt.1).and.(markln.lt.1))goto 615
+      if ((markl.lt.1).or.(markl.gt.10000))goto 616
+      if (kndx(markl*2-1).ne.1)goto 616
+      krecarr(markl*2-1)=krecarr(markl*2-1)-gpr(iz)
+616   if ((markln.gt.10000).or.(markln.lt.1))goto 6162
+
+      if (kndx(markln*2).ne.1)goto 6162
+      krecarr(markln*2)=krecarr(markln*2)-gpr(iz)
+6162  markl=markl-ipr(iz)
+      markln=markln-ipr(iz)
+      goto 6051
+615   end do
+      end do
+      
+      
+
+
+      
+      
+      
+
+      
+
+
+
+      goto 668
+
+
+
+
+      
+!     start of last phase
+668   a=a      
+!      print *,'start of last phase'
+      do kz=1,160000
+      
+      if (kndx(kz).ne.1)goto 690
+!     was 116.0       
+!      if (krecarr(kz).gt.vlgls)goto 690
+      isgn=mod(kz,2)
+      kia=int(kz/2)
+      if (isgn.eq.1)goto 699
+      kia =kia*(-1)
+      goto 702
+               
+699   kia=kia+1
+      
+
+702   kpoin=0
+
+      
+      
+      vimprm=mimprm 
+      vimprm3=mimprm
+!      print *,'vimprm',vimprm,'vimprm3',vimprm3
+!      if ((krecarr(kz).gt.vimprm).or.(mrecarr(kz).gt.vimprm3))goto 690
+      if (krecarr(kz).gt.vimprm)goto 690
+!      print *,'krecarr',krecarr(kz)
+!     compute accurately      
+!     convert kia,kib to multi-precision,square and add into norma      
+      if (abs(kia).lt.10000)goto 4100
+      karr(1)=abs(kia)/10000
+      karr(2)=abs(kia)-karr(1)*10000
+      kbarr(1)=karr(1)
+      kbarr(2)=karr(2)
+      kial(1)=0
+      kial(2)=2
+      
+      kial(3)=karr(1)
+      kial(4)=karr(2)
+      ilen=2
+      ilen2=2
+      goto 4101
+4100  karr(1)=abs(kia)      
+      kbarr(1)=karr(1)
+      kial(1)=0
+      kial(2)=1
+      kial(3)=karr(1)
+      
+      ilen=1
+      ilen2=1
+4101  call mpmul(ilen,ilen2,ilen3)
+      do jf=1,ilen3
+      kiatm(jf+2)=kcarr(jf)
+      end do
+      kiatm(1)=0
+      kiatm(2)=ilen3
+      if (kib.lt.10000)goto 4150 
+      karr(1)=kib/10000
+      karr(2)=kib-karr(1)*10000
+      kbarr(1)=karr(1)
+      kbarr(2)=karr(2)
+      ilen=2
+      ilen2=2
+      kibl(1)=0
+      kibl(2)=2
+      kibl(3)=karr(1)
+      kibl(4)=karr(2)
+      goto 4151
+4150  karr(1)=kib
+      kbarr(1)=kib
+      ilen=1
+      ilen2=1
+      kibl(1)=0
+      kibl(2)=1
+      kibl(3)=karr(1)
+4151  call mpmul(ilen,ilen2,ilen3)
+      do jf=1,ilen3
+      karr(jf)=kcarr(jf)
+      end do
+      ilen=ilen3
+      do jf=3,iaa0(2)+2
+      kbarr(jf-2)=iaa0(jf)
+      end do
+      ilen2=iaa0(2)
+      call mpmul(ilen,ilen2,ilen3)
+
+
+
+
+      do jf=1,ilen3
+      karr(jf+2)=kcarr(jf)
+      
+      end do
+      karr(1)=0
+      karr(2)=ilen3
+      
+
+      do jf=1,kiatm(2)+2
+      kbarr(jf)=kiatm(jf)
+      end do
+      call mpadd(0)
+      do jf=1,kcarr(2)+2
+      norma(jf)=kcarr(jf)
+      end do
+      
+      if (kia.gt.0)goto 4200
+      kial(1)=1
+4200  do jf=3,im2(2)+2
+      karr(jf-2)=im2(jf)
+      end do
+      do jf=3,kial(2)+2
+      kbarr(jf-2)=kial(jf)
+      end do
+      ilen=im2(2)
+      ilen2=kial(2)
+      call mpmul(ilen,ilen2,ilen3)
+      do jf=1,ilen3
+      itemp1(jf+2)=kcarr(jf)
+      end do
+      itemp1(2)=ilen3
+      itemp1(1)=mod(im2(1)+kial(1),2)
+      do jf=3,im1(2)+2
+      karr(jf-2)=im1(jf)
+      end do
+      ilen=im1(2)
+      do jf=3,kibl(2)+2
+      kbarr(jf-2)=kibl(jf)
+      end do
+      ilen2=kibl(2)
+      call mpmul(ilen,ilen2,ilen3)
+      do jf=1,ilen3
+      kbarr(jf+2)=kcarr(jf)
+      end do
+      kbarr(1)=im1(1)
+      kbarr(2)=ilen3
+      do jf=1,itemp1(2)+2
+      karr(jf)=itemp1(jf)
+      end do
+      call mpadd(1)
+      do jf=1,kcarr(2)+2
+      norma0(jf)=kcarr(jf)
+      end do
+
+
+
+      
+      
+      
+      goto 454
+
+
+
+
+
+! minus side of sieve here      
+      norma0(1)=1
+      karr(1)=1
+      do jf=1,n(2)+2
+      kbarr(jf)=n(jf)
+      end do
+      call mpadd(0)
+      do jf=1,kcarr(2)+2
+      norma(jf)=kcarr(jf)
+      end do
+
+454   a=a
+
+
+
+
+
+
+
+
+      rel=zlog(norma0(3))+4*norma0(2)-4
+      rel2=rel-127.0+krecarr(kz)
+!      rel=zlog(norma0(3))+4*norma0(2)-4
+!      rel3=rel-127.0 +mrecarr(kz)
+!      print *,'rel3',rel3,'rel2',rel2,'lglm',lglm ,'mrec',mrecarr(kz)
+      if (rel2.gt.lglm)goto 690
+!      if ((rel2.gt.lglm).or.(rel3.gt.lglm))goto 690
+      print *,'norma0',(norma0(jf),jf=1,norma0(2)+2),'limp2',limprm2
+      
+      
+      
+      call sieve(kia,kib,irecnn,kkmx,icdn,iconq,limprm2,limprm)
+      do jhj=1,nfak
+      if (jfakin(jhj).eq.0)goto 69001
+      end do
+      do jhj=1,nfak
+      if (kjfakin(jhj).eq.0)goto 69001
+      end do
+      if (irecnn.ge.limprm*3-100)goto 720
+      
+      
+
+69001 a=a
+690   end do
+      ia=1
+      ib=ib+1
+      if (ib.gt.isivlb)goto 720
+      do jf=1,160000
+      kndx(jf)=0
+      krecarr(jf)=127.0
+      end do
+      
+      
+      goto 460
+
+
+
+      
+
+
+
+
+
+
+
+
+
+720   print *,'maximum no of primes=',kkmx
+      print *,'irecnn=',irecnn
+      ixxy=0
+      ixxz=0
+      izzy1=0
+      izzy2=0
+      
+730   print *,'run completed',' no of records=',irecnn,'iconq',iconq
+      open (unit=1,file='gauspar',access='direct',form=&
+      'formatted',recl=514,status='old')
+      write (1,1002,rec=1)(iaa1(jf),jf=1,10),(iaa0(jf),jf=1,10),&
+      (im1(jf),jf=1,10),(im2(jf),jf=1,10),ixxy,ixxz,ijpow,(ibase(jf),&
+      jf=1,20),(jbase(jf),jf=1,20),(itarg(jf),jf=1,20),(jtarg(jf),jf=1,20),&
+      izzy1,izzy2
+
+
+1002  format (40i4,3i8,20i4,20i4,20i4,20i4,2i5)
+
+      close (unit=1)
+      close (unit=7)
+      close (unit=2)
+      
+      
+      
+      
+      close(unit=4)
+      
+      end
+      subroutine sieve0(kia,kib,irecnn,kkmx,icdn,iconq,limprm2)
+      common karr(50),kbarr(50),kcarr(200),ipqt(50),irrr(50)
+      common mnum(50)
+      common ia5(5),ia4(5),ia3(5),ia2(5),ia1(5),ia0(5),m1(5),m2(5)
+      common ipr(65000),norma(50),gpr(40000),norma0(50)
+      common kara(50),karb(50),kard(50),karp(50),karv(50)
+      common ncom(50),iprar(50),iansar(50),narc(50)
+      common nfak,jfak(20),mntes1(50),mntes2(50),jfakin(20),iconarr(50)
+      common ijpow,ibase(50),jbase(50),itarg(50),jtarg(50)
+      common kfak,kfakin(20),kfreq(20),kjfakin(20)
+      
+      
+      
+      
+      dimension litt(50),litd(50),ity(50),iabp(50),iabpn(50)
+      dimension iprex(50),larp(2),iarp(2),ipfar(4),litz(50)
+      dimension littr(50),normar(50),jfreq(20),itbase(50)
+      ibbsw=0
+!     change parameter      
+      lprx1=ipr(limprm2)                                      
+      
+      
+      
+      larp(1)=int(lprx1/10000)
+      larp(2)=lprx1 -larp(1) *10000
+      ijpow=1
+      do jf=1,jbase(2)+2
+      ibase(jf)=jbase(jf)
+      end do
+      do jf=1,jtarg(2)+2
+      itarg(jf)=jtarg(jf)
+      end do
+440   a=a
+      do jf=1,itarg(2)+2
+      litt(jf)=itarg(jf)
+      end do
+441   a=a
+
+
+
+
+
+      
+      do i=1,50
+      ity(i)=0
+      iabp(i)=0
+      iabpn(i)=0
+      end do
+      
+
+
+!     finish of calculation of number to be sieved
+      do i=1,litt(2)+2
+      litz(i)=litt(i)
+      litd(i)=litt(i)
+      end do
+      litd(1)=0
+      
+      iflim=10000
+      iab=1
+      icur=0
+!      print *,'litd',(litd(i),i=1,litd(2) +2),'icdn',icdn,'irecnn',irecnn&
+!      ,kkb
+      do i=1,50
+
+      iprex(i)=0
+      end do
+      iprex(2)=litd(2)
+      ipfar(1)=1
+      ipfar(2)=0
+      jab=0
+1010  iab=iab+1
+      
+      if (iab.eq.limprm2)goto 1500
+      if (gpr(iab).gt.90.0)goto 1010
+      jab=jab+1
+      if (jab.eq.16)goto 400
+      if (jab.eq.96)goto 410
+      goto 421
+400   do jf=2,litd(2)+2
+      if (litd(jf).lt.mntes1(jf))goto 420
+      if (litd(jf).gt.mntes1(jf))goto 1500
+      end do
+      goto 420
+410   do jf=1,litd(2)+2
+      if (litd(jf).lt.mntes2(jf))goto 420
+      if (litd(jf).gt.mntes2(jf))goto 1500
+      end do
+420   a=a
+421   a=a
+
+
+
+
+       
+      iprx1=ipr(iab)
+      
+      iarp(1)=int(iprx1/10000)
+      iarp(2)=iprx1-iarp(1) *10000
+      ibsw=0
+      
+      
+      
+      if (iarp(1).gt.larp(1))goto 1500
+      if (iarp(1).lt.larp(1))goto 1162
+      if (iarp(2).gt.larp(2))goto 1500
+1162  if (iarp(1).gt.ipfar(1))goto 1200
+      if (iarp(1).lt.ipfar(1))goto 1166
+      if (iarp(2).gt.ipfar(2))goto 1200
+
+
+1166  do i=3,litd(2)+2
+      karr(i-2)= litd(i)
+      end do
+      
+      
+      ilen=litd(2)
+      if (iprx1.lt.10000)goto 1168
+      ilen2 =2
+      kbarr(1)=iarp(1)
+      kbarr(2)=iarp(2)
+      goto 1170
+1168  kbarr(1)=iprx1
+      ilen2=1
+1170  call mpdiv(ilen,ilen2,irlen,icont,iswq)
+      
+      
+!      if (icont.eq.0)goto 1300
+      if(irlen.gt.0)goto 1010
+      
+      
+      do i=1,icont
+      litd(i+2)=ipqt(i)
+      end do
+      litd(2)=icont
+      
+      
+      if(ibsw.eq.1)goto 1176
+      ibsw=1
+      icur=icur +1
+      iabp(icur)=iprx1
+      iabpn(icur)=1
+      ity(icur)=1
+      if ((icont.eq.1).and.(ipqt(1).eq.1))goto 1300
+      goto 1166
+1176  iabpn(icur)=iabpn(icur)+1
+      if ((icont.eq.1).and.(ipqt(1).eq.1))goto 1300
+      goto 1166
+      
+
+
+1200  if (litd(2).ne.iprex(2))goto 12001
+      do i=3,litd(2)+2
+      if (litd(i).ne.iprex(i))goto 12001
+      end do
+      goto 1204
+
+ 
+12001 if (litd(2).gt.2)goto 2020
+      if (litd(2).eq.1)goto 1166
+      if (litd(3).lt.larp(1))goto 1166
+      if (litd(3).gt.larp(1))goto 2020
+      if (litd(4).le.larp(2))goto 1166
+2020  do i=3,litd(2) +2
+      mnum(i-2)=litd(i)
+      end do
+      inlen=litd(2)
+
+      call mpprime(icorp,inlen)
+      if (icorp.eq.1)goto 1500
+      do i=1,litd(2)+2
+      iprex(i)=litd(i)
+      end do
+1204  ipfar(1)=ipfar(1) +2
+      goto 1166
+1300  if (ibbsw.eq.1)goto 1301
+      nfak=icur
+      do jf=1,nfak
+      jfak(jf)=iabp(jf)
+      jfreq(jf)=iabpn(jf)
+      end do
+      print *,'ijpow',ijpow
+      print *,'nfak',nfak
+      print *,'jfaks',(jfak(jf),jf=1,nfak)
+      print *,'jfreqs',(jfreq(jf),jf=1,nfak)
+      goto 1600
+      do jf=1,nfak
+      jfreq(jf)=jfreq(jf)*ijpow2
+      end do
+      print *,'ijpow2',ijpow2
+1301  kfak=icur
+      do jf=1,kfak
+      kfakin(jf)=iabp(jf)
+      kfreq(jf)=iabpn(jf)
+      end do
+      do jf=1,nfak
+      jfreq(jf)=jfreq(jf)*ijpow2
+      iabp(jf)=jfak(jf)
+      iabpn(jf)=jfreq(jf)
+      end do
+      
+      print *,'ijpow2',ijpow2,'ijpow',ijpow
+      print *,'ibase',(ibase(jf),jf=1,ibase(2)+2)
+      
+
+
+!      irecnn=irecnn+1
+      print *,'hit no',irecnn,'a=',kia,'b=',kib,(litt(i),i=1,litt(2) +2)&
+      ,'iconq',iconq
+      if (icur.le.kkmx)goto 1302
+      kkmx=icur
+
+1302  do i=1,20
+      normar(i)=0
+      littr(i)=0
+      end do
+!      do i=1,litz(2) +2
+!      littr(i)=litz(i)
+!      end do
+      icur=nfak
+! do not write to disk      
+!      write(4,*)irecnn,kia,kib,icur,(littr(j1),j1=1,20)
+!      write(4,*)irecnn,(iabp(i),iabpn(i),ity(i),i=1,icur)
+      
+!     note next instruction      
+      if (irecnn.lt.190000)goto 1501
+13861 close(unit=4)
+      print *,'max no of primes=',kkmx
+      stop
+      
+      goto 1501
+      
+
+
+1500 if (ibbsw.eq.1)goto 1610
+     ijpow=ijpow+1
+     ilen=jbase(2)
+     do jf=3,jbase(2)+2
+     karr(jf-2)=jbase(jf)
+     end do
+     ilen2=ibase(2)
+     do jf=3,ibase(2)+2
+     kbarr(jf-2)=ibase(jf)
+     end do
+     call mpmul(ilen,ilen2,ilen3)
+     do jf=1,ilen3
+     karr(jf)=kcarr(jf)
+     end do
+     ilen=ilen3
+     do jf=3,ncom(2)+2
+     kbarr(jf-2)=ncom(jf)
+     end do
+     ilen2=ncom(2)
+     call mpdiv(ilen,ilen2,irlen,icont,iswq)
+     do jf=1,irlen
+     ibase(jf+2)=irrr(jf)
+     end do
+     ibase(1)=0
+     ibase(2)=irlen
+     ilen=jtarg(2)
+     do jf=3,jtarg(2)+2
+     karr(jf-2)=jtarg(jf)
+     end do
+     ilen2=itarg(2)
+     do jf=3,itarg(2)+2
+     kbarr(jf-2)=itarg(jf)
+     end do
+     call mpmul(ilen,ilen2,ilen3)
+     do jf=1,ilen3
+     karr(jf)=kcarr(jf)
+     end do
+     ilen=ilen3
+     ilen2=ncom(2)
+     do jf=3,ncom(2)+2
+     kbarr(jf-2)=ncom(jf)
+     end do
+     call mpdiv(ilen,ilen2,irlen,icont,iswq)
+     do jf=1,irlen
+     itarg(jf+2)=irrr(jf)
+     end do
+     itarg(1)=0
+     itarg(2)=irlen
+     if (icont.eq.0)goto 1500
+!     if (mod(ijpow,2).eq.0)goto 1500
+     goto 440
+1600 ibbsw=1
+     ijpow2=1
+     do jf=1,ibase(2)+2
+     litt(jf)=ibase(jf)
+     itbase(jf)=ibase(jf)
+     end do
+     goto 441
+1610 do jf=3,ibase(2)+2 
+     karr(jf-2)=ibase(jf)
+     end do
+     ilen=ibase(2)
+     do jf=3,itbase(2)+2
+     kbarr(jf-2)=itbase(jf)
+     end do
+     ilen2=itbase(2)
+     call mpmul(ilen,ilen2,ilen3)
+     do jf=1,ilen3
+     karr(jf)=kcarr(jf)
+     end do
+     ilen=ilen3
+     do jf=3,ncom(2)+2
+     kbarr(jf-2)=ncom(jf)
+     end do
+     ilen2=ncom(2)
+     call mpdiv(ilen,ilen2,irlen,icont,iswq)
+     do jf=1,irlen
+     ibase(jf+2)=irrr(jf)
+     end do
+     ibase(1)=0
+     ibase(2)=irlen
+     ijpow2=ijpow2+1
+     if (icont.eq.0)goto 1610
+     if (mod(ijpow2,2).eq.0)goto 1610
+     do jf=1,ibase(2)+2
+     litt(jf)=ibase(jf)
+     end do
+     goto 441
+
+
+
+1501 return
+
+
+
+
+
+
+     end
+      
+      subroutine sieve(kia,kib,irecnn,kkmx,icdn,iconq,limprm2,limprm)
+      common karr(50),kbarr(50),kcarr(200),ipqt(50),irrr(50)
+      common mnum(50)
+      common ia5(5),ia4(5),ia3(5),ia2(5),ia1(5),ia0(5),m1(5),m2(5)
+      common ipr(65000),norma(50),gpr(40000),norma0(50)
+      common kara(50),karb(50),kard(50),karp(50),karv(50)
+      common ncom(50),iprar(50),iansar(50),narc(50)
+      common nfak,jfak(20),mntes1(50),mntes2(50),jfakin(20),iconarr(50)
+      common ijpow,ibase(50),jbase(50),itarg(50),jtarg(50)
+      common kfak,kfakin(20),kfreq(20),kjfakin(20)
+      
+      
+      
+      
+      dimension litt(50),litd(50),ity(50),iabp(50),iabpn(50)
+      dimension iprex(50),larp(2),iarp(2),ipfar(4),litz(50)
+      dimension littr(50),normar(50),jabp(50),jabpn(50),jty(50)
+      
+!     change parameter      
+      
+      lprx1=ipr(limprm2-150)
+      
+      
+      
+      larp(1)=int(lprx1/10000)
+      larp(2)=lprx1 -larp(1) *10000
+      
+      
+      do i=1,50
+      ity(i)=0
+      iabp(i)=0
+      iabpn(i)=0
+      end do
+      do jf=1,norma(2)+2
+      litt(jf)=norma(jf)
+      end do
+
+
+!     finish of calculation of number to be sieved
+      do i=1,litt(2)+2
+      litz(i)=litt(i)
+      litd(i)=litt(i)
+      end do
+      litd(1)=0
+      
+      iflim=10000
+      iab=1
+      icur=0
+      print *,'litd',(litd(i),i=1,litd(2) +2),'icdn',icdn,'irecnn',irecnn&
+      ,'iconq',iconq,'kia',kia,'kib',kib
+      do i=1,50
+
+      iprex(i)=0
+      end do
+      iprex(2)=litd(2)
+      ipfar(1)=1
+      ipfar(2)=0
+1010  iab=iab+1
+      if (iab.eq.limprm2-150)goto 1500
+      if (gpr(iab).gt.90.0)goto 1010
+       
+      iprx1=ipr(iab)
+      if (iprx1.eq.2)goto 1020
+!      if (mod(iprx1,4).ne.1)goto 1010
+1020  iarp(1)=int(iprx1/10000)
+      iarp(2)=iprx1-iarp(1) *10000
+      ibsw=0
+      
+      
+      
+      if (iarp(1).gt.larp(1))goto 1500
+      if (iarp(1).lt.larp(1))goto 1162
+      if (iarp(2).gt.larp(2))goto 1500
+1162  if (iarp(1).gt.ipfar(1))goto 1200
+      if (iarp(1).lt.ipfar(1))goto 1166
+      if (iarp(2).gt.ipfar(2))goto 1200
+
+
+1166  do i=3,litd(2)+2
+      karr(i-2)= litd(i)
+      end do
+      
+      
+      ilen=litd(2)
+      if (iprx1.lt.10000)goto 1168
+      ilen2 =2
+      kbarr(1)=iarp(1)
+      kbarr(2)=iarp(2)
+      goto 1170
+1168  kbarr(1)=iprx1
+      ilen2=1
+1170  call mpdiv(ilen,ilen2,irlen,icont,iswq)
+      
+      
+      if (icont.eq.0)goto 1300
+      if(irlen.gt.0)goto 1010
+      
+      
+      do i=1,icont
+      litd(i+2)=ipqt(i)
+      end do
+      litd(2)=icont
+      
+      
+      if(ibsw.eq.1)goto 1176
+      ibsw=1
+      icur=icur +1
+      iabp(icur)=iprx1
+      iabpn(icur)=1
+      ity(icur)=1
+      goto 1166
+1176  iabpn(icur)=iabpn(icur)+1
+      goto 1166
+      
+
+
+1200  if (litd(2).ne.iprex(2))goto 12001
+      do i=3,litd(2)+2
+      if (litd(i).ne.iprex(i))goto 12001
+      end do
+      goto 1204
+
+ 
+12001 if (litd(2).gt.2)goto 2020
+      if (litd(2).eq.1)goto 1166
+      if (litd(3).lt.larp(1))goto 1166
+      if (litd(3).gt.larp(1))goto 2020
+      if (litd(4).le.larp(2))goto 1166
+2020  do i=3,litd(2) +2
+      mnum(i-2)=litd(i)
+      end do
+      inlen=litd(2)
+
+      call mpprime(icorp,inlen)
+      if (icorp.eq.1)goto 1500
+      do i=1,litd(2)+2
+      iprex(i)=litd(i)
+      end do
+1204  ipfar(1)=ipfar(1) +2
+      goto 1166
+1300  do i=1,norma0(2)+2
+      litt(i)=norma0(i)
+      litd(i)=norma0(i)
+      end do
+      print *,'norma0',(norma0(jf),jf=1,norma0(2)+2),'kia',kia,'kib',kib
+      
+      lprx1=ipr(limprm)                                      
+      
+      
+      
+      larp(1)=int(lprx1/10000)
+      larp(2)=lprx1 -larp(1) *10000
+      
+      indcur=icur
+      litd(1)=0
+      iab=1
+      do i=1,50
+      iprex(i)=0
+      end do
+      iprex(2)=litd(2)
+      ipfar(1)=1
+      ipfar(2)=0
+1306  iab=iab+1
+      iprx1=ipr(iab)
+      if (iab.eq.limprm)goto 1500
+!      if ((gpr(iab).gt.90.0).and.(iab.gt.200))goto 1306
+      iarp(1)=int(iprx1/10000)
+      iarp(2)=iprx1-iarp(1)*10000
+      ibsw=0
+      if (iarp(1).gt.larp(1))goto 1500
+      if (iarp(1).lt.larp(1))goto 1362
+      if (iarp(2).gt.larp(2))goto 1500
+1362  if (iarp(1).gt.ipfar(1))goto 1400
+      if (iarp(1).lt.ipfar(1))goto 1366
+      if (iarp(2).gt.ipfar(2))goto 1400
+1366  do i=3,litd(2)+2
+      karr(i-2)=litd(i)
+      end do
+      ilen=litd(2)
+      if (iprx1.lt.10000)goto 1368
+      kbarr(1)=iarp(1)
+      kbarr(2)=iarp(2)
+      ilen2=2
+      goto 1370
+1368  kbarr(1)=iprx1
+      ilen2=1
+1370  call mpdiv(ilen,ilen2,irlen,icont,iswq)
+      if (icont.eq.0)goto 1386
+!      if (icont.eq.0)goto 13555
+      if (irlen.gt.0)goto 1306
+      do i=1,icont
+      litd(i+2)=ipqt(i)
+      end do
+      litd(2)=icont
+1382  if (ibsw.eq.1)goto 1384
+      ibsw=1
+      icur=icur+1
+      if (icur.le.kkmx)goto 1383
+      kkmx=icur
+1383  if (icur.gt.50)goto 13861
+      ity(icur)=2
+      iabp(icur)=iprx1
+      iabpn(icur)=1
+      goto 1366
+1384  iabpn(icur)=iabpn(icur)+1
+      goto 1366
+1386  a=a
+      do jf=1,icur
+      jabp(jf)=iabp(jf)
+      jabpn(jf)=iabpn(jf)
+      jty(jf)=ity(jf)
+
+      end do
+
+
+      do ii=1,nfak
+      if (jfakin(ii).eq.1)goto 435
+!      do jj=1,indcur
+      do jj=indcur+1,icur
+      if (iabp(jj).eq.jfak(ii))goto 430
+      goto 434
+430   jfakin(ii)=1
+      goto 436
+434   end do
+435   end do
+436   a=a
+      do ii=1,kfak
+      if (kjfakin(ii).eq.1)goto 445
+!      do jj=1,indcur
+      do jj=indcur+1,icur
+      if (iabp(jj).eq.kfakin(ii))goto 450
+      goto 444
+450   kjfakin(ii)=1
+      
+      goto 446
+444   end do
+445   end do
+446   a=a 
+!      ind1=1
+      ind1=indcur+1
+      ind2=1
+      ind3=indcur+1
+31    if (iabp(ind1).lt.kfakin(ind2))goto 30
+      if (iabp(ind1).gt.kfakin(ind2))goto 35
+      jabp(ind3)=iabp(ind1)
+      jabpn(ind3)=iabpn(ind1)-kfreq(ind2)*(3-mod(irecnn+1,3))
+      jty(ind3)=2
+      ind1=ind1+1
+      ind2=ind2+1
+      ind3=ind3+1
+!      if (ind1.gt.indcur)goto 36
+      if (ind1.gt.icur)goto 36
+      if (ind2.gt.kfak)goto 37
+      goto 31
+30    jabp(ind3)=iabp(ind1)
+      jabpn(ind3)=iabpn(ind1)
+      jty(ind3)=2
+      ind1=ind1+1
+      ind3=ind3+1
+!      if (ind1.gt.indcur)goto 36
+      if (ind1.gt.icur)goto 36
+      goto 31
+35    jabp(ind3)=kfakin(ind2)
+      jabpn(ind3)=kfreq(ind2)*(3-mod(irecnn+1,3))*(-1)
+      jty(ind3)=2
+      ind2=ind2+1
+      ind3=ind3+1
+      if (ind2.gt.kfak)goto 37
+      goto 31
+36    if (ind2.gt.kfak)goto 38
+      do jf=ind2,kfak
+      jabp(ind3)=kfakin(jf)
+      jabpn(ind3)=kfreq(jf)*(3-mod(irecnn+1,3))*(-1)
+      jty(ind3)=2
+      ind3=ind3+1
+      end do
+      goto 38
+!37    do jf=ind1,indcur
+37    do jf=ind1,icur
+      jabp(ind3)=iabp(jf)
+      jabpn(ind3)=iabpn(jf)
+      jty(ind3)=2
+      ind3=ind3+1
+      end do
+!38    do jf=1,icur
+!      jabp(ind3)=iabp(jf)
+!      jabpn(ind3)=iabpn(jf)
+!      jty(ind3)=2
+!      ind3=ind3+1
+!      end do
+38      jcur=ind3-1
+
+
+
+13555 a=a
+
+
+
+
+      irecnn=irecnn+1
+      print *,'hit no',irecnn,'a=',kia,'b=',kib,(litt(i),i=1,litt(2) +2)&
+      ,'iconq',iconq
+      if (icur.le.kkmx)goto 1302
+      kkmx=icur
+
+1302  do i=1,20
+      normar(i)=0
+      littr(i)=0
+      end do
+      do i=1,litt(2) +2
+      littr(i)=litt(i)
+      end do
+      do i=1,norma(2)+2
+      normar(i)=norma(i)
+      end do
+      
+      write(4,*)irecnn,kia,kib,jcur,(littr(j1),j1=1,20)
+      write(4,*)irecnn,(jabp(i),jabpn(i),jty(i),i=1,jcur)
+      
+!     note next instruction      
+      if (irecnn.lt.190000)goto 1500
+13861 close(unit=4)
+      print *,'max no of primes=',kkmx
+      stop
+      
+      goto 1500
+      
+
+1400 if (litd(2).ne.iprex(2))goto 1402 
+     do i=3,litd(2)+2
+     if (litd(i).ne.iprex(i))goto 1402
+     end do
+     goto 1404
+1402 if (litd(2).gt.2)goto 3020
+     if (litd(2).eq.1)goto 1366
+     if (litd(3).lt.larp(1))goto 1366
+     if (litd(3).gt.larp(1))goto 3020
+     if (litd(4).le.larp(2))goto 1366
+3020 do i=3,litd(2)+2
+     mnum(i-2)=litd(i)
+     end do
+     inlen=litd(2)
+     call mpprime(icorp,inlen)
+     if (icorp.eq.1)goto 1500
+     do i=1,litd(2)+2
+     iprex(i)=litd(i)
+     end do
+1404 ipfar(1)=ipfar(1)+2
+     goto 1366
+1500 return
+     end
+
+
+     
+
+      
+      
+
+      subroutine mpmul(ilen,ilen2,ilen3)
+      common karr(50),kbarr(50),kcarr(200),ipqt(50),irrr(50)
+      common mnum(50)
+      common ia5(5),ia4(5),ia3(5),ia2(5),ia1(5),ia0(5),m1(5),m2(5)
+      common ipr(65000),norma(50),gpr(40000),norma0(50)
+      common kara(50),karb(50),kard(50),karp(50),karv(50)
+      common ncom(50),iprar(50),iansar(50),narc(50)
+      common nfak,jfak(20),mntes1(50),mntes2(50),jfakin(20),iconarr(50)
+      common ijpow,ibase(50),jbase(50),itarg(50),jtarg(50)
+      common kfak,kfakin(20),kfreq(20),kjfakin(20)
+      
+      
+      
+      do i=1,200
+      kcarr(i) =0
+      end do
+      do i =1,ilen
+      do j=1,ilen2
+      itemp =karr(i) *kbarr(j)
+      
+      itemp2=int(itemp/10000)
+      irem1 =itemp-itemp2 *10000
+      
+      
+      kcarr(i+j)=kcarr(i+j) +irem1
+      kcarr(i+j-1)=kcarr(i+j-1) +itemp2
+      
+      if (kcarr(i+j).lt.10000)goto 20
+      kcarr(i+j)=kcarr(i+j)-10000
+      kcarr(i+j-1) =kcarr(i+j-1)+1
+20    do k =1,i+j-2
+      if (kcarr(i+j-k).lt.10000)goto 22
+      kcarr(i+j-k)=kcarr(i+j-k) -10000
+      kcarr(i+j-k-1)=kcarr(i+j-k-1)+1
+      end do
+22    end do
+      end do
+      ilen3 =ilen +ilen2
+      if(kcarr(1).ne.0)goto 100
+      ilen3 =ilen3-1
+      do i=1,ilen3
+      kcarr(i)=kcarr(i+1)
+      end do
+      
+      
+100   return
+      end
+
+      subroutine mpdiv(ilen,ilen2,irlen,icont,iswq)
+      common karr(50),kbarr(50),kcarr(200),ipqt(50),irrr(50)
+      common mnum(50)
+      common ia5(5),ia4(5),ia3(5),ia2(5),ia1(5),ia0(5),m1(5),m2(5)
+      common ipr(65000),norma(50),gpr(40000),norma0(50)
+      common kara(50),karb(50),kard(50),karp(50),karv(50)
+      common ncom(50),iprar(50),iansar(50),narc(50)
+      common nfak,jfak(20),mntes1(50),mntes2(50),jfakin(20),iconarr(50)
+      common ijpow,ibase(50),jbase(50),itarg(50),jtarg(50)
+      common kfak,kfakin(20),kfreq(20),kjfakin(20)
+      
+      dimension kdum(50),isub(50)
+      
+      if (kbarr(1).eq.0)goto 906
+      if (ilen2.eq.0)goto 906
+      do i =1,ilen
+      kdum(i)=karr(i)
+      ipqt(i)=0
+      end do
+      icont =0
+      icont2 =0
+      icong =0
+      iswm=0
+      iswq=1
+      isw2=0
+      ind2 =ilen2
+      if(ilen2.ne.1)goto 8
+      kbarr(2)=0
+      ilen2=2
+      ind2=2
+      ilen=ilen+1
+      karr(ilen)=0
+      kdum(ilen)=0
+      ipqt(ilen)=0
+      isw2=1
+8     if (ilen2.gt.ilen)goto 905
+      if (ilen2.lt.ilen)goto 10
+      if (kbarr(1).gt.karr(1))goto 905
+      do i=1,ilen2
+      if(kbarr(i).gt.karr(i))goto 905
+      if(kbarr(i).lt.karr(i))goto 10
+      end do
+10    kbap=kbarr(1)
+      lop =ilen +1 -ilen2
+      ll=1
+201   do i =1,ilen2
+      if (kbarr(i).eq.kdum(ll+i-1))goto 202
+      if (kbarr(i).gt.kdum(ll +i-1))goto 203
+      if(i.gt.2)goto 2021
+      goto 20
+202   end do
+2021  icont =ind2
+      iapd =1
+      goto 31
+
+203   iapd =int((kdum(ll)*10000 +kdum(ll+1))/(kbap+1))
+      goto 30
+20    kbig = kdum(ll) *10000 +kdum(ll+1)
+      kbap =kbap*10000 +kbarr(2) +1
+      icont =ind2
+      
+      
+      iapd=int(kbig/kbap)
+      goto 31
+      
+      
+30    icont =ind2 +1
+      
+
+
+31    ipqt(icont) =ipqt(icont)+iapd
+      icont2 =icont2 +1
+      do i=icont,2,-1
+      if (ipqt(i).lt.10000)goto 35
+      ipqt(i)=ipqt(i)-10000
+      ipqt(i-1)=ipqt(i-1) +1
+      end do
+
+35    isub(1)=0
+      do i=1,ilen2
+      isub(i+1)= kbarr(i)*iapd
+      end do
+      do i=1,ilen2 
+      ii=ilen2 +2 -i
+      if (isub(ii).lt.10000)goto 37
+      itemp =int(isub(ii)/10000)
+      irem1 =isub(ii)-itemp *10000
+      isub(ii) =irem1
+      isub(ii-1) =isub(ii-1) +itemp
+37    end do
+      if(isub(1).ne.0)goto 38
+      if (kdum(ll).lt.isub(2))goto 38
+      ilens =ilen2
+      do i =1,ilens
+      isub(i) =isub(i+1)
+      end do
+      goto 39
+
+      
+38    ilens =ilen2 +1
+39    do i =1,ilens
+      ii = ilens +1 -i
+      ig=icont-ilens
+      
+      kdum(ii+ig) =kdum(ii+ig) -isub(ii)
+      if (kdum(ii+ig) .ge.0)goto 40
+      kdum(ii+ig) =kdum(ii+ig) +10000
+      kdum(ii+ig-1) =kdum(ii+ig-1) -1
+40    end do
+      icong =icong +1
+      
+      
+      
+   
+402   do i =1,ilen
+      if(kdum(i).ne.0)goto 70
+      end do
+      goto 90
+      
+150   kbap = kbarr(1)
+      goto 201
+
+70    if (ilen2 +i-1.gt.ilen)goto 90
+      ll =i
+      
+      ind2 =ll +ilen2-1   
+      if (ind2.lt.ilen)goto 150
+      do i=1,ilen2
+      if (kbarr(i).eq.kdum(ll+i-1))goto 71
+      if (kbarr(i).gt.kdum(ll+i-1))goto 90
+      if (kbarr(i).lt.kdum(ll+i-1))goto 150
+71    end do
+      goto 150
+90    do i=1,ilen
+      if (kdum(i).ne.0)goto 92
+      end do
+      irlen =0
+      goto 921
+92    irlen=ilen +1 -i
+      do j=1,irlen
+      irrr(j)=kdum(i+j-1)
+      end do
+921   do i=1,ilen
+      if (ipqt(i).ne.0)goto 901
+      end do
+      icont =0
+      goto 902
+901   icont =ilen +1 -i
+      do j=1,icont
+      ipqt(j)=ipqt(j+i-1)
+      end do
+902   if (isw2.eq.0)goto 910
+      ilen=ilen-1
+      ilen2 =ilen2-1
+      if (irlen.eq.0)goto 910
+      irlen=irlen-1
+      goto 910
+905   do i=1,ilen
+      irrr(i)=karr(i)
+      end do
+      irlen=ilen
+      icont=0
+      if (isw2.eq.1)goto 902
+      goto 910
+906   print *,'halted:attempted division by zero'
+      stop
+      
+910   return      
+      end
+
+
+
+
+
+      subroutine mpadd(isora)
+      common karr(50),kbarr(50),kcarr(200),ipqt(50),irrr(50)
+      common mnum(50)
+      common ia5(5),ia4(5),ia3(5),ia2(5),ia1(5),ia0(5),m1(5),m2(5)
+      common ipr(65000),norma(50),gpr(40000),norma0(50)
+      common kara(50),karb(50),kard(50),karp(50),karv(50)
+      common ncom(50),iprar(50),iansar(50),narc(50)
+      common nfak,jfak(20),mntes1(50),mntes2(50),jfakin(20),iconarr(50)
+      common ijpow,ibase(50),jbase(50),itarg(50),jtarg(50)
+      common kfak,kfakin(20),kfreq(20),kjfakin(20)
+      if(karr(2).eq.0)goto 50
+      if(kbarr(2).eq.0)goto 55
+      if(kbarr(2).gt.karr(2))goto 2
+      kmx=0
+      goto 4
+2     kmx=1
+4     if((karr(1).eq.kbarr(1)).and.(isora.eq.0))goto 30
+      if((karr(1).ne.kbarr(1)).and.(isora.eq.1))goto 30
+      if(karr(2).ne.kbarr(2))goto 22
+      do i=3,karr(2) +2
+      if(karr(i).lt.kbarr(i))goto 5
+      if(karr(i).gt.kbarr(i))goto 24
+      end do
+      goto 26
+22    if(kmx.eq.1)goto 5
+
+24    kcarr(1)=karr(1)
+      do i=2,karr(2)+2
+      
+      
+      kcarr(i)=karr(i)
+      end do
+      
+      
+      ii=kbarr(2)+2
+      do i=karr(2)+2,3,-1
+      kcarr(i)=kcarr(i)-kbarr(ii)
+      
+      
+      if(kcarr(i).ge.0)goto 6
+      kcarr(i)=kcarr(i)+10000
+      kcarr(i-1)=kcarr(i-1)-1
+6     ii =ii-1
+      if(ii.lt.3)goto 17
+      end do
+7     do i =3,kcarr(2)+2
+      if(kcarr(i).ne.0)goto 8
+      end do
+8     kcarr(2) =kcarr(2) +3-i
+      do j=3,kcarr(2) +2
+      kcarr(j)=kcarr(j+i-3)
+      end do
+      goto 100
+5     do i=2,kbarr(2)+2
+      kcarr(i)=kbarr(i)
+      end do
+      kcarr(1)=mod(kbarr(1)+isora,2)
+      ii =karr(2)+2
+      do i =kbarr(2)+2,3,-1
+      kcarr(i)=kcarr(i)-karr(ii)
+      
+      
+      if(kcarr(i).ge.0)goto 16
+      kcarr(i)=kcarr(i)+10000
+      kcarr(i-1)=kcarr(i-1)-1
+16    ii=ii-1
+      if(ii.lt.3)goto 17
+      end do
+17    jj=i-1 
+      if(jj.lt.3)goto 7
+      do j=jj,3,-1
+      if (kcarr(j).ge.0)goto 7
+      kcarr(j)=kcarr(j)+10000
+      kcarr(j-1)=kcarr(j-1)-1
+18    end do
+26    kcarr(1)=0
+      kcarr(2)=0
+      goto 100
+30    if(kmx.eq.1)goto 40
+      do i=3,karr(2)+2
+      kcarr(i+2)=karr(i)
+      
+      end do
+      kcarr(1)=karr(1)
+      kcarr(2)=karr(2)+2
+      kcarr(3)=0
+      kcarr(4)=0
+      ii =kbarr(2)+2
+      do i=kcarr(2)+2,3,-1
+      kcarr(i)=kcarr(i)+kbarr(ii)
+      if(kcarr(i).lt.10000)goto 32
+      kcarr(i)=kcarr(i)-10000
+      kcarr(i-1)=kcarr(i-1)+1
+32    ii =ii-1
+      if(ii.lt.3)goto 34
+      end do
+34    jj=i-1
+      do j=jj,3,-1
+      if(kcarr(j).lt.10000)goto 36
+      kcarr(j)=kcarr(j)-10000
+      kcarr(j-1)=kcarr(j-1)+1
+      end do
+36    do i=3,kcarr(2)+2
+      if(kcarr(i).ne.0)goto 38
+      end do
+38    kcarr(2)=kcarr(2)+3-i
+      
+      if(i.eq.3)goto 100
+      do j =3,kcarr(2)+2
+      kcarr(j)=kcarr(j+i-3)
+      end do
+      goto 100
+40    do i=1,kbarr(2)+2
+      kcarr(i+2)=kbarr(i)
+      end do
+      kcarr(1)=karr(1)
+      kcarr(2)=kbarr(2)+2
+
+      kcarr(3)=0
+      kcarr(4)=0
+      ii=karr(2)+2
+      do i=kcarr(2)+2,1,-1
+      kcarr(i)=kcarr(i) +karr(ii)
+      if(kcarr(i).lt.10000)goto 42
+      kcarr(i)=kcarr(i)-10000
+      kcarr(i-1)=kcarr(i-1)+1
+42    ii=ii-1
+      if(ii.lt.3)goto 34
+      end do
+      goto 34
+
+50    do i=2,kbarr(2)+2
+      kcarr(i)=kbarr(i)
+      end do
+      kcarr(1)=mod(kbarr(1) +isora,2)
+      if (kcarr(2).ne.0)goto 100
+      kcarr(1)=0
+      goto 100
+55    do i=1,karr(2)+2
+      kcarr(i)=karr(i)
+      end do
+100   return
+      end
+
+
+      subroutine mpprime(icorp,inlen)
+      common karr(50),kbarr(50),kcarr(200),ipqt(50),irrr(50)
+      common mnum(50)
+      common ia5(5),ia4(5),ia3(5),ia2(5),ia1(5),ia0(5),m1(5),m2(5)
+      common ipr(65000),norma(50),gpr(40000),norma0(50)
+      common kara(50),karb(50),kard(50),karp(50),karv(50)
+      common ncom(50),iprar(50),iansar(50),narc(50)
+      common nfak,jfak(20),mntes1(50),mntes2(50),jfakin(20),iconarr(50)
+      common ijpow,ibase(50),jbase(50),itarg(50),jtarg(50)
+      common kfak,kfakin(20),kfreq(20),kjfakin(20)
+      dimension ie(50),itwo(100),nnum(50)
+      
+      
+      icong=0
+      icont1=0
+      icont2=0
+      ie(1)=0
+      
+      ileng =1
+      itwo(1)=2
+      karr(1)=itwo(1)
+      ilen=1
+      kbarr(1)=itwo(1)
+      ilen2=1
+4     call mpmul(ilen,ilen2,ilen3)
+      
+      if(ilen3.lt.inlen)goto 22
+      if(ilen3.gt.inlen)goto 20
+      do i=1,ilen3
+      if(mnum(i).lt.kcarr(i))goto 20
+      if(mnum(i).gt.kcarr(i))goto 22
+      end do
+      goto 22
+20    ie(2) =ilen3
+      do i=1,ilen3
+      ie(i+2)=kcarr(i)
+      end do
+      goto 30
+22    do i=1,ilen3
+      kbarr(i)=kcarr(i)
+      end do
+      ilen2=ilen3
+      goto 4
+
+30    do i=1,inlen
+      nnum(i+2)=mnum(i)
+      end do
+      nnum(1)=0
+      nnum(2)=inlen
+      
+      
+      do i=1,ie(2)
+      karr(i)=ie(i+2)
+      end do
+      ilen =ie(2)
+      
+      
+      ilen2=1
+      kbarr(1)=2
+      call mpdiv(ilen,ilen2,irlen,icont,iswq)
+      do i=1,icont
+      ie(i+2)=ipqt(i)
+      end do
+      ie(2)=icont
+      
+      
+
+      ie(1)=0
+      do i=1,nnum(2)+2
+      karr(i)=nnum(i)
+      end do
+      do i=1,ie(2)+2
+      kbarr(i)=ie(i)
+      end do
+      
+      
+      call mpadd(1)
+      do i=1,kcarr(2)+2
+      nnum(i)=kcarr(i)
+      end do
+31    if(ie(2).gt.1)goto 32
+      
+      
+      if(ie(3).eq.1)goto 100
+32    do i=1,ie(2)+2      
+      karr(i)=ie(i+2)
+      end do
+      ilen=ie(2)
+      ilen2=1
+      kbarr(1)=2
+      call mpdiv(ilen,ilen2,irlen,icont,iswq)
+      ie(2)=icont
+      do i=1,icont
+      ie(i+2)=ipqt(i)
+      end do
+      ilen=ileng
+      ilen2=ileng
+34    do i=1,ilen
+      karr(i)=itwo(i)
+      end do
+      icong=icong +1
+      
+      
+      
+
+36    do i=1,ilen2
+      kbarr(i)=itwo(i)
+      end do
+      call mpmul(ilen,ilen2,ilen3)
+      ilen=ilen3
+      do i=1,ilen3
+      karr(i)=kcarr(i)
+      
+      end do
+      do i=1,inlen
+      kbarr(i)=mnum(i)
+      end do
+      ilen2=inlen
+      call mpdiv(ilen,ilen2,irlen,icont,iswq)
+      icont1=icont1+1
+      
+      do i=1,irlen
+      itwo(i)=irrr(i)
+      end do
+      ileng =irlen
+      ilen =irlen
+40    if (nnum(2).lt.ie(2))goto 31
+      if(nnum(2).gt.ie(2))goto 42
+      do i=3,nnum(2)+2
+      if(nnum(i).lt.ie(i))goto 31
+      if(nnum(i).gt.ie(i))goto 42
+      end do
+42    do i=1,nnum(2)+2
+      karr(i)=nnum(i)
+      end do
+      do i=1,ie(2) +2
+      kbarr(i)=ie(i)
+      end do
+      call mpadd(1)
+      do i=1,kcarr(2) +2
+      nnum(i)=kcarr(i)
+      end do
+      
+      
+      
+      do i=1,ilen
+      karr(i)=itwo(i)
+      end do
+      ilen2=1
+      kbarr(1)=2
+      call mpmul(ilen,ilen2,ilen3)
+      do i=1,ilen3
+      karr(i)=kcarr(i)
+      end do
+      ilen=ilen3
+      do i=1,inlen
+      kbarr(i)=mnum(i)
+      end do
+      ilen2=inlen
+      call mpdiv(ilen,ilen2,irlen,icont,iswq)
+      icont2=icont2+1
+      
+      do i=1,irlen
+      itwo(i)=irrr(i)
+      end do
+      ileng=irlen
+      goto 31
+
+   
+100   if(ileng.ne.1)goto 110
+      if (itwo(1).ne.2)goto 110
+      
+      icorp=1
+      goto 112
+110   a=a
+      
+      
+      
+      
+      icorp=0
+112   return
+      end
+
+      subroutine subgcd(ibig,little,igcd2)
+      common karr(50),kbarr(50),kcarr(200),ipqt(50),irrr(50)
+      common mnum(50)
+      common ia5(5),ia4(5),ia3(5),ia2(5),ia1(5),ia0(5),m1(5),m2(5)
+      common ipr(65000),norma(50),gpr(40000),norma0(50)
+      common kara(50),karb(50),kard(50),karp(50),karv(50)
+      common ncom(50),iprar(50),iansar(50),narc(50)
+      common nfak,jfak(20),mntes1(50),mntes2(50),jfakin(20),iconarr(50)
+      common ijpow,ibase(50),jbase(50),itarg(50),jtarg(50)
+      common kfak,kfakin(20),kfreq(20),kjfakin(20)
+918   itemp=int(ibig/little)
+      irem1=ibig -itemp *little
+      if (irem1.eq.0)goto 940
+      ibig=little
+      little =irem1
+      goto 918
+940   igcd2=little
+      return
+      end
+
+
+      subroutine mpgcd
+      common karr(50),kbarr(50),kcarr(200),ipqt(50),irrr(50)
+      common mnum(50)
+      common ia5(5),ia4(5),ia3(5),ia2(5),ia1(5),ia0(5),m1(5),m2(5)
+      common ipr(65000),norma(50),gpr(40000),norma0(50)
+      common kara(50),karb(50),kard(50),karp(50),karv(50)
+      common ncom(50),iprar(50),iansar(50),narc(50)
+      common nfak,jfak(20),mntes1(50),mntes2(50),jfakin(20),iconarr(50)
+      common ijpow,ibase(50),jbase(50),itarg(50),jtarg(50)
+      common kfak,kfakin(20),kfreq(20),kjfakin(20)
+      dimension karu(50),karv1(50),karv3(50),karqq(50)
+      dimension kart3(50),kart1(50)
+      
+      
+      
+      karu(1)=0
+      karu(2)=1
+      karu(3)=1
+      do i=1,kara(2)+2
+      kard(i)=kara(i)
+      end do
+      
+      if (karb(2).eq.0)goto 888
+3     karv1(2)=0
+      karv1(1)=0
+      do i=1,karb(2) +2
+      karv3(i)=karb(i)
+      end do
+815   if (karv3(2).eq.0)goto 830
+      
+      
+      
+      do i=3,kard(2)+2
+      karr(i-2)=kard(i)
+      end do
+      ilen=kard(2)
+      do i=3,karv3(2)+2
+      kbarr(i-2)=karv3(i)
+      end do
+      ilen2=karv3(2)
+      call mpdiv(ilen,ilen2,irlen,icont,iswq)
+      if (icont.eq.0)goto 4
+      do i=1,icont
+      karqq(i+2)=ipqt(i)
+      end do
+4     karqq(2)=icont
+      karqq(1)=karv3(1)
+      
+      if (irlen.eq.0)goto 41
+      kart3(1)=0
+      kart3(2)=irlen
+      do i=1,irlen
+      kart3(i+2)=irrr(i)
+      end do
+      
+      
+      
+      goto 51
+41    kart3(1)=0
+      kart3(2)=0
+51    if (karv1(2).eq.0)goto 6
+      
+      do i=3,karv1(2) +2
+      kbarr(i-2)=karv1(i)
+      end do
+      do i=3,karqq(2)+2
+      karr(i-2)=karqq(i)
+      end do
+      ilen=karqq(2)
+      ilen2=karv1(2)
+      call mpmul(ilen,ilen2,ilen3)
+      do i=1,ilen3
+      kbarr(i+2)=kcarr(i)
+      end do
+      kbarr(2)=ilen3
+      kbarr(1)=mod(karqq(1) +karv1(1),2)
+      do i=1,karu(2)+2
+      karr(i)=karu(i)
+      end do
+      call mpadd(1)
+      do i=1,kcarr(2)+2
+      kart1(i)=kcarr(i)
+      end do
+      
+      
+      goto 7
+6     do i=1,karu(2)+2
+      kart1(i)=karu(i)
+      end do
+      karu(1)=0
+      karu(2)=0
+      goto 8
+7     do i=1,karv1(2)+2
+      karu(i)=karv1(i)
+      end do
+8     do i=1,karv3(2)+2
+      kard(i)=karv3(i)
+      end do
+      do i=1,kart1(2)+2
+      karv1(i)=kart1(i)
+      end do
+      do i=1,kart3(2)+2
+      karv3(i)=kart3(i)
+      end do
+      goto 815
+      
+830   if ((kara(2).eq.0).or.(karu(2).eq.0))goto 9   
+      do i=3,kara(2)+2
+      karr(i-2)=kara(i)
+      end do
+      ilen=kara(2)
+      do i=3,karu(2)+2
+      kbarr(i-2)=karu(i)
+      end do
+      ilen2=karu(2)
+      call mpmul(ilen,ilen2,ilen3)
+      do i=1,ilen3
+      kbarr(i+2)=kcarr(i)
+      end do
+      kbarr(2)=ilen3
+      do i=1,kard(2)+2
+      karr(i)=kard(i)
+      end do
+      kbarr(1)=mod(kara(1)+karu(1),2)
+      call mpadd(1)
+      do i=3,kcarr(2)+2
+      karr(i-2)=kcarr(i)
+      end do
+      ksgn=kcarr(1)
+      ilen=kcarr(2)
+      goto 10
+9     do i=3,kard(2)+2
+      karr(i-2)=kard(i)
+      end do
+      ilen =kard(2)
+      ksgn =kard(1)
+
+10    do i=3,karb(2) +2    
+      kbarr(i-2)=karb(i)
+      end do
+      ilen2=karb(2)
+      call mpdiv(ilen,ilen2,irlen,icont,iswq)
+      karv(2)=icont
+      if (icont.eq.0)goto 11
+      do i=1,icont
+      karv(i+2)=ipqt(i)
+      end do
+      karv(1)=mod(ksgn +karb(1),2)
+
+
+
+      if ((karu(2).eq.0).or.(karu(1).eq.1))goto 890
+      karr(1)=0
+      karr(2)=1
+      karr(3)=1
+      do i=1,kara(2) +2
+      kbarr(i)=kara(i)
+      end do
+      call mpadd(1)
+      ksgn=kcarr(1)
+      ilen2=kcarr(2)
+      do i=3,kcarr(2)+2
+      kbarr(i-2)=kcarr(i)
+      end do
+      
+      do i=3,karv(2)+2
+      karr(i-2)=karv(i)
+      end do
+      ilen=karv(2)
+      call mpmul(ilen,ilen2,ilen3)
+      karv(1)=mod(ksgn +karv(1),2)
+      karv(2)=ilen3
+      do i=1,ilen3
+      karr(i)=kcarr(i)
+      karv(i+2)=kcarr(i)
+      end do
+      do i=3,kara(2)+2
+      kbarr(i-2)=kara(i)
+      end do
+      ilen2=kara(2)
+      ilen=ilen3
+      call mpdiv(ilen,ilen2,irlen,icont,iswq)
+      if (karv(1).eq.0)goto 12
+      do i=1,irlen
+      kbarr(i+2)=irrr(i)
+      end do
+      kbarr(1)=0
+      kbarr(2)=irlen
+      do i=1,kara(2)+2
+      karr(i)=kara(i)
+      end do
+      call mpadd(1)
+      do i=1,kcarr(2)+2
+      karv(i)=kcarr(i)
+      end do
+      goto 890
+12    do i=1,irlen
+      karv(i+2)=irrr(i)
+      end do
+      karv(2)=irlen
+      goto 890
+11    karv(1)=0
+      karv(2)=0
+      goto 890
+888   do i=1,karb(2)+2
+      karv(i)=karb(i)
+      end do
+890   karv(1)=0
+      return
+      end
+
+      subroutine mpkron(k)
+      common karr(50),kbarr(50),kcarr(200),ipqt(50),irrr(50)
+      common mnum(50)
+      common ia5(5),ia4(5),ia3(5),ia2(5),ia1(5),ia0(5),m1(5),m2(5)
+      common ipr(65000),norma(50),gpr(40000),norma0(50)
+      common kara(50),karb(50),kard(50),karp(50),karv(50)
+      common ncom(50),iprar(50),iansar(50),narc(50)
+      common nfak,jfak(20),mntes1(50),mntes2(50),jfakin(20),iconarr(50)
+      common ijpow,ibase(50),jbase(50),itarg(50),jtarg(50)
+      common kfak,kfakin(20),kfreq(20),kjfakin(20)
+      dimension karae(50),karde(50),karpe(50),karh(50),ktemp(50)
+      
+      
+      
+      
+      do i=3,kard(2) +2
+      karr(i-2)=kard(i)
+      end do
+      ksgn=kard(1)
+      ilen =kard(2)
+      kbarr(1)=2
+      ilen2=1
+      call mpdiv(ilen,ilen2,irlen,icont,iswq)
+      if (irlen.ne.0)goto 414
+      do i=3,karp(2)+2
+      karr(i-2)=karp(i)
+      end do
+      ilen =karp(2)
+      call mpdiv(ilen,ilen2,irlen,icont,iswq)
+      if (irlen.eq.0)goto 512
+414   do i=1,karp(2) +2
+      karpe(i)=karp(i)
+      end do
+      iv =0
+      do ii=1,100
+      do i=3,karpe(2)+2
+      karr(i-2)=karpe(i)
+      end do
+      ilen=karpe(2)
+      call mpdiv(ilen,ilen2,irlen,icont,iswq)
+      if (irlen.ne.0)goto 432
+      do i=1,icont
+      karpe(i+2)=ipqt(i)
+      end do
+      karpe(2)=icont
+      iv =iv+1
+      end do
+      print *,'large denominator?'
+      stop
+432   ive2 =mod(iv,2)
+      if (ive2.eq.0)goto 444
+      do i=3,kard(2)+2
+      karr(i-2)=kard(i)
+      kbarr(i-2)=kard(i)
+      end do
+      ilen =kard(2)
+      ilen2 =kard(2)
+      call mpmul(ilen,ilen2,ilen3)
+      karr(1)=0
+      karr(2)=ilen3
+      do i=1,ilen3
+      karr(i+2)=kcarr(i)
+      end do
+      kbarr(1)=0
+      kbarr(2)=1
+      kbarr(3)=1
+      call mpadd(1)
+      do i=3,kcarr(2) +2
+      karr(i-2)=kcarr(i)
+      end do
+      ilen=kcarr(2)
+      kbarr(1)=8
+      ilen2=1
+      call mpdiv(ilen,ilen2,irlen,icont,iswq)
+      karae(1)=0
+      karae(2)=icont
+      do i=1,icont
+      karae(i+2)=ipqt(i)
+      end do
+      do i=3,karae(2)+2
+      karr(i-2)=karae(i)
+      end do
+      ilen=karae(2)
+      kbarr(1)=2
+      ilen2=1
+      call mpdiv(ilen,ilen2,irlen,icont,iswq)
+      if (irlen.eq.0)goto 444
+      k=-1
+      goto 446
+444   k=1
+446   do i=1,kard(2)+2
+      karde(i)=kard(i)
+      end do
+452   if (karde(2).eq.0)goto 510
+      iv =0
+      do ii=1,100
+      do i=3,karde(2)+2
+      karr(i-2)=karde(i)
+      end do
+      ilen =karde(2)
+      kbarr(1)=2
+      ilen2=1
+      call mpdiv(ilen,ilen2,irlen,icont,iswq)
+      if (irlen.eq.1)goto 470
+      iv =iv+1
+      do i=1,icont
+      karde(i+2)=ipqt(i)
+      end do
+      karde(1)=0
+      karde(2)=icont
+      end do
+      print *,'warning:numerator very large'
+      stop
+470   ive2 =mod(iv,2)
+      if (ive2.eq.0)goto 486
+      do i=3,karpe(2)+2
+      karr(i-2)=karpe(i)
+      kbarr(i-2)=karpe(i)
+      end do
+      ilen =karpe(2)
+      ilen2=karpe(2)
+      call mpmul(ilen,ilen2,ilen3)
+      karr(1)=0
+      karr(2)=ilen3
+      do i=1,ilen3
+      karr(i+2)=kcarr(i)
+      end do
+      kbarr(1)=0
+      kbarr(2)=1
+      kbarr(3)=1
+      call mpadd(1)
+      if (kcarr(2).eq.0)goto 466
+      do i=3,kcarr(2)+2
+      karr(i-2)=kcarr(i)
+      end do
+      ilen =kcarr(2)
+      kbarr(1)=8
+      ilen2 =1
+      call mpdiv(ilen,ilen2,irlen,icont,iswq)
+      do i=1,icont
+      karae(i+2)=ipqt(i)
+      karr(i)=ipqt(i)
+      end do
+      karae(1)=0
+      karae(2)=icont
+      ilen =icont
+      kbarr(1)=2
+      ilen2=1
+      call mpdiv(ilen,ilen2,irlen,icont,iswq)
+      if (irlen.eq.0)goto 466
+      kmul =-1
+      goto 468
+466   kmul =1
+468   k=kmul *k
+486   do i=2,karde(2)+2
+      karr(i)=karde(i)
+      end do
+      karr(1)=ksgn
+      kbarr(1)=0
+      kbarr(2)=1
+      kbarr(3)=1
+      call mpadd(1)
+      if (kcarr(2).eq.0)goto 490
+      do i=1,kcarr(2) +2
+      ktemp(i)=kcarr(i)
+      end do
+      do i=1,karpe(2)+2
+      karr(i)=karpe(i)
+      end do
+      call mpadd(1)
+      if (kcarr(2).eq.0)goto 490
+      ilen2=kcarr(2)
+      do i=3,kcarr(2) +2
+      kbarr(i-2)=kcarr(i)
+      end do
+      do i=3,ktemp(2)+2
+      karr(i-2)=ktemp(i)
+      end do
+      ilen =ktemp(2)
+      call mpmul(ilen,ilen2,ilen3)
+      ilen =ilen3
+      do i=1,ilen3
+      karr(i)=kcarr(i)
+      end do
+      kbarr(1)=4
+      ilen2=1
+      call mpdiv(ilen,ilen2,irlen,icont,iswq)
+      ilen=icont
+      do i=1,icont
+      karr(i)=ipqt(i)
+      end do
+      kbarr(1)=2
+      ilen2=1
+      call mpdiv(ilen,ilen2,irlen,icont,iswq)
+      if (irlen.eq.0)goto 490
+      kmul =-1
+      goto 492
+490   kmul =1
+492   k=kmul *k
+      do i=2,karde(2)+2
+      karh(i)=karde(i)
+      end do
+      karh(1)=0
+      do i=3,karde(2) +2
+      kbarr(i-2)=karde(i)
+      end do
+      ilen2=karde(2)
+      do i=3,karpe(2)+2
+      karr(i-2)=karpe(i)
+      end do
+      ilen =karpe(2)
+      call mpdiv(ilen,ilen2,irlen,icont,iswq)
+      ksgn=0
+      if (irlen.eq.0)goto 502
+      do i=1,irlen
+      karde(i+2)=irrr(i)
+      end do
+502   karde(2)=irlen
+      kard(1)=ksgn
+      do i=1,karh(2)+2 
+      karpe(i)= karh(i)
+      end do
+      goto 452
+510   if ((karpe(2).eq.1).and.(karpe(3).eq.1))goto 513
+512   k=0
+513   print *,'k',k
+      return
+      end
+       subroutine bwq5(ip,ians)
+       common karr(50),kbarr(50),kcarr(200),ipqt(50),irrr(50)
+       common mnum(50)
+       common ia5(5),ia4(5),ia3(5),ia2(5),ia1(5),ia0(5),m1(5),m2(5)
+       common ipr(65000),norma(50),gpr(40000),norma0(50)
+       common kara(50),karb(50),kard(50),karp(50),karv(50)
+       common ncom(50),iprar(50),iansar(50),narc(50)
+      common nfak,jfak(20),mntes1(50),mntes2(50),jfakin(20),iconarr(50)
+      common ijpow,ibase(50),jbase(50),itarg(50),jtarg(50)
+      common kfak,kfakin(20),kfreq(20),kjfakin(20)
+       dimension itempz(2)
+       print *,'ncom',(ncom(jf),jf=1,ncom(2)+2)
+       
+       
+       do jf=3,ncom(2)+2
+       karr(jf-2)=ncom(jf)
+       end do
+       ilen=ncom(2)
+       if (ip.lt.10000)goto 1100
+       kbarr(1)=int(ip/10000)
+       kbarr(2)=ip-kbarr(1)*10000
+       ilen2=2
+       goto 1102
+1100   kbarr(1)=ip
+       ilen2=1
+1102   call mpdiv(ilen,ilen2,irlen,icont,iswq)
+       if (irlen.eq.0)goto 1104
+       if (irlen.eq.1)goto 1106
+       iaa=irrr(1)*10000+irrr(2)
+       goto 1108
+1104   print *,'factor found early',ip
+       stop
+1106   iaa=irrr(1)
+
+
+       
+       
+1108   ix = 0
+       
+       
+       
+       
+       
+10     iprecod =ip -1
+       i=0
+26     itemp = int(iprecod/2)
+       irem1 =iprecod -itemp*2
+       if(itemp.eq.0)goto 46
+       if(irem1.gt.0)goto 40
+       iprecod = itemp
+       i =i+1
+       if(i.lt.200)goto 26
+40     iq =iprecod
+       ie = i
+       goto 48
+46     iq =1
+       ie = i
+48     i =1
+       print *,'qs',iq
+       n = 1
+52     n = n*607
+54     itemp=int(n/1000)
+56     irem1 =n-1000 *itemp
+       n = irem1
+       id = n
+       if (ip.lt.10000)goto 5901
+       karp(1)=0
+       karp(2)=2
+       karp(3)=int(ip/10000)
+       karp(4)=ip-karp(3)*10000
+       goto 5902
+5901   karp(1)=0       
+       karp(2)=1
+       karp(3)=ip
+5902   kard(1)=0
+       kard(2)=1
+       kard(3)=id
+
+       call mpkron(k)
+       
+       print *,'k',k,'ip',ip
+       if(k.eq.-1)goto 68
+       
+       
+       i =i +1
+       if(i.lt.1000)goto 52
+68     ipn =iq
+       print *,'k',k,'n',n,'ip',ip
+       
+       
+5601   iaas = n
+       call sub516(ibprod,iaas,ipn,ip)
+       iz = ibprod
+       print *,'zz',iz
+       
+       iy = iz
+       ir = ie
+       ipn = (iq-1)/2
+       iaas = iaa
+       call sub516(ibprod,iaas,ipn,ip)
+       ix = ibprod
+       print *,ix
+       if (ix.lt.10000)goto 140
+       karr(1)=int(ix/10000)
+       karr(2)=ix-karr(1)*10000
+       ilen=2
+       goto 142
+140    karr(1)=ix       
+       ilen=1
+142    if (iaa.lt.10000)goto 150       
+       kbarr(1)=int(iaa/10000)
+       kbarr(2)=iaa-kbarr(1)*10000
+       ilen2=2
+       goto 152
+150    kbarr(1)=iaa
+       ilen2=1
+152    call mpmul(ilen,ilen2,ilen3)
+       do jf=1,ilen3
+       karr(jf)=kcarr(jf)
+       end do
+       ilen=ilen3
+       if (ip.lt.10000)goto 160
+       kbarr(1)=int(ip/10000)
+       kbarr(2)=ip-kbarr(1)*10000
+       ilen2=2
+       goto 162
+160    kbarr(1)=ip
+       ilen2=1
+162    call mpdiv(ilen,ilen2,irlen,icont,iswq)
+       if (irlen.eq.0)goto 169
+       do jf=1,irlen
+       karr(jf)=irrr(jf)
+       itempz(jf)=irrr(jf)
+       end do
+       itempzl=irlen
+       ilen=irlen
+       goto 170
+169    print *,'error type 2'
+       stop
+170    if (ix.lt.10000)goto 172
+       kbarr(1)=int(ix/10000)
+       kbarr(2)=ix-kbarr(1)*10000
+       ilen2=2
+       goto 174
+172    kbarr(1)=ix
+       ilen2=1
+174    call mpmul(ilen,ilen2,ilen3)
+       do jf=1,ilen3
+       karr(jf)=kcarr(jf)
+       end do
+       ilen=ilen3
+       if (ip.lt.10000)goto 181
+       kbarr(1)=int(ip/10000)
+       kbarr(2)=ip-kbarr(1)*10000
+       ilen2=2
+       goto 182
+181    kbarr(1)=ip
+       ilen2=1
+182    call mpdiv(ilen,ilen2,irlen,icont,iswq)
+       if (irlen.eq.0)goto 169
+       if (irlen.eq.1)goto 190
+       ib=irrr(1)*10000+irrr(2)
+       goto 192
+190    ib=irrr(1)
+192    if (itempzl.eq.1)goto 196
+       ix=itempz(1)*10000+itempz(2)
+       goto 100
+196    ix=itempz(1)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       
+       
+       
+       
+100    irem1 =mod(ib,ip)
+       
+       if(irem1.eq.1)goto 200
+       i=1
+       m=1
+110    ipow =2**m
+       goto 700
+112    irem2 =ibprod
+       print *,'irem2',irem2,'ip=',ip
+       if(irem2.eq.1)goto 130
+       m =m+1
+       goto 110
+130    if(m.eq.ir)goto 180
+       ipow =2**(ir-m-1)
+       goto 800
+134    it = ibprod
+       print *,'it',it
+       if (it.lt.10000)goto 2000
+       karr(1)=int(it/10000)
+       karr(2)=it-karr(1)*10000
+       kbarr(1)=karr(1)
+       kbarr(2)=karr(2)
+       ilen=2
+       ilen2=2
+       goto 2002
+2000   karr(1)=it       
+       kbarr(1)=it
+       ilen=1
+       ilen2=1
+2002   call mpmul(ilen,ilen2,ilen3)
+       do jf=1,ilen3
+       karr(jf)=kcarr(jf)
+       end do
+       ilen=ilen3
+       if (ip.lt.10000)goto 2004
+       kbarr(1)=int(ip/10000)
+       kbarr(2)=ip-kbarr(1)*10000 
+       ilen2=2
+       goto 2006
+2004   kbarr(1)=ip
+       ilen2=1
+2006   call mpdiv(ilen,ilen2,irlen,icont,iswq)
+       if (irlen.eq.0)goto 2008
+       if (irlen.eq.1)goto 2010
+       iy=irrr(1)*10000+irrr(2)
+       goto 2012
+2008   print *,'error type 3'
+       stop
+2010   iy=irrr(1)
+2012   ir=mod(m,ip)
+       
+       if (ix.lt.10000)goto 2014
+       karr(1)=int(ix/10000)
+       karr(2)=ix-karr(1)*10000
+       ilen=2
+       goto 2016
+2014   karr(1)=ix
+       ilen=1
+2016   if (it.lt.10000)goto 2018
+       kbarr(1)=int(it/10000)
+       kbarr(2)=it-kbarr(1)*10000
+       ilen2=2
+       goto 2020
+2018   kbarr(1)=it
+       ilen2=1
+
+2020   call mpmul(ilen,ilen2,ilen3)
+       
+       do jf=1,ilen3
+       karr(jf)=kcarr(jf)
+       end do
+       ilen=ilen3
+       
+       if (ip.lt.10000)goto 2022
+       kbarr(1)=int(ip/10000)
+       kbarr(2)=ip-kbarr(1)*10000
+       ilen2=2
+       goto 2024
+2022   kbarr(1)=ip
+       ilen2=1
+2024   call mpdiv(ilen,ilen2,irlen,icont,iswq)
+       if (irlen.eq.0)goto 2008
+       if (irlen.eq.1)goto 2026
+       ix=irrr(1)*10000+irrr(2)
+       goto 2028
+2026   ix=irrr(1)
+2028   if (ib.lt.10000)goto 2030
+       print *,'ix',ix
+       karr(1)=int(ib/10000)
+       karr(2)=ib-karr(1)*10000
+       ilen=2
+       goto 2032
+2030   karr(1)=ib
+       ilen=1
+2032   if (iy.lt.10000)goto 2034
+       kbarr(1)=int(iy/10000)
+       kbarr(2)=iy-kbarr(1)*10000
+       ilen2=2
+       goto 2036
+2034   kbarr(1)=iy
+       ilen2=1
+2036   call mpmul(ilen,ilen2,ilen3)
+       do jf=1,ilen3
+       karr(jf)=kcarr(jf)
+       end do
+       ilen=ilen3
+       if (ip.lt.10000)goto 2038
+       kbarr(1)=int(ip/10000)
+       kbarr(2)=ip-kbarr(1)*10000
+       ilen2=2
+       goto 2040
+2038   kbarr(1)=ip
+       ilen2=1
+   
+
+2040   call mpdiv(ilen,ilen2,irlen,icont,iswq)
+       if (irlen.eq.0)goto 2008
+       if (irlen.eq.1)goto 2042
+       ib=irrr(1)*10000+irrr(2)
+       
+       goto 100
+2042   ib=irrr(1)
+       print *,'ib1',ib
+       goto 100
+
+
+
+       
+       
+       
+180    print *,'no square root exists'
+       
+       stop
+       goto 900
+200    print *,'square root=',ix
+       ians=ix
+       
+       
+       goto 900
+700    ipn =ipow
+       if (ipn.gt.10000000)goto 950
+       
+       iaas =ib
+       call sub516(ibprod,iaas,ipn,ip)
+       goto 112
+800    ipn =ipow
+       iaas=iy
+       call sub516(ibprod,iaas,ipn,ip)
+       goto 134
+900    goto 1000       
+       print *,'loop too short'
+       stop
+950    ians=999999
+1000   return       
+       end
+       subroutine sub400(id,ip,k)
+       ide =int(id/2)
+       ipe= int(ip/2)
+       ide2 =id -ide *2
+       ipe2 =ip -ipe*2
+       if(ide2.eq.0)goto 414
+       goto 416
+414    if(ipe2.eq.0)goto 512
+416    iv = 0
+       ipe = ip
+       ii = 0
+419    print *,'pefirst',ipe
+       ipe2 =int(ipe/2)
+       ipe3 =ipe -ipe2 *2
+       if(ipe3.eq.1)goto 432
+       ipe =ipe2
+       iv = iv+1
+       ii =ii +1
+       if(ii.lt.50)goto 419
+432    ive = int(iv/2)
+       ive2 =iv -ive*2
+       if(ive2.eq.0)goto 450
+       iae =(id **2 -1)/8
+       iae1 =int(iae/2)
+       iae2 =iae -iae1 *2
+       iae3 =iae2 +2
+       k=(-1)**iae3
+       goto 451
+450    k =1
+451    ide = id
+452    if(ide.eq.0)goto 510 
+       ive = 0
+       ii = 0
+456    ide1 =int(ide/2)
+       ide2 =ide -ide1 *2
+       if(ide2.eq.1)goto 470
+       iv = iv+1
+       ide =ide1
+       ii =ii+1
+       if(ii.lt.50)goto 456
+470    ive =int(iv/2)
+       ive2=iv -ive *2
+       if(ive2.eq.0)goto 486
+       iae=(ipe **2 -1)/8
+       iae2 =int(iae/2)
+       iae3 =iae -iae2 *2
+       iae3 = iae3 +2
+       
+       
+       
+       
+       k = (-1)**iae3*k
+486    iae2 =((ide -1)*(ipe-1))/4       
+       iae3 =int(iae2/2)
+       iae4 =iae2-iae3 *2
+       iae4 =iae4 +2
+       k =(-1) **iae4 *k
+       ir=abs(ide)
+       
+       itemp=int(ipe/ir)
+       ide =ipe -itemp*ir
+       ipe = ir
+       
+       goto 452
+510    if(ipe.eq.1)goto 513
+512    k =0
+513    print *,k,ipe
+       return
+       end
+       
+       subroutine sub516(ibprod,iaas,ipn,ip)
+       common karr(50),kbarr(50),kcarr(200),ipqt(50),irrr(50)
+       common mnum(50)
+       common ia5(5),ia4(5),ia3(5),ia2(5),ia1(5),ia0(5),m1(5),m2(5)
+       common ipr(65000),norma(50),gpr(40000),norma0(50)
+       common kara(50),karb(50),kard(50),karp(50),karv(50)
+       common ncom(50),iprar(50),iansar(50),narc(50)
+      common nfak,jfak(20),mntes1(50),mntes2(50),jfakin(20),iconarr(50)
+      common ijpow,ibase(50),jbase(50),itarg(50),jtarg(50)
+      common kfak,kfakin(20),kfreq(20),kjfakin(20)
+       
+       iy=iaas
+       n=ipn
+       ipow=2
+14     if (ipow.gt.n)goto 20
+       ipow=ipow*2
+       goto 14
+20     ie=int(ipow/2)
+       n1=n
+       n1=n1-ie
+26     if (ie.eq.1)goto 100
+       ie=int(ie/2)
+       if (iy.lt.10000)goto 200
+       karr(1)=int(iy/10000)
+       karr(2)=iy-karr(1)*10000
+       ilen=2
+       kbarr(1)=karr(1)
+       kbarr(2)=karr(2)
+       ilen2=2
+       goto 202
+200    karr(1)=iy       
+       ilen=1
+       kbarr(1)=iy
+       ilen2=1
+
+202    call mpmul(ilen,ilen2,ilen3)
+       do jf=1,ilen3
+       karr(jf)=kcarr(jf)
+       end do
+       ilen=ilen3
+       if (ip.lt.10000)goto 220
+       kbarr(1)=int(ip/10000)
+       kbarr(2)=ip-kbarr(1)*10000
+       ilen2=2
+       goto 222
+220    kbarr(1)=ip
+       ilen2=1
+222    call mpdiv(ilen,ilen2,irlen,icont,iswq)
+       if (irlen.eq.0)goto 230
+       if (irlen.eq.1)goto 240
+       iy=irrr(1)*10000+irrr(2)
+       goto 242
+230    print *,'error number 2'
+       iy=0
+240    iy=irrr(1)
+242    if (n1.lt.ie)goto 26
+       n1=n1-ie
+       if (iy.lt.10000)goto 250
+       karr(1)=int(iy/10000)
+       karr(2)=iy-karr(1)*10000
+       ilen=2
+       goto 252
+250    karr(1)=iy
+       ilen=1
+252    if (iaas.lt.10000)goto 260       
+       kbarr(1)=int(iaas/10000)
+       kbarr(2)=iaas-kbarr(1)*10000
+       ilen2=2
+       goto 262
+260    kbarr(1)=iaas       
+       ilen2=1
+262    call mpmul(ilen,ilen2,ilen3)        
+       do jf=1,ilen3
+       karr(jf)=kcarr(jf)
+       end do
+       ilen=ilen3
+       if (ip.lt.10000)goto 270
+       kbarr(1)=int(ip/10000)
+       kbarr(2)=ip-kbarr(1)*10000
+       ilen2=2
+       goto 272
+270    kbarr(1)=ip
+       ilen2=1
+272    call mpdiv(ilen,ilen2,irlen,icont,iswq)
+       if (irlen.eq.0)goto 230
+       if (irlen.eq.1)goto 280
+       iy=irrr(1)*10000+irrr(2)
+       goto 26
+280    iy=irrr(1)
+       goto 26
+
+       
+       
+100    ibprod=iy
+       
+620    return
+       end
+       subroutine bigb5(noyes)
+       common karr(50),kbarr(50),kcarr(200),ipqt(50),irrr(50)
+       common mnum(50)
+       common ia5(5),ia4(5),ia3(5),ia2(5),ia1(5),ia0(5),m1(5),m2(5)
+       common ipr(65000),norma(50),gpr(40000),norma0(50)
+       common kara(50),karb(50),kard(50),karp(50),karv(50)
+       common ncom(50),iprar(50),iansar(50),narc(50)
+      common nfak,jfak(20),mntes1(50),mntes2(50),jfakin(20),iconarr(50)
+      common ijpow,iibase(50),jbase(50),itarg(50),jtarg(50)
+      common kfak,kfakin(20),kfreq(20),kjfakin(20)
+       dimension ibase(50),ipow(50),ibst(50),nnum(50),ie(50)
+       
+       ibigsw=0
+       
+       do jf=3,ncom(2)+2
+       karr(jf-2)=ncom(jf)
+       end do
+       ilen=ncom(2)
+       do jf=3,iprar(2)+2
+       kbarr(jf-2)=iprar(jf)
+       end do
+       ilen2=iprar(2)
+       print *,'iprar',(iprar(jf),jf=1,iprar(2)+2)
+       call mpdiv(ilen,ilen2,irlen,icont,iswq)
+       if (irlen.eq.0)goto 1
+       do jf=1,irlen
+       ibase(jf+2)=irrr(jf)
+       ibst(jf+2)=irrr(jf)
+       ipow(jf+2)=irrr(jf)
+       end do
+       ibst(1)=0
+       ibst(2)=irlen
+       ibase(1)=0
+       ibase(2)=irlen
+       ipow(1)=0
+       ipow(2)=irlen
+       print *,'ipow',(ipow(jf),jf=1,ipow(2)+2)
+       
+       do jf=1,iprar(2)+2
+       karr(jf)=iprar(jf)
+       end do
+       iconz=iprar(2)+2
+       if (mod(iprar(iconz),4).ne.3)goto 2
+       kbarr(1)=0 
+       kbarr(2)=1
+       kbarr(3)=1
+       
+       call mpadd(0)
+15     do jf=3,kcarr(2)+2
+       karr(jf-2)=kcarr(jf)
+       end do
+       ilen=kcarr(2)
+       kbarr(1)=4
+       ilen2=1
+       call mpdiv(ilen,ilen2,irlen,icont,iswq)
+       do jf=1,icont
+       mnum(jf+2)=ipqt(jf)
+       end do
+       mnum(2)=icont
+       mnum(1)=0
+       
+       goto 3
+1      print *,'factor found early=',(iprar(jf),jf=1,iprar(2)+2)
+       stop
+2      kbarr(1)=0
+       kbarr(2)=1
+       kbarr(3)=5
+       call mpadd(1) 
+       do jf=3,kcarr(2)+2
+       karr(jf-2)=kcarr(jf)
+       end do
+       ilen=kcarr(2)
+       kbarr(1)=8
+       ilen2=1
+       call mpdiv(ilen,ilen2,irlen,icont,iswq)
+       print *,'icont',icont
+       do jf=1,icont
+       mnum(jf+2)=ipqt(jf)
+       end do
+       mnum(1)=0
+       mnum(2)=icont
+       
+       do jf=3,ibase(2)+2
+       karr(jf-2)=ibase(jf)
+       end do
+       ilen=ibase(2)
+       kbarr(1)=4
+       ilen2=1
+       call mpmul(ilen,ilen2,ilen3)
+       do jf=1,ilen3
+       karr(jf)=kcarr(jf)
+       end do
+       ilen=ilen3
+       do jf=3,iprar(2)+2
+       kbarr(jf-2)=iprar(jf)
+       end do
+       ilen2=iprar(2)
+       call mpdiv(ilen,ilen2,irlen,icont,iswq)
+       do jf=1,irlen
+       ibase(jf+2)=irrr(jf)
+       
+       end do
+       ibase(1)=0
+       ibase(2)=irlen
+       do jf=1,ibase(2)+2
+       
+       ipow(jf)=ibase(jf)
+       end do
+
+
+
+       
+       
+       
+3      ie(1)=0
+       ie(2)=1
+       ie(3)=2
+       karr(1)=2
+       ilen=1
+       inlen=mnum(2)
+4      do jf=3,ie(2)+2
+       kbarr(jf-2)=ie(jf)
+       end do
+       ilen2=ie(2)
+       call mpmul(ilen,ilen2,ilen3)
+       if (ilen3.lt.inlen)goto 22
+       if (ilen3.gt.inlen)goto 20
+       do i=1,ilen3
+       if (mnum(i+2).lt.kcarr(i))goto 20
+       if (mnum(i+2).gt.kcarr(i))goto 22
+       end do
+       goto 22
+20     ie(2)=ilen3
+       do i=1,ilen3
+       ie(i+2)=kcarr(i)
+       end do
+       goto 30
+22     do i=1,ilen3
+       ie(i+2)=kcarr(i)
+       end do
+       ie(2)=ilen3
+       goto 4
+30     do i=1,inlen +2
+       nnum(i)=mnum(i)
+       end do
+       do i=3,ie(2)+2
+       karr(i-2)=ie(i)
+       end do
+       ilen=ie(2)
+       kbarr(1)=2
+       ilen2=1
+       call mpdiv(ilen,ilen2,irlen,icont,iswq)
+       do i=1,icont
+       ie(i+2)=ipqt(i)
+       end do
+       ie(1)=0
+       ie(2)=icont
+       
+       do i=1,mnum(2)+2
+       karr(i)=mnum(i)
+       end do
+       do i=1,ie(2)+2
+       kbarr(i)=ie(i)
+       end do
+       call mpadd(1)
+       do i=1,kcarr(2)+2
+       nnum(i)=kcarr(i)
+       end do
+       print *,'nnum1',(nnum(jf),jf=1,nnum(2)+2)
+31     if (ie(2).gt.1)goto 32
+       if (ie(3).eq.1)goto 100
+32     do i=3,ie(2)+2
+       karr(i-2)=ie(i)
+       end do
+       ilen=ie(2)
+       ilen2=1
+       kbarr(1)=2
+       call mpdiv(ilen,ilen2,irlen,icont,iswq)
+       ie(2)=icont
+       do i=1,icont
+       ie(i+2)=ipqt(i)
+       end do
+       do jf=3,ipow(2)+2
+       karr(jf-2)=ipow(jf)
+       kbarr(jf-2)=ipow(jf)
+       end do
+       ilen=ipow(2)
+       
+       ilen2=ipow(2)
+       call mpmul(ilen,ilen2,ilen3)
+       do jf=1,ilen3
+       karr(jf)=kcarr(jf)
+       end do
+       ilen=ilen3
+       do jf=3,iprar(2)+2
+       kbarr(jf-2)=iprar(jf)
+       end do
+       ilen2=iprar(2)
+       call mpdiv(ilen,ilen2,irlen,icont,iswq) 
+       do jf=1,irlen
+       ipow(jf+2)=irrr(jf)
+       end do
+       ipow(2)=irlen
+       ipow(1)=0
+       if (nnum(2).lt.ie(2))goto 31
+       if (nnum(2).gt.ie(2))goto 42
+       do i=3,nnum(2)+2
+       if (nnum(i).lt.ie(i))goto 31
+       if (nnum(i).gt.ie(i))goto 42
+       end do
+42     do i=1,nnum(2)+2
+       karr(i)=nnum(i)
+       end do
+       do i=1,ie(2)+2
+       kbarr(i)=ie(i)
+       end do
+       call mpadd(1)
+       do i=1,kcarr(2)+2
+       nnum(i)=kcarr(i)
+       end do
+       do i=3,ipow(2)+2
+       karr(i-2)=ipow(i)
+       end do
+       ilen=ipow(2)
+       do i=3,ibase(2)+2
+       kbarr(i-2)=ibase(i)
+       end do
+       ilen2=ibase(2)
+       call mpmul(ilen,ilen2,ilen3)
+       do jf=1,ilen3
+       karr(jf)=kcarr(jf)
+       end do
+       ilen=ilen3
+       do jf=3,iprar(2)+2
+       kbarr(jf-2)=iprar(jf)
+       end do
+       ilen2=iprar(2)
+       call mpdiv(ilen,ilen2,irlen,icont,iswq)
+       do jf=1,irlen
+       ipow(jf+2)=irrr(jf)
+       end do
+       ipow(1)=0
+       ipow(2)=irlen
+       goto 31
+100    iconz=iprar(2)+2
+       if (mod(iprar(iconz),4).eq.3)goto 110
+       if (ibigsw.eq.1)goto 104
+       print *,'ipow13',(ipow(jf),jf=1,ipow(2)+2)
+       do jf=3,ipow(2)+2
+       karr(jf-2)=ipow(jf)
+       end do
+       ilen=ipow(2)
+       kbarr(1)=2
+       ilen2=1
+       call mpmul(ilen,ilen2,ilen3)
+       do jf=1,ilen3
+       karr(jf)=kcarr(jf)
+       end do
+       ilen=ilen3
+       do jf=3,ibst(2)+2
+       kbarr(jf-2)=ibst(jf)
+       end do
+       ilen2=ibst(2)
+       call mpmul(ilen,ilen2,ilen3)
+       do jf=1,ilen3
+       karr(jf)=kcarr(jf)
+       end do
+       ilen=ilen3
+       do jf=3,iprar(2)+2
+       kbarr(jf-2)=iprar(jf)
+       end do
+       ilen2=iprar(2)
+       call mpdiv(ilen,ilen2,irlen,icont,iswq)
+       do jf=1,irlen
+       iansar(jf+2)=irrr(jf)
+       end do
+       iansar(1)=0
+       iansar(2)=irlen
+       goto 1041
+1039   do jf=1,iprar(2)+2
+       karr(jf)=iprar(jf)
+       end do
+       kbarr(1)=0
+       kbarr(2)=1
+       kbarr(3)=3
+       call mpadd(0)
+       do jf=3,kcarr(2)+2
+       karr(jf-2)=kcarr(jf)
+       end do
+       ilen=kcarr(2)
+       kbarr(1)=8
+       ilen2=1
+       call mpdiv(ilen,ilen2,irlen,icont,iswq)
+       do jf=1,icont
+       mnum(jf+2)=ipqt(jf)
+       end do
+       mnum(1)=0
+       mnum(2)=icont
+       do jf=1,ibst(2)+2
+       ibase(jf)=ibst(jf)
+       ipow(jf)=ibst(jf)
+       end do
+       
+       print *,'ipowb',(ipow(jf),jf=1,ipow(2)+2)
+       print *,'mnumb',(mnum(jf),jf=1,mnum(2)+2)
+       goto 3
+1041   do jf=3,iansar(2)+2
+       karr(jf-2)=iansar(jf)
+       kbarr(jf-2)=iansar(jf)
+       end do
+       ilen=iansar(2)
+       ilen2=ilen
+       call mpmul(ilen,ilen2,ilen3)
+       do jf=1,ilen3
+       karr(jf+2)=kcarr(jf)
+       end do
+       karr(1)=0
+       karr(2)=ilen3
+       do jf=1,ibst(2)+2
+       kbarr(jf)=ibst(jf)
+       end do
+       call mpadd(1)
+       do jf=3,kcarr(2)+2
+       karr(jf-2)=kcarr(jf)
+       end do
+       ilen=kcarr(2)
+       isgn=kcarr(1)
+       do jf=3,iprar(2)+2
+       kbarr(jf-2)=iprar(jf)
+       end do
+       ilen2=iprar(2)
+       call mpdiv(ilen,ilen2,irlen,icont,iswq)
+       if (irlen.eq.0)goto 1141
+       ibigsw=1
+       goto 1039
+
+       
+104    print *,'bans',(ipow(jf),jf=1,ipow(2)+2)
+       
+
+
+110    do jf=1,ipow(2)+2
+       iansar(jf)=ipow(jf)
+       end do
+       print *,'bigans',(iansar(jf),jf=1,iansar(2)+2)
+       do jf=3,iansar(2)+2
+       karr(jf-2)=iansar(jf)
+       kbarr(jf-2)=iansar(jf)
+       end do
+       ilen=iansar(2)
+       ilen2=ilen
+       call mpmul(ilen,ilen2,ilen3)
+       do jf=1,ilen3
+       karr(jf+2)=kcarr(jf)
+       end do
+       karr(1)=0
+       karr(2)=ilen3
+       do jf=1,ibst(2)+2
+       kbarr(jf)=ibst(jf)
+       end do
+       call mpadd(1)
+       do jf=3,kcarr(2)+2
+       karr(jf-2)=kcarr(jf)
+       end do
+       ilen=kcarr(2)
+       isgn=kcarr(1)
+       do jf=3,iprar(2)+2
+       kbarr(jf-2)=iprar(jf)
+       end do
+       ilen2=iprar(2)
+       call mpdiv(ilen,ilen2,irlen,icont,iswq)
+       if (irlen.ne.0)goto 114 
+1141   noyes=0
+       
+       goto 112
+114    noyes=1
+       print *,'irlen',irlen
+       print *,'irrr',(irrr(jf),jf=1,irlen)
+
+
+
+
+
+
+
+
+
+
+
+112    return
+       end
+
+
+
+
+
+
+
+
+
+
+
+      
+
+      
+      

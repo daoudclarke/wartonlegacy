@@ -1,0 +1,112 @@
+    2   dim Igg(3),Bprod(3),Sprod(3)
+    6   input "code number";P
+    8   A=A
+   12   Sprod(1)=1
+   14   Sprod(2)=5
+   16   Sprod(3)=2
+   17   A=A
+   18   for I=1 to 3
+   19   Bprod(I)=Sprod(I)
+   20   Igg(I)=Sprod(I)
+   22   next I
+   23   goto 1100
+   24   P=31
+   26   Ngr=P^2+P+1
+   27   A=A
+   28   gosub 516
+   29   A=A
+   30   Sprod(1)=Sprod(1)+1
+   32   if Sprod(1)=P then goto 40
+   34   goto 18
+   40   Sprod(1)=0
+   42   Sprod(2)=Sprod(2)+1
+   44   if Sprod(2)=P then goto 50
+   46   goto 18
+   50   Sprod(3)=Sprod(3)+1
+   51   Sprod(2)=0
+   52   if Sprod(3)=P then goto 60
+   54   goto 18
+   60   print "run ended"
+   62   end
+  516   Ipow=2
+  518   if Ipow>Ngr then goto 524
+  520   Ipow=Ipow*2
+  522   goto 518
+  524   Ie=Ipow/2
+  526   N1=Ngr-Ie
+  528   if Ie=1 then goto 700
+  530   Ie=Ie/2
+  532   A0=Bprod(1)
+  534   A1=Bprod(2)
+  536   A2=Bprod(3)
+  538   B0=A0
+  540   B1=A1
+  542   B2=A2
+  544   gosub 1000
+  545   A=A
+  546   if N1<Ie then goto 528
+  548   N1=N1-Ie
+  550   A0=Bprod(1)
+  552   A1=Bprod(2)
+  554   A2=Bprod(3)
+  556   B0=Igg(1)
+  558   B1=Igg(2)
+  560   B2=Igg(3)
+  562   gosub 1000
+  564   goto 528
+  600   if Bprod(1)=1 then goto 606
+  601   print "bprods",Bprod(1),Bprod(2),Bprod(3),"ngr",Ngr
+  602   stop
+  604   goto 700
+  606   if Bprod(2)>0 then goto 700
+  608   if Bprod(3)>0 then goto 700
+  609   print "start",Igg(1),Igg(2),Igg(3)
+  610   print "bprods",Bprod(1),Bprod(2),Bprod(3)
+  612   stop
+  700   return
+  917   Big=P
+  919   Itemp=int(Big/Little)
+  921   A=A
+  922   Irem=Big-Little*Itemp
+  924   if Irem=0 then goto 940
+  926   Big=Little
+  928   Little=Irem
+  930   goto 919
+  940   Gcd2=Little
+  942   return
+ 1000   Bprod(1)=A0*B0+(A1*B2+A2*B1)*3
+ 1002   Itemp=int(Bprod(1)/P)
+ 1004   Bprod(1)=Bprod(1)-Itemp*P
+ 1006   Bprod(2)=A0*B1+A1*B0+(A2*B2)*3
+ 1008   Itemp=int(Bprod(2)/P)
+ 1010   Bprod(2)=Bprod(2)-Itemp*P
+ 1012   Bprod(3)=A0*B2+B0*A2+A1*B1
+ 1014   Itemp=int(Bprod(3)/P)
+ 1016   Bprod(3)=Bprod(3)-Itemp*P
+ 1018   return
+ 1100   Blim=200000
+ 1102   Ab=1
+ 1104   Prm=nxtprm(Ab)
+ 1106   if Prm>Blim then goto 1200
+ 1108   Ab=Prm
+ 1110   Rq=Ab
+ 1112   Rq1=Ab
+ 1114   L=int(Blim/Rq)
+ 1116   if Rq1>L then goto 1120
+ 1118   Rq1=Rq1*Rq
+ 1119   goto 1116
+ 1120   Ngr=Rq1
+ 1121   for I=1 to 3
+ 1122   A=A
+ 1124   Igg(I)=Bprod(I)
+ 1126   next I
+ 1127   gosub 516
+ 1128   if Bprod(2)=0 then goto 1142
+ 1130   Little=Bprod(2)
+ 1132   gosub 917
+ 1133   print "powered prime=",Ngr,"prime=",Ab
+ 1134   if Gcd2=1 then goto 1104
+ 1136   print "factor found=",Gcd2
+ 1138   Fact2=int(P/Gcd2)
+ 1140   print "cofactor=",Fact2
+ 1142   end

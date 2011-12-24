@@ -1,0 +1,12 @@
+   10   *RatConf(A,B,&C(),&Leng)
+   20   ' Calculates the continued fraction of the rational a/b.
+   30   ' Returns leng = -1 if b = 0.
+   40   ' Modeled on the Pascal version
+   50   ' 3 May 1990
+   60   Leng=-1
+   70   if B<1 then return endif
+   80   repeat
+   90   inc Leng:C(Leng)=A\B
+  100   A=B:B=res
+  110   until res=0
+  120   return ' End of subroutine RatConf.

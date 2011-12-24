@@ -1,0 +1,121 @@
+    1   ' This program implements the reduction algorithm of Lenstra, Lenstra,
+    2   ' and Lovasz (Math. Ann. 261 (1982) 515-534) to obtain a "reduced basis"
+    3   ' for a positive definite real valued bilinear form A(-,-) on Z^n.
+    4   ' I have added a search algorithm to find short vectors for the form.
+    5   '
+    6   ' The parameter PP should be between .25 and 1.  The routine seems
+    7   ' fairly insensitive to its value.
+    8   '      Written by W.D. Neumann
+   10   word 12:point 6
+   20   N%=40
+   30   dim A(N%,N%),B(N%,N%),C(N%,N%),M(N%,N%),V(N%) 'used by main algorithm
+   40   dim X(N%),Y(N%),Z(N%) '        used by *SEARCH
+   50   PP=0.9
+   60   '
+   70   ' Set up a form to play with to test the routine.
+   71   '
+   73   N%=4:X=sqrt(3)+sqrt(2)-2
+   74   for I=0 to N%:for J=0 to N%:A(I,J)=8^24*X^(I+J):next:A(I,I)=A(I,I)+1:next
+   80   '
+   81   ' The minimal polynomial for X gives a short vector for this form.
+   82   '
+   83   gosub *MAIN
+   84   gosub *PRINTFORM:gosub *PRINTBASE:gosub *PRINTINV
+   85   gosub *SEARCH:goto 85
+  100   '
+  110   ' Subroutine to compute the A-inner product of d(n,-) and d(m,-)
+  120   ' A() must be initialized to the definite form in question.
+  130   '
+  140   *IP(&D(),N,M)
+  141   local I,J
+  142   clr IP
+  150   for I=0 to N%:for J=0 to N%:IP=IP+A(I,J)*D(N,I)*D(M,J):next:next
+  160   return
+  200   '
+  210   *MAIN
+  220   '
+  230   ' At any time during the reduction, B(i,-) is the ith basis element.
+  240   ' So BABt is the matrix of the form with respect to the B-basis.
+  250   '  (Bt means transpose of B.)
+  260   ' We start with the standard basis, though this is not essential.
+  270   '
+  280   clr block B(0..N%,0..N%):for I=0 to N%:B(I,I)=1:next I
+  290   '
+  300   ' M will be a lower triangular matrix with 1's on the diagonal
+  310   ' (its entries below the diagonal are M(i,j)).  We do a Gram
+  320   ' reduction to find C and M such that B=MC and CACt=Diag(V1,...,Vn).
+  330   ' In particular, (A =) BABt = MVMt, where V is diagonal.
+  340   '
+  350   print "Initializing reduction...";
+  360   block C(0..N%,0..N%)=block B(0..N%,0..N%)
+  370   for I=0 to N%
+  380   for J=0 to I-1
+  390   gosub *IP(&C(),I,J):M(I,J)=IP/V(J)
+  400   for K=0 to N%:C(I,K)=C(I,K)-M(I,J)*C(J,K):next K
+  410   next J
+  420   gosub *IP(&C(),I,I):V(I)=IP
+  430   next I
+  440   '
+  450   ' We re-use C(-,-) to hold B^-1 (actually (old B)*(new B)^-1
+  460   ' for any initial choice of B).  B^-1 is not needed for most
+  470   ' applications, so the code to compute it can usually be deleted.
+  480   ' We first initialize it.
+  490   '
+  500   clr block C(0..N%,0..N%):for I=0 to N%:C(I,I)=1:next I
+  510   '
+  520   ' The main reduction algorithm follows.  It operates on the basis
+  530   ' B so that after reduction we have new B,M,V still satisfying
+  540   ' BABt=MVMt, but with all Mij <= .5 and with a constraint on
+  550   ' the entries of V (which implies V(k) >= V(k-1)*(PP-.25) ).
+  560   '
+  570   print "STARTING REDUCTION"
+  580   K=1:goto *R1
+  590   *R2:M=M(K,K-1):V=V(K)+M*M*V(K-1):M(K,K-1)=M*V(K-1)/V
+  600   V(K)=V(K-1)*V(K)/V:V(K-1)=V
+  610   swap block B(K,0..N%),block B(K-1,0..N%):swap block C(0..N%,K),block C(0..N%,K-1)
+  620   if K>1 then swap block M(K,0..K-2),block M(K-1,0..K-2)
+  630   for I=K+1 to N%
+  640   V=M(I,K):M(I,K)=M(I,K-1)-M*V:M(I,K-1)=V+M(K,K-1)*M(I,K):next
+  650   if K>1 then dec K
+  660   *R1:L=K-1:gosub *R3
+  670   if V(K)/V(K-1)+M(K,K-1)*M(K,K-1)<PP goto *R2
+  680   for L=K-2 to 0 step -1:gosub *R3:next L
+  690   inc K:if K<=N% goto *R1
+  700   return '          -------------------->
+  710   *R3:if abs(M(K,L))<=0.5 then return
+  720   R=int(0.5+M(K,L))
+  730   for I=0 to N%:B(K,I)=B(K,I)-R*B(L,I):C(I,L)=C(I,L)+R*C(I,K):next I
+  740   M(K,L)=M(K,L)-R:for I=0 to L-1:M(K,I)=M(K,I)-R*M(L,I):next
+  750   return
+  760   '
+  770   '   The following routine uses the normal form to search for ALL
+  780   '   vectors up to a given squared length with respect to the form.
+  790   '   It only list one of each pair w, -w.
+  800   '
+  810   *SEARCH:K=N%:clr Y(N%),Z(N%),NN
+  820   input "Search up to square length (try v(0) for shortest vector)";TT
+  830   input "Print vectors (0/1)";SS%:if SS% then print "vector | square len."
+  840   goto *S1
+  850   *S0:dec K:Z(K)=0:for I=K+1 to N%:Z(K)=Z(K)+M(I,K)*X(I):next
+  860   Y(K)=Y(K+1)+V(K+1)*(X(K+1)+Z(K+1))^2
+  870   *S1:X(K)=int(sqrt((TT-Y(K))/V(K))-Z(K))
+  880   *S2:while V(K)*(X(K)+Z(K))^2>TT-Y(K):inc K:dec X(K):wend
+  890   'if K=N%+1 then print "ERROR":stop:return
+  900   if K goto *S0
+  910   if or{X(0),Y(0)}-1 then print 2*NN;"nonzero vectors up to";TT:return
+  920   if SS% then for I=0 to N%:AC=0:for J=0 to N%:AC=AC+X(J)*B(J,I):next:print using(5),AC;:next:print tab(60);"|";:PR=V(0)*(X(0)+Z(0))^2+Y(0):gosub *PR:print
+  930   inc NN:dec X(K):goto *S2
+  940   '
+  950   *PRINTFORM:print "Form with respect to new basis:"
+  960   for I=0 to N%:for J=0 to N%:if J<I then PR=M(J,I):gosub *PR:goto 980
+  970   gosub *IP(&B(),I,J):M(I,J)=IP:PR=IP:gosub *PR
+  980   next:print:next:return
+  990   *PRINTLENGTHS:print "Lengths of basis vectors":for I=0 to N%:gosub *IP(&B(),I,I):PR=IP:gosub *PR:next:print:return
+ 1000   *PRINTBASE:print "Basis":for I=0 to N%:for J=0 to N%:print using(5),B(I,J);:next:print:next:return
+ 1010   *PRINTINV:print "Inverse of basis matrix":for I=0 to N%:for J=0 to N%:print C(I,J);:next:print:next:return
+ 2000   '
+ 3030   *PR:PE=0:if PR=0 then jump
+ 3040   while abs(PR)>=10:PR=PR/10:PE=PE+1:wend
+ 3050   while abs(PR)<1:PR=PR*10:PE=PE-1:wend
+ 3060   **:print using(4,4),PR;" E";using(3),PE;
+ 3070   return

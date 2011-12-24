@@ -1,0 +1,132 @@
+    1   dim Pdiff(190)
+   10   input "code number";N
+   12   Xr=2
+   14   Gcon=1
+   16   Ab=1
+   18   B1=100000
+   20   B2=10^9
+   22   Prm=nxtprm(Ab)
+   24   if Prm>B1 then goto 1000
+   26   Ab=Prm
+   28   Rq=Ab
+   30   Rq1=Ab
+   32   L=int(B1/Rq)
+   34   if Rq1>L then goto 40
+   36   Rq1=Rq1*Rq
+   38   goto 34
+   40   Qqs=Rq1
+   41   A=A
+   42   gosub 510
+   44   Xr=Bprod
+   45   if N<10^12 then goto 48
+   46   Gcon=Gcon+1
+   47   if Gcon<21 then goto 22
+   48   print "powered prime",Prm
+   50   Gcon=1
+   60   if Bprod=1 then goto 400
+   62   Little=Bprod-1
+   64   gosub 917
+   66   if Gcd2>1 then goto 300
+   68   goto 22
+  200   A=A
+  202   Xr=Aprod
+  208   Qqs=Prm
+  209   Ab=Prm
+  210   gosub 510
+  213   if Bprod<N then goto 218
+  214   Temp=int(Bprod/N)
+  216   Aprod1=Bprod-Temp*N
+  217   goto 219
+  218   Aprod1=Bprod
+  220   if Aprod1=1 then goto 400
+  221   Gprod=Aprod1-1
+  222   Little=Aprod1-1
+  224   gosub 917
+  225   print "aprod1",Aprod1,Xr
+  226   if Gcd2>1 then goto 300
+  227   Hcon=1
+  228   Prm=nxtprm(Ab)
+  229   goto 1100
+  230   Aprod1=Aprod1*Pdiff(Rq2)
+  231   if Aprod1<N then goto 234
+  232   Itemp=int(Aprod1/N)
+  233   Aprod1=Aprod1-Itemp*N
+  234   goto 1200
+  235   Ab=Prm
+  236   if Hcon<201 then goto 228
+  237   Hcon=1
+  238   print "prime2",Prm
+  239   A=A
+  240   Little=Gprod
+  242   gosub 917
+  244   if Gcd2>1 then goto 300
+  246   if Prm>10^9 then goto 400
+  250   A=A
+  252   goto 228
+  280   Temp=int(Aprod1/N)
+  282   Aprod1=Aprod1-Temp*N
+  284   return
+  300   print "factor found =",Gcd2
+  302   Fact2=int(N/Gcd2)
+  304   print "remaining factor =",Fact2
+  306   end
+  400   print "algorithm unsuitable or number is prime"
+  404   end
+  510   Q1=N
+  512   Pn=Qqs
+  514   Ipow=2
+  520   if Ipow>Qqs then goto 524
+  522   Ipow=Ipow*2
+  523   goto 520
+  524   Ie=int(Ipow/2)
+  526   N1=Qqs
+  527   Iy=Xr
+  528   N1=N1-Ie
+  530   if Ie=1 then goto 561
+  532   Ie=int(Ie/2)
+  533   Iy=Iy*Iy
+  534   if Iy<N then goto 537
+  535   Itemp=int(Iy/N)
+  536   Iy=Iy-Itemp*N
+  537   if N1<Ie then goto 530
+  538   N1=N1-Ie
+  539   Iy=Iy*Xr
+  540   if Iy<N then goto 530
+  541   Itemp=int(Iy/N)
+  543   Iy=Iy-Itemp*N
+  560   goto 530
+  561   Bprod=Iy
+  563   return
+  917   Big=N
+  918   Temp=int(Big/Little)
+  920   Rem1=Big-Little*Temp
+  922   if Rem1=0 then goto 940
+  924   Big=Little
+  926   Little=Rem1
+  928   goto 918
+  940   Gcd2=Little
+  942   A=A
+  950   return
+ 1000   Icon=0
+ 1001   Aprod=Bprod
+ 1002   Qqs=0
+ 1003   Xr=Aprod
+ 1004   Qqs=Qqs+2
+ 1006   gosub 510
+ 1008   Icon=Icon+1
+ 1010   Pdiff(Icon)=Bprod
+ 1011   A=A
+ 1012   if Icon<190 then goto 1003
+ 1014   goto 200
+ 1100   Rq2=int((Prm-Ab)/2)
+ 1102   if Rq2>190 then goto 1120
+ 1104   goto 230
+ 1120   print "difference too large",Rq2
+ 1122   end
+ 1200   Gprod=Gprod*(Aprod1-1)
+ 1201   Hcon=Hcon+1
+ 1202   if Gprod<N then goto 1208
+ 1204   Itemp=int(Gprod/N)
+ 1206   Gprod=Gprod-Itemp*N
+ 1208   if Gprod=1 then goto 400
+ 1210   goto 235

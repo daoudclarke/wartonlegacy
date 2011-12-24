@@ -1,0 +1,28 @@
+   10   'gsample
+   20   screen 23
+   30   gsize:gcolor -7
+   40   cls 3
+   50   F#="X*sin(X)"
+   60   Vxh=560:Vx1=320-Vxh\2:Vx2=Vx1+Vxh
+   70   Vyh=400:Vy1=240-Vyh\2:Vy2=Vy1+Vyh
+   80   glocate Vx1,Vy1-18:gprint F#;
+   90   view (Vx1,Vy1)-(Vx2,Vy2),0,7
+  100   X1=-6*#pi:X2=6*#pi
+  110   Y1=-6*#pi:Y2=6*#pi
+  120   window (X1,Y2)-(X2,Y1)
+  130   line (X1,0)-(X2,0),1
+  140   line (0,Y1)-(0,Y2),1
+  150   glocate mapx(X1)+4,mapy(0):gprint using(3,1),X1;
+  160   glocate mapx(X2)-44,mapy(0):gprint using(3,1),X2;
+  170   glocate mapx(0),mapy(Y1)-20:gprint using(3,1),Y1;
+  180   glocate mapx(0),mapy(Y2)+4:gprint using(3,1),Y2;
+  190   glocate mapx(0)+4,mapy(0)+4:gprint "0";
+  200   Unit=(X2-X1)/Vxh
+  210   F#=encode(F#)
+  220   X=X1
+  230   pset (X,val(F#)),4
+  240   for I=1 to Vxh
+  250      X=X+Unit
+  260      line -(X,val(F#)),2
+  270   next
+  280   end

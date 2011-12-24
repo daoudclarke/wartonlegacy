@@ -1,0 +1,127 @@
+    1   dim Aa(3,3),Bb(3,3),Cc(3,3)
+    2   input "code";N
+    3   input "what is the likely maximum prime as power of 10";Mr
+    6   Nr=10^(Mr*2)
+    8   Pow=log(log(Nr))
+   10   Pow=(log(Nr)*Pow)^0.5
+   12   Prn=exp(Pow)
+   14   Prn=Prn^(1/(2^0.5))
+   68   Aperm=6
+   69   Ibcon=1
+   80   Aa(1,1)=Aperm
+   81   Aa(1,2)=Aperm-3
+   82   Aa(1,3)=Aperm-5
+   83   Aa(2,1)=2
+   84   Aa(2,2)=4
+   85   Aa(2,3)=5
+   86   Aa(3,1)=3
+   87   Aa(3,2)=5
+   88   Aa(3,3)=6
+   90   for I=1 to 3
+   92   for J=1 to 3
+   93   Cc(I,J)=Aa(I,J)
+   94   next J
+   95   next I
+  100   A=A
+  110   Ab=1
+  113   print "a11",A11,"prn",Prn,"aperm",Aperm,"ibcon",Ibcon
+  114   Prx1=nxtprm(Ab)
+  116   Ab=Prx1
+  118   if Ab>Prn then goto 500
+  121   Q=Ab
+  123   Q1=Q
+  125   L=int(Prn/Q)
+  128   if Q1>L then goto 131
+  129   Q1=Q1*Q
+  130   goto 128
+  131   Ibcon=Ibcon+1
+  132   Q1=Q1
+  134   print "q1",Q1
+  150   Iee=1
+  152   if Iee<Q1 then goto 160
+  154   if Iee=Q1 then goto 160
+  156   goto 170
+  160   Iee=Iee*2
+  162   goto 152
+  170   Iee=Iee/2
+  171   Itex=Q1-Iee
+  172   if Iee=1 then goto 220
+  173   Iee=Iee/2
+  174   gosub 1900
+  175   goto 196
+  196   if Itex<Iee then goto 172
+  198   Itex=Itex-Iee
+  199   gosub 2000
+  200   goto 172
+  220   for I=1 to 3
+  221   for J=1 to 3
+  222   Cc(I,J)=Aa(I,J)
+  223   next J
+  224   next I
+  230   Big=N
+  231   if Aa(1,1)=1 then goto 113
+  232   A=A
+  233   Little=Aa(1,1)-1
+  234   gosub 917
+  236   if Gcd2=N then goto 500
+  238   if Gcd2=0 then goto 500
+  239   A=A
+  240   if Gcd2=1 then goto 113
+  242   print "factor found",Gcd2
+  243   Cof=int(N/Gcd2)
+  244   print "co-factor=",Cof
+  246   stop
+  270   end
+  400   print "loop too short"
+  402   stop
+  500   Aperm=Aperm+2
+  502   goto 80
+  917   Itemp=int(Big/Little)
+  918   Irem=Big-Itemp*Little
+  919   if Irem=0 then goto 940
+  922   Big=Little
+  924   Little=Irem
+  926   goto 917
+  940   Gcd2=Little
+  942   return
+ 1900   for I=1 to 3
+ 1902   for J=1 to 3
+ 1904   Bb(I,J)=0
+ 1906   for K=1 to 3
+ 1907   Bb(I,J)=Bb(I,J)+Aa(I,K)*Aa(K,J)
+ 1908   A=A
+ 1909   next K
+ 1910   Itemp=int(Bb(I,J)/N)
+ 1912   Bb(I,J)=Bb(I,J)-Itemp*N
+ 1916   next J
+ 1918   next I
+ 1919   A=A
+ 1920   for I=1 to 3
+ 1922   for J=1 to 3
+ 1924   Aa(I,J)=Bb(I,J)
+ 1926   next J
+ 1928   next I
+ 1929   A=A
+ 1930   A=A
+ 1932   A=A
+ 1934   return
+ 2000   for I=1 to 3
+ 2002   for J=1 to 3
+ 2004   Bb(I,J)=0
+ 2006   for K=1 to 3
+ 2008   Bb(I,J)=Bb(I,J)+Aa(I,K)*Cc(K,J)
+ 2009   next K
+ 2010   Itemp=int(Bb(I,J)/N)
+ 2012   Bb(I,J)=Bb(I,J)-N*Itemp
+ 2016   next J
+ 2018   next I
+ 2019   A=A
+ 2020   for I=1 to 3
+ 2022   for J=1 to 3
+ 2024   Aa(I,J)=Bb(I,J)
+ 2026   next J
+ 2028   next I
+ 2029   A=A
+ 2030   A=A
+ 2032   A=A
+ 2034   return

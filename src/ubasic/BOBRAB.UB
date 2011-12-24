@@ -1,0 +1,95 @@
+    1   dim Prod(230)
+   18   Idb=1
+   20   input "number";N
+   22   Temp=int(N/2)
+   24   Rem1=N-Temp*2
+   26   if Rem1=1 then goto 30
+   27   print N,"is composite"
+   28   N=N+1
+   30   Pow=100
+   31   gosub 850
+   32   if N>10^Pow then goto 40
+   34   Pow=Pow-1
+   36   goto 32
+   40   Xr=1
+   42   Ind1=0
+   44   Nt=N-1
+   46   Temp=int(Nt/2)
+   48   Rem1=Nt-Temp*2
+   50   if Rem1=1 then goto 60
+   52   Ind1=Ind1+1
+   54   Nt=Temp
+   56   goto 46
+   60   Tt=Ind1
+   61   Temp=Temp*2+1
+   62   Qqs=Temp
+   64   Xr=Xr*40353607
+   66   Temp=int(Xr/(10^Pow))
+   68   Rem1=Xr-Temp*(10^Pow)
+   70   Xr=Rem1
+  510   Q1=N
+  512   Pn=Qqs
+  514   Coun=1
+  520   I=1
+  522   Prod(I)=Xr
+  523   I=I+1
+  524   if I<230 then goto 522
+  526   I=1
+  527   Bigi=1
+  528   J=1
+  530   if Bigi>Pn then goto 560
+  532   if Bigi=Pn then goto 590
+  534   Prep=Prod(I)
+  535   Prod(I)=Prod(I)*Prod(I)
+  536   Temp=int(Prod(I)/Q1)
+  537   Rem1=Prod(I)-Temp*Q1
+  538   Prod(I)=Rem1
+  539   Bigi=Bigi*2
+  541   J=J+1
+  543   if J<231 then goto 530
+  560   Pn=Pn-int(Bigi/2)
+  561   Prod(I)=Prep
+  563   Coun=Coun+1
+  565   I=I+1
+  567   goto 527
+  590   Bprod=Prod(1)
+  592   if Coun=1 then goto 604
+  593   I=2
+  594   Bprod=Bprod*Prod(I)
+  596   Temp=int(Bprod/Q1)
+  598   Rem1=Bprod-Temp*Q1
+  600   Bprod=Rem1
+  601   I=I+1
+  602   if I<Coun+1 then goto 594
+  604   Tst=Bprod
+  606   Temp=int(Tst/Q1)
+  608   Rem1=Tst-Temp*Q1
+  610   if Rem1=1 then goto 700
+  611   if Rem1=N-1 then goto 700
+  614   Bb=Rem1
+  616   Ee=1
+  630   if Ee>Tt-1 then goto 660
+  632   Bb=Bb*Bb
+  634   Temp=int(Bb/N)
+  636   Rem1=Bb-Temp*N
+  638   Bb=Rem1
+  644   if Bb=N-1 then goto 700
+  646   Ee=Ee+1
+  648   goto 630
+  660   print N,"is composite"
+  662   N=N+2
+  664   goto 30
+  700   if Idb=20 then goto 750
+  702   Idb=Idb+1
+  704   goto 64
+  750   print N,"is very probably prime"
+  752   end
+  850   Temp=int(N/3)
+  852   Rem1=N-Temp*3
+  854   Temp=int(N/5)
+  856   Rem1=N-Temp*5
+  858   if Rem1=0 then goto 870
+  860   goto 880
+  870   print N,"is composite"
+  872   N=N+2
+  880   return

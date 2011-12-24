@@ -1,0 +1,60 @@
+   10   'DETI
+   20   print "整数行列の行列式の計算":print
+   30   input "次元は";N:dim A(N,N):print
+   40   gosub *InputMatrix(&A(),N)
+   50   print "行列 :":print
+   60   gosub *PrintMatrix(&A(),N)
+   70   Det=fnIDet(A(),N)
+   80   print:print "行列式 :":print:print spc(2);Det:print
+   90   end
+  100   '
+  110   *InputMatrix(&A(),N)
+  120   local I,J,A
+  130   print "カンマで区切って入力してください。（例 1,2,3）":print
+  140   for I=1 to N
+  150     print "第";I;"行";:strinput "  ";A
+  160     for J=1 to N:A(I,J)=val(member(A,J)):next J
+  170   next I:print
+  180   return
+  190   '
+  200   *PrintMatrix(&A(),N)
+  210   local I,J,A,P=0
+  220   for I=1 to N
+  230     for J=1 to N
+  240       P=max(P,len(str(A(I,J))))
+  250     next J
+  260   next I:P+=1
+  270   for I=1 to N
+  280     for J=1 to N:A=A(I,J)
+  290       print spc(P-len(str(A)));A;
+  300     next J:print
+  310   next I
+  320   return
+  330   '
+  340   'fnIDet
+  350   '  関数：整数係数行列の行列式を返す
+  360   '  入力：行列、次元：どちらも値渡し
+  370   '  破壊：なし
+  380   fnIDet(A(),N)
+  390   local A,B,C,I,J,K,Sign,Amin,Imin
+  400   C=1:Sign=1
+  410   for K=1 to N
+  420     for I=K to N
+  430       if A(I,K) then cancel for:goto 460
+  440     next
+  450     cancel for:return(0)
+  460     Amin=abs(A(I,K)):Imin=I
+  470     for I=K+1 to N
+  480       if A(I,K) then
+  490         :if abs(A(I,K))<Amin then Amin=abs(A(I,K)):Imin=I
+  500     next
+  510     if Imin<>K then
+  520       :swap block A(K,K..N),A(Imin,K..N):neg Sign
+  530     A=A(K,K)
+  540     for I=K+1 to N
+  550       B=A(I,K)
+  560       for J=K+1 to N:A(I,J)=(A(I,J)*A-A(K,J)*B)\C:next
+  570     next
+  580     C=A
+  590   next
+  600   return(C*Sign)

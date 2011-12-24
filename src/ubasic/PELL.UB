@@ -1,0 +1,18 @@
+   10   *Pell(D,&X,&Y,&F)
+   20   ' Solves X^2 - D Y^2 = F.  F is 1 or -1, not your choice, but
+   30   ' returned by the subroutine. F = 0 for error.
+   40   ' 23 April 1990.  Modeled on the Pascal version.
+   50   local Leng%=0,H1=0,H2=1,K1=1,K2=0,Sqd,A,Te,U,V,Uu,Vv
+   60   if D<1 then F=0:return endif
+   70   Sqd=isqrt(D):if res=0 then F=0 return endif
+   90   A=Sqd:U=D-A*A:Uu=U:V=A:Vv=V
+  120   repeat
+  130   Te=H1+H2*A:H1=H2:H2=Te
+  140   Te=K1+K2*A:K1=K2:K2=Te
+  150   inc Leng%
+  160   A=(Sqd+V)\U:Te=res
+  170   V=U*A-V:U=(D-V*V)\U
+  180   until and{V=Vv,U=Uu}
+  190   X=H2:Y=K2
+  200   if odd(Leng%) then F=-1 else F=1 endif
+  210   return ' End of subroutine Pell

@@ -1,0 +1,96 @@
+    1   dim Aa(5),Bb(5),Alg1(5),Alg2(5),Blg1(2),Blg2(2)
+    2   Rt=2197233962013229959541263052854991624692
+    4   N=2469135780246913578024691357802469139103
+    6   Itemp=Rt*Rt
+    8   Itemp2=int(Itemp/N)
+   10   Irem=Itemp-Itemp2*N
+   12   print "irem",Irem
+   14   M1=13420908898882609556
+   16   M2=18083200509133992341
+   18   Num1=M2*(-4305)-M1*98389
+   20   print "num1",Num1
+   22   Num2=((-4305)-98389*(N-Rt))*M2
+   24   print "num2",Num2
+   26   Itemp=int(Num2/N)
+   28   Irem=Num2-Itemp*N
+   29   Bigr=Irem
+   30   print "iremalg",Irem
+   32   print Num1+N
+   40   Aa(1)=1
+   42   Aa(2)=7
+   44   Aa(3)=10
+   46   Aa(4)=20
+   48   Aa(5)=19
+   50   Bb(1)=1
+   52   Bb(2)=3
+   54   Bb(3)=1
+   56   Bb(4)=9
+   58   Bb(5)=28
+   60   Nrt=N-Rt
+   62   for I=1 to 5
+   64   Itemp=Aa(I)+Nrt*Bb(I)
+   66   Itemp2=int(Itemp/N)
+   68   Irem=Itemp-Itemp2*N
+   70   Alg1(I)=Irem
+   72   Itemp=Aa(I)-Nrt*Bb(I)
+   74   Itemp2=int(Itemp/N)
+   76   Irem=Itemp-Itemp2*N
+   78   Alg2(I)=Irem
+   80   next I
+   82   for I=1 to 5
+   84   print "i",I,"alg1",Alg1(I),"alg2",Alg2(I)
+   86   next I
+   88   Itemp=((N+1)/2)*Alg1(1)
+   90   Itemp2=int(Itemp/N)
+   92   Blg1(1)=Itemp-Itemp2*N
+   94   Itemp=((N+1)/4)*Alg1(2)
+   96   Itemp2=int(Itemp/N)
+   98   Blg1(2)=Itemp-Itemp2*N
+  100   Itemp=((N+1)/2)*Alg2(1)
+  102   Itemp2=int(Itemp/N)
+  104   Blg2(1)=Itemp-Itemp2*N
+  106   Itemp=((N+1)/4)*Alg2(2)
+  108   Itemp2=int(Itemp/N)
+  110   Blg2(2)=Itemp-Itemp2*N
+  112   print "bigr",Bigr
+  114   print Num1+N
+  120   Mul=1
+  122   for I=1 to 4
+  124   Itemp=Mul*Blg1(1)
+  126   Itemp2=int(Itemp/N)
+  128   Mul=Itemp-Itemp2*N
+  130   next I
+  132   Bblg1=Mul
+  134   Mul=1
+  135   for I=1 to 4
+  136   Itemp=Mul*Blg2(1)
+  138   Itemp2=int(Itemp/N)
+  140   Mul=Itemp-Itemp2*N
+  142   next I
+  144   Bblg2=Mul
+  145   print "blg11",Blg1(1),"blg12",Blg1(2)
+  146   print "bblg1",Bblg1,"bblg2",Bblg2
+  150   Itemp=Bblg1*Blg2(2)*Alg1(3)*Alg2(4)*Alg1(5)
+  152   Itemp2=int(Itemp/N)
+  153   Ans=Itemp-Itemp2*N
+  154   print "ans",Itemp-Itemp2*N
+  156   print "rev",N-Bigr
+  158   Div=((Blg2(1))^4-Bblg2)/N
+  160   print "div",Div
+  170   Itemp=Bblg1*Bblg2
+  172   Itemp2=int(Itemp/N)
+  174   Irem=Itemp-Itemp2*N
+  176   print "irem",Irem
+  180   Itemp=1245374381807435801720776039124457594570*2458329288562934565316260997579245969006
+  182   Itemp2=int(Itemp/N)
+  184   Irem2=Itemp-Itemp2*N
+  186   print "irem2",Irem2
+  190   Itemp=(-4305)-98389*Nrt
+  192   Itemp2=int(Itemp/N)
+  193   Irem3=Itemp-Itemp2*N
+  194   print "irem3",Irem3,N-Irem3
+  196   print "ans",Ans
+  198   Itemp=Ans*M2
+  200   Itemp2=int(Itemp/N)
+  202   Ansm2=Itemp-Itemp2*N
+  204   print "ansm2",Ansm2,"num1",Num1+N

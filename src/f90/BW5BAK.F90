@@ -1,0 +1,220 @@
+       program bbw5
+       common iprod(200)
+       print *,'number?'
+       read *,iaa
+       print *,'mod'
+       read *,ip
+       ix = 0
+       iaa =mod(iaa,ip)
+       
+       if(iaa.gt.0)goto 10
+       if(iaa.eq.0)goto 200
+       iaa = iaa + ip
+       
+10     iprecod =ip -1
+       i=0
+26     itemp = int(iprecod/2)
+       irem1 =iprecod -itemp*2
+       if(itemp.eq.0)goto 46
+       if(irem1.gt.0)goto 40
+       iprecod = itemp
+       i =i+1
+       if(i.lt.200)goto 26
+40     iq =iprecod
+       ie = i
+       goto 48
+46     iq =1
+       ie = i
+48     i =1
+       print *,'qs',iq
+       n = 1
+52     n = n*607
+54     itemp=int(n/1000)
+56     irem1 =n-1000 *itemp
+       n = irem1
+       id = n
+       call sub400(id,ip,k)
+       if(k.eq.-1)goto 68
+       i =i +1
+       if(i.lt.1000)goto 52
+68     ipn =iq
+       iaas = n
+       call sub516(ibprod,iaas,ipn,ip)
+       iz = ibprod
+       print *,'zz',iz
+       iy = iz
+       ir = ie
+       ipn = (iq-1)/2
+       iaas = iaa
+       call sub516(ibprod,iaas,ipn,ip)
+       ix = ibprod
+       print *,ix
+       itemp =iaa *ix *ix
+       itemp2=int(itemp/ip)
+       irem1 =itemp-itemp2*ip
+       ib =irem1
+       print *,'bbb',ib
+       itemp = iaa *ix
+       itemp2 =int(itemp/ip)
+       ix = itemp - itemp2 *ip
+100    itemp =int(ib/ip)
+       irem1 = ib - ip *itemp
+       if(irem1.eq.1)goto 200
+       i=1
+       m=1
+110    ipow =2**m
+       goto 700
+112    irem2 =ibprod
+       print *,'irem2',irem2
+       if(irem2.eq.1)goto 130
+       m =m+1
+       goto 110
+130    if(m.eq.ir)goto 180
+       ipow =2**(ir-m-1)
+       goto 800
+134    it = ibprod
+       iy =it*it
+       itemp =int(iy/ip)
+       irem1 =iy -itemp *ip
+       iy =irem1
+       itemp =int(m/ip)
+       irem1 =m -ip *itemp
+       m =irem1
+       ir = irem1
+       itemp =ix * it
+       itemp2 =int(itemp/ip)
+       irem1 =itemp -itemp2 *ip
+       ix = irem1
+       itemp =ib *iy
+       itemp2 =int(itemp/ip)
+       irem1 =itemp -itemp2 *ip
+       ib = irem1
+       goto 100
+180    print *,'no square root exists'
+       
+       goto 900
+200    print *,'square root=',ix
+       
+       goto 900
+700    ipn =ipow
+       iaas =ib
+       call sub516(ibprod,iaas,ipn,ip)
+       goto 112
+800    ipn =ipow
+       iaas=iy
+       call sub516(ibprod,iaas,ipn,ip)
+       goto 134
+900    end       
+       subroutine sub400(id,ip,k)
+       ide =int(id/2)
+       ipe= int(ip/2)
+       ide2 =id -ide *2
+       ipe2 =ip -ipe*2
+       if(ide2.eq.0)goto 414
+       goto 416
+414    if(ipe2.eq.0)goto 512
+416    iv = 0
+       ipe = ip
+       ii = 0
+419    print *,'pefirst',ipe
+       ipe2 =int(ipe/2)
+       ipe3 =ipe -ipe2 *2
+       if(ipe3.eq.1)goto 432
+       ipe =ipe2
+       iv = iv+1
+       ii =ii +1
+       if(ii.lt.50)goto 419
+432    ive = int(iv/2)
+       ive2 =iv -ive*2
+       if(ive2.eq.0)goto 450
+       iae =(id **2 -1)/8
+       iae1 =int(iae/2)
+       iae2 =iae -iae1 *2
+       iae3 =iae2 +2
+       k=(-1)**iae3
+       goto 451
+450    k =1
+451    ide = id
+452    if(ide.eq.0)goto 510 
+       ive = 0
+       ii = 0
+456    ide1 =int(ide/2)
+       ide2 =ide -ide1 *2
+       if(ide2.eq.1)goto 470
+       iv = iv+1
+       ide =ide1
+       ii =ii+1
+       if(ii.lt.50)goto 456
+470    ive =int(iv/2)
+       ive2=iv -ive *2
+       if(ive2.eq.0)goto 486
+       iae=(ipe **2 -1)/8
+       iae2 =int(iae/2)
+       iae3 =iae -iae2 *2
+       iae3 = iae3 +2
+       
+       
+       
+       
+       k = (-1)**iae3*k
+486    iae2 =((ide -1)*(ipe-1))/4       
+       iae3 =int(iae2/2)
+       iae4 =iae2-iae3 *2
+       iae4 =iae4 +2
+       k =(-1) **iae4 *k
+       ir=abs(ide)
+       print *,'r',ir,ipe
+       itemp=int(ipe/ir)
+       ide =ipe -itemp*ir
+       ipe = ir
+       print *,'pe',ipe,ide
+       goto 452
+510    if(ipe.eq.1)goto 513
+512    k =0
+513    print *,k,ipe
+       return
+       end
+       
+       subroutine sub516(ibprod,iaas,ipn,ip)
+       common iprod(200)
+       icoun =1
+       iq1 = ipn
+       if (iq1.eq.0)goto 604
+       i =1
+522    iprod(i) =iaas
+       i =i +1
+       if(i.lt.201)goto 522
+       i =1
+527    ibigi =1
+       j =1
+530    if(ibigi.gt.ipn)goto 560
+       if(ibigi.eq.ipn)goto 590
+       iprep =iprod(i)
+       iprod(i) =iprod(i) *iprod(i)
+       itemp =int(iprod(i)/ip)
+       irem1 =iprod(i) -ip *itemp
+       iprod(i)=irem1
+       ibigi =ibigi*2
+       j = j+1
+       if(j.lt.201)goto 530
+       print *,'jaze',j,i,iprep
+       goto 604
+560    ipn = ipn-int(ibigi/2)
+       iprod(i) =iprep
+       icoun =icoun +1
+       i =i +1
+       goto 527
+590    ibprod =iprod(1)
+       if(icoun.eq.1)goto 604
+       i =2
+594    ibprod =ibprod *iprod(i)
+       itemp= int(ibprod/ip)
+       irem1 =ibprod -itemp *ip
+       ibprod = irem1
+       i =i +1
+       if(i.lt.icoun+1)goto 594
+       goto 620
+604    itemp = mod(iaas,ip)
+       iaas =iaas -itemp * ip
+620    return
+       end

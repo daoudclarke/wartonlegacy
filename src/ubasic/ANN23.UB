@@ -1,0 +1,72 @@
+    8   P=7069
+   10   A=-820750
+   12   B=-1084125
+   14   C=-616750
+   16   R1=A*(C*C+2*A*B)+B*(2*B*C+2*A*B+A*A)+C*(2*A*C+B*B+A*A)+A*(2*A*C+B*B+A*A)
+   18   R2=B*(C*C+2*A*B)+C*(2*B*C+2*A*B+A*A)+A*(2*A*C+B*B+A*A)+A*(2*B*C+2*A*B+A*A)
+   20   R2=R2+B*(2*A*C+B*B+A*A)
+   22   R3=C*(C*C+2*A*B)+A*(2*B*C+2*A*B+A*A)+B*(2*A*C+B*B+A*A)
+   24   A11=2*A*C+B*B+A*A
+   26   A21=2*B*C+2*A*B+A*A
+   28   A31=C*C+2*A*B
+   30   A12=A
+   32   A22=B
+   34   A32=C
+   36   A13=0
+   38   A23=0
+   40   A33=1
+   42   X2=(R1*A21-R2*A11)/(A12*A21-A22*A11)
+   44   print "x2",X2
+   46   X1=(R1-X2*A12)/A11
+   48   print "x1",X1
+   50   X3=R3-X1*A31-X2*A32
+   52   X1=X1*(-1)
+   54   X2=X2*(-1)
+   56   X3=X3*(-1)
+   58   print "x1",X1,"x2",X2
+   60   print "x3",X3
+   62   print "r1",R1,"a11",A11,"a12",A12
+   64   print "r2",R2,"r3",R3
+   66   A=A
+   70   Itemp=int(X1/P)
+   72   Irem1=X1-Itemp*P
+   74   print "irem1",Irem1
+   76   Itemp=int(X2/P)
+   78   Irem2=X2-Itemp*P
+   80   print "irem2",Irem2
+   82   Itemp=int(X3/P)
+   84   Irem3=X3-Itemp*P
+   86   print "irem3",Irem3
+   88   for I=1 to P
+   90   Sum=I^3+I^2*Irem1+I*Irem2+Irem3
+  100   Div=int(Sum/P)
+  102   Irem=Sum-Div*P
+  104   if Irem>0 then goto 110
+  106   print "i",I
+  110   next I
+  112   Ch=A11*X1+A12*X2
+  114   print "ch",Ch,"r1",R1
+  116   Ch2=A21*X1+A22*X2
+  118   print "ch2",Ch2,"r2",R2
+  120   Ch3=A31*X1+A32*X2+X3
+  122   print "ch3",Ch3,"r3",R3
+  130   Sq1=sqrt(23/108)
+  132   print "sq1",Sq1
+  134   Cu1=(Sq1+0.5)^(1/3)
+  136   print "cu1",Cu1
+  138   Root1=Cu1+1/(3*Cu1)
+  140   print "root1",Root1
+  152   Equ=Root1^3-Root1-1
+  154   print "equ",Equ
+  160   Sol=Root1^2*A+Root1*B+C
+  162   Tot=Sol^3+Sol^2*X1+Sol*X2+X3
+  164   print "tot",Tot,"sol",Sol
+  170   print Sol^3
+  180   for I=1 to P
+  182   Itemp=I*830
+  184   Itemp2=int(Itemp/P)
+  186   Irem=Itemp-Itemp2*P
+  188   if Irem=1 then goto 194
+  190   next I
+  192   stop
+  194   print "i",I

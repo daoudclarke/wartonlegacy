@@ -1,0 +1,153 @@
+    2   input "code";N
+    3   input "what is the likely maximum prime as power of 10";Mr
+    6   Nr=10^(Mr*2)
+    8   Pow=log(log(Nr))
+   10   Pow=(log(Nr)*Pow)^0.5
+   12   Prn=exp(Pow)
+   14   Prn=Prn^(1/(2^0.5))
+   68   Aperm=4
+   69   Kxx=13
+   70   A11=3+2#i
+   72   A22=3-2#i
+   74   A12=A11*A22-1
+   76   A21=1
+   90   A=A
+  100   A=A
+  110   Ab=1
+  113   print "a11",A11,"prn",Prn,"kxx",Kxx
+  114   Prx1=nxtprm(Ab)
+  116   Ab=Prx1
+  118   if Ab>Prn then goto 500
+  121   Q=Ab
+  123   Q1=Q
+  125   L=int(Prn/Q)
+  128   if Q1>L then goto 131
+  129   Q1=Q1*Q
+  130   goto 128
+  131   print "q1",Q1
+  142   C11=A11
+  144   C12=A12
+  146   C21=A21
+  148   C22=A22
+  150   Iee=1
+  152   if Iee<Q1 then goto 160
+  154   if Iee=Q1 then goto 160
+  156   goto 170
+  160   Iee=Iee*2
+  162   goto 152
+  170   Iee=Iee/2
+  171   Itex=Q1-Iee
+  172   if Iee=1 then goto 230
+  173   B11=A11*A11+A12*A21
+  174   B12=A11*A12+A12*A22
+  176   B21=A21*A11+A22*A21
+  178   B22=A21*A12+A22*A22
+  179   A=A
+  180   Iee=Iee/2
+  181   gosub 1800
+  182   goto 196
+  184   Itemp=int(B12/N)
+  186   A12=B12-Itemp*N
+  188   Itemp=int(B21/N)
+  190   A21=B21-Itemp*N
+  192   Itemp=int(B22/N)
+  194   A22=B22-Itemp*N
+  196   if Itex<Iee then goto 172
+  198   Itex=Itex-Iee
+  200   B11=A11*C11+A12*C21
+  202   B12=A11*C12+A12*C22
+  204   B21=A21*C11+A22*C21
+  206   B22=A21*C12+A22*C22
+  208   gosub 1800
+  209   goto 172
+  210   A11=B11-Itemp*N
+  212   Itemp=int(B12/N)
+  214   A12=B12-Itemp*N
+  216   Itemp=int(B21/N)
+  218   A21=B21-Itemp*N
+  220   Itemp=int(B22/N)
+  222   A22=B22-Itemp*N
+  224   goto 172
+  230   Big=N
+  231   if re(A11)=1 then goto 113
+  232   Little=re(A11)-1
+  234   gosub 917
+  236   if Gcd2=N then goto 500
+  238   if Gcd2=0 then goto 500
+  240   if Gcd2=1 then goto 113
+  242   print "factor found",Gcd2
+  243   Cof=int(N/Gcd2)
+  244   print "co-factor=",Cof
+  245   print "a11",A11,"a12",A12
+  246   print "a21",A21,"a22",A22
+  248   stop
+  250   if A21=0 then goto 260
+  252   goto 114
+  260   if A22=1 then goto 270
+  262   goto 114
+  270   end
+  400   print "loop too short"
+  402   stop
+  447   *11447
+  500   Kxx=nxtprm(Kxx)
+  502   Itemp=int(Kxx/4)
+  504   Kll=Kxx-Itemp*4
+  506   if Kll=1 goto 512
+  508   Kxx=nxtprm(Kxx)
+  510   goto 502
+  512   I=1
+  514   J=1
+  516   if I^2+J^2=Kxx then goto 530
+  517   J=J+1
+  518   if J<101 then goto 516
+  519   I=I+1
+  520   J=1
+  521   if I<101 then goto 516
+  522   print "stophash"
+  524   stop
+  530   if I<J then goto 550
+  532   A11=I+J*(1#i)
+  534   A22=I-J*(1#i)
+  536   A12=A11*A22-1
+  538   A21=1
+  540   goto 90
+  550   A11=J+I*(1#i)
+  552   A22=J-I*(1#i)
+  554   goto 536
+  917   Itemp=int(Big/Little)
+  918   Irem=Big-Itemp*Little
+  919   if Irem=0 then goto 940
+  922   Big=Little
+  924   Little=Irem
+  926   goto 917
+  940   Gcd2=Little
+  942   return
+ 1800   Itempr=re(B11)
+ 1802   Itemp=int(Itempr/N)
+ 1804   Resr=Itempr-Itemp*N
+ 1806   Itempi=im(B11)
+ 1808   Itemp=int(Itempi/N)
+ 1810   Resi=Itempi-Itemp*N
+ 1812   A11=Resr+Resi*(1#i)
+ 1814   Itempr=re(B12)
+ 1816   Itemp=int(Itempr/N)
+ 1818   Resr=Itempr-Itemp*N
+ 1820   Itempi=im(B12)
+ 1822   Itemp=int(Itempi/N)
+ 1824   Resi=Itempi-Itemp*N
+ 1826   A12=Resr+Resi*(1#i)
+ 1828   Itempr=re(B21)
+ 1830   Itemp=int(Itempr/N)
+ 1832   Resr=Itempr-Itemp*N
+ 1834   Itempi=im(B21)
+ 1836   Itemp=int(Itempi/N)
+ 1838   Resi=Itempi-Itemp*N
+ 1840   A21=Resr+Resi*(1#i)
+ 1842   Itempr=re(B22)
+ 1844   Itemp=int(Itempr/N)
+ 1846   Resr=Itempr-Itemp*N
+ 1848   Itempi=im(B22)
+ 1850   Itemp=int(Itempi/N)
+ 1852   Resi=Itempi-Itemp*N
+ 1854   A22=Resr+Resi*(1#i)
+ 1856   return

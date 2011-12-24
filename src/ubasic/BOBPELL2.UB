@@ -1,0 +1,165 @@
+    4   input "size";Apar
+    5   input "search start";Dtfirs
+    6   input "mod";Nfirs
+    7   input "search end";Dtlim
+    8   goto 200
+    9   Y=1
+   10   Isw1=0
+   11   N=Nfirs*Dtfirs
+   12   Nrt=sqrt(N)
+   14   Nrt=int(Nrt)
+   16   print "nrt",Nrt
+   17   A0=Nrt
+   19   Q=1
+   20   P=0
+   21   Inrt=Nrt
+   22   P=(P-Inrt*Q)*(-1)
+   24   Q=(N-P^2)/Q
+   26   A=A
+   28   Inrt=(P+Nrt)/Q
+   30   Inrt=int(Inrt)
+   32   A1=Inrt
+   34   Pm2=A0
+   36   Pm1=A1*A0+1
+   38   Qm2=1
+   39   Qm1=A1
+   40   A1=Inrt
+   41   if abs(Pm2^2-N*Qm2^2)<Apar then goto 110
+   42   if abs(Pm1^2-N*Qm1^2)<Apar then goto 120
+   44   I=1
+   46   P=(P-Inrt*Q)*(-1)
+   48   Q=(N-P^2)/Q
+   49   Inrt=(P+Nrt)/Q
+   50   Inrt=int(Inrt)
+   52   Ann=Inrt
+   54   Pm0=Ann*Pm1+Pm2
+   56   Qm0=Ann*Qm1+Qm2
+   57   A=A
+   58   if abs(Pm0^2-N*Qm0^2)<Apar then goto 100
+   60   Pm2=Pm1
+   62   Pm1=Pm0
+   64   Qm2=Qm1
+   66   Qm1=Qm0
+   68   I=I+1
+   69   if I<801 then goto 46
+   70   print "loop too small"," dtt",Dtt
+   72   goto 300
+  100   print "dtt",Dtt
+  101   if Pm0^2-N*Qm0^2>0 then goto 60
+  102   Xx=Pm0
+  103   Dt=(Pm0^2-N*Qm0^2)*(-1)
+  104   goto 130
+  110   print "dtt",Dtt
+  111   if Pm2^2-N*Qm2^2>0 then goto 42
+  112   Xx=Pm2
+  113   Dt=(Pm2^2-N*Qm2^2)*(-1)
+  114   goto 130
+  120   print "dtt,Dtt"
+  121   if Pm1^2-N*Qm1^2>0 then goto 44
+  122   Xx=Pm1
+  123   Dt=(Pm1^2-N*Qm1^2)*(-1)
+  130   if Isw1=1 then goto 140
+  131   print "xx",Xx
+  132   Ib=Xx
+  133   Kxx=Xx
+  134   A=A
+  135   goto 142
+  140   Ib=N-Xx
+  141   Kxx=Ib
+  142   Ia=N
+  143   if Ib=Nrt then goto 160
+  144   if Ib<Nrt then goto 160
+  146   Itemp=int(Ia/Ib)
+  148   Irem=Ia-Itemp*Ib
+  150   Ia=Ib
+  152   Ib=Irem
+  154   goto 143
+  160   A=A
+  162   A=N
+  164   B=Xx
+  165   goto 900
+  166   gosub 800
+  168   print "vlater",V
+  170   Itemp=V*Ib/Gcd2
+  172   Itemp2=int(Itemp/N)
+  174   Yy=Itemp-Itemp2*N
+  176   Vvcomp=Ib^2+Dt*Yy^2
+  178   if Vvcomp>Vvmin then goto 190
+  180   Vvmin=Vvcomp
+  182   Yymin=Yy
+  184   Xxmin=Ib
+  186   Dtres=Dt
+  188   Mulres=Dtt
+  190   if Isw1=1 then goto 300
+  192   Isw1=1
+  194   goto 140
+  200   A=A
+  202   A=A
+  204   A=A
+  206   Vvmin=10^200
+  208   Dtt=Dtfirs
+  210   N=N*Dt
+  212   goto 9
+  300   if Dtt=Dtlim then goto 400
+  302   Dtt=Dtt+1
+  304   N=Nfirs*Dtt
+  306   Y=1
+  308   Isw1=0
+  310   goto 12
+  400   print "xxmin",Xxmin,"dtres",Dtres,"yymin",Yymin
+  402   print "vvmin",Vvmin/Nfirs,"Nfirs",Nfirs,"mult",Mulres
+  404   end
+  800   if B<0 then goto 804
+  802   goto 810
+  804   B=B+A
+  810   U=1
+  811   D=A
+  812   if B=0 then goto 888
+  813   V1=0
+  814   V3=B
+  815   if V3=0 then goto 828
+  816   Qq=int(D/V3)
+  817   T3=D-Qq*V3
+  818   T1=U-Qq*V1
+  819   U=V1
+  820   D=V3
+  821   V1=T1
+  822   V3=T3
+  823   goto 815
+  828   if D>1 then goto 890
+  830   V=(D-A*U)/B
+  831   goto 860
+  840   V=0
+  850   A=A
+  860   if U=0 then goto 870
+  862   if U<0 then goto 870
+  863   V=V*(1-A)
+  864   V=int(V)
+  865   A=A
+  866   Temp=int(V/A)
+  869   V=V-Temp*A
+  870   A=A
+  872   goto 890
+  888   V=B
+  890   return
+  900   Itemp=int(Xx/N)
+  902   B=Xx-Itemp*N
+  903   print "b",B,"a",A
+  904   Big=A
+  906   Little=B
+  908   Itemp=int(Big/Little)
+  910   Irem=Big-Itemp*Little
+  912   if Irem=0 then goto 940
+  914   Big=Little
+  916   Little=Irem
+  918   goto 908
+  940   Gcd2=Little
+  941   print "gcd2",Gcd2
+  942   if Gcd2=1 then goto 166
+  944   Itemp=int(Ib/Gcd2)
+  946   Irem=Ib-Itemp*Gcd2
+  947   if Irem=0 then goto 950
+  948   goto 300
+  950   A=A/Gcd2
+  952   B=B/Gcd2
+  954   goto 166

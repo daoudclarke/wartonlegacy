@@ -1,0 +1,30 @@
+   10   for I=1 to 43158
+   12   N1=11797*I*2
+   14   Item=int(N1/43159)
+   16   Irem=N1-Item*43159
+   18   if Irem=1 then goto 40
+   20   next I
+   22   print "error"
+   24   stop
+   40   print "i",I
+   50   N2=(43159-32121+39511)*I
+   52   Item=int(N2/43159)
+   54   N3=N2-Item*43159
+   56   print "n3",N3
+   60   Ia0=2774485699
+   62   Ia1=1037288717
+   64   Ia2=1295337210
+   66   Ia3=785872630
+   68   Ia4=359019090
+   70   Ia5=789844842
+   72   N4=Ia5*N3^5+Ia4*N3^4+Ia3*N3^3+Ia2*N3^2+Ia1*N3+Ia0
+   74   N5=N4/43159
+   76   print "n5",N5
+   80   N6=32121^2-4*11797*39181
+   82   print "n6",N6
+   84   N7=abs(N6)
+   86   print "n7",N7
+   88   Item=int(N7/43159)
+   90   N8=N7-Item*43159
+   92   N9=43159-N8
+   94   print "n9",N9

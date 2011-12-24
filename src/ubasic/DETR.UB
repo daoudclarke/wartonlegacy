@@ -1,0 +1,54 @@
+   10   word -100:'DETR
+   20   print "Determinant of a rational matrix":print
+   30   input "degree ";N:dim A(N,N):print
+   40   gosub *InputMatrix(&A(),N)
+   50   print "matrix :":print
+   60   gosub *PrintMatrix(&A(),N)
+   70   Det=fnDetRat(A(),N)
+   80   print:print "Determinant :":print:print spc(2);Det:print
+   90   end
+  100   '
+  110   '
+  120   *InputMatrix(&A(),N)
+  130   local I,J,A
+  140   print "Input by separating each term by comma.(ex. 2//11,1//3,5//3) ":print
+  150   for I=1 to N
+  160     print I;"-th row";:strinput "  ";A
+  170     for J=1 to N:A(I,J)=val(member(A,J)):next J
+  180   next I:print
+  190   return
+  200   '
+  210   *PrintMatrix(&A(),N)
+  220   local I,J,A,P=0
+  230   for I=1 to N
+  240     for J=1 to N
+  250       P=max(P,len(str(A(I,J))))
+  260     next J
+  270   next I:P+=1
+  280   for I=1 to N
+  290     for J=1 to N:A=A(I,J)
+  300       print spc(P-len(str(A)));A;
+  310     next J:print
+  320   next I
+  330   return
+  340   '
+  350   'fnDetRat
+  360   '  out : determinant of a rational matrix
+  370   '  in  : matrix,degree : passed by values
+  380   '  destroy : nothing
+  390   fnDetRat(A(),N)
+  400      local Det=1,R,I,J,A,C
+  410   for R=1 to N
+  420     if A(R,R) then 480
+  430     for I=R+1 to N
+  440       if A(I,R) then cancel for:goto 470
+  450     next
+  460     cancel for:return(0)
+  470     neg Det:swap block A(R,R..N),A(I,R..N)
+  480     A=A(R,R):Det*=A
+  490     for I=R+1 to N
+  500       C=A(I,R)//A
+  510       for J=R+1 to N:A(I,J)-=C*A(R,J):next
+  520     next
+  530   next
+  540   return(Det)

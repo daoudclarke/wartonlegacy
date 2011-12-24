@@ -1,0 +1,29 @@
+    1   dim Prod(10)
+    6   N=14732265321145317331353282383
+    7   J=1
+    8   Ab=2
+   10   J=1
+   12   Prm=nxtprm(Ab)
+   13   Ab=Prm
+   14   Prod(1)=Prm
+   15   I=0
+   16   I=I+1
+   18   if I>8 then goto 30
+   20   Prod(I+1)=Prod(I)*Prod(I)
+   21   Prodd=Prod(I+1)
+   22   Temp=int(Prodd/N)
+   24   Prod(I)=Prodd-Temp*N
+   25   print Prod(I)
+   26   goto 16
+   30   Prodd=Prod(8)*Prod(7)*Prod(1)
+   32   Temp=int(Prodd/N)
+   34   Bprod=Prodd-Temp*N
+   35   if Bprod=1 then goto 60
+   36   print Prodd
+   37   J=J+1
+   38   if J<15000 then goto 12
+   40   print "not found"
+   42   end
+   60   print "congruence",Prm
+   61   Temp=Temp*2+1
+   62   end

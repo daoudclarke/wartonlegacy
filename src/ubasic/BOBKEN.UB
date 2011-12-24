@@ -1,0 +1,76 @@
+   10   dim Mult1(6),Mult2(6),Mult3(12),Isol(6),Mpol(6),Kbper(6)
+   11   Idd=5
+   12   Kbper(1)=387
+   14   Kbper(2)=310
+   16   Kbper(3)=393
+   18   Kbper(4)=154
+   20   Kbper(5)=129
+   22   Ipd=109*109
+   23   Mpol(1)=1
+   24   Mpol(2)=557-118
+   26   Mpol(3)=557-349
+   28   Mpol(4)=557-66
+   30   Mpol(5)=557-286
+   32   Mpol(6)=557-208
+   34   Ipd=557
+   36   Isol(1)=294
+   38   Isol(2)=506
+   40   Isol(3)=437
+   42   Isol(4)=95
+   44   Isol(5)=409
+  100   for I=1 to Idd
+  102   Mult1(I)=Isol(I)
+  104   Mult2(I)=Kbper(I)
+  106   next I
+  108   gosub 1000
+  109   print Mult1(1),Mult1(2),Mult1(3),Mult1(4),Mult1(5)
+  110   for I=1 to Idd
+  111   stop
+  112   Mult2(I)=Kbper(I)
+  114   next I
+  116   gosub 1000
+  118   for I=1 to Idd-1
+  120   Mult1(I)=Ipd-Mult1(I)
+  122   next I
+  124   Mult1(Idd)=3-Mult1(Idd)
+  126   if Mult1(Idd)=0 goto 132
+  128   if Mult1(Idd)>0 goto 132
+  130   Mult1(Idd)=Mult1(Idd)+Ipd
+  132   for I=1 to Idd
+  134   Mult2(I)=Isol(I)
+  136   next I
+  138   gosub 1000
+  140   Jpow=int(Ipd/2)+1
+  142   for I=1 to Idd
+  144   Isol(I)=Isol(I)*Jpow
+  146   Item=int(Isol(I)/Ipd)
+  148   Isol(I)=Isol(I)-Item*Ipd
+  149   print "isol",Isol(I)
+  150   next I
+  152   end
+ 1000   for I=1 to 12
+ 1002   Mult3(I)=0
+ 1003   next I
+ 1004   for I=1 to 5
+ 1005   for J=1 to 5
+ 1006   Mult3(I+J-1)=Mult3(I+J-1)+Mult1(I)*Mult2(J)
+ 1008   Item=int(Mult3(I+J-1)/Ipd)
+ 1010   Mult3(I+J-1)=Mult3(I+J-1)-Item*Ipd
+ 1012   next J
+ 1014   next I
+ 1015   print Mult3(1),Mult3(2),Mult3(3),Mult3(4),Mult3(5)
+ 1016   for J=1 to 4
+ 1018   Mul=Mult3(J)
+ 1020   for I=1 to Idd
+ 1022   Mult3(J)=0
+ 1024   Mult3(I+J)=Mult3(I+J)+Mul*Mpol(I+1)
+ 1026   Item=int(Mult3(I+J)/Ipd)
+ 1028   Mult3(I+J)=Mult3(I+J)-Item*Ipd
+ 1030   next I
+ 1031   print Mult3(1),Mult3(2),Mult3(3),Mult3(4),Mult3(5),Mult3(6),Mult3(7)
+ 1032   print Mult3(8),Mult3(9)
+ 1033   next J
+ 1034   for I=1 to Idd
+ 1036   Mult1(I)=Mult3(I-1+Idd)
+ 1038   next I
+ 1040   return

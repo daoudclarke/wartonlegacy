@@ -1,0 +1,58 @@
+    4   A=A
+    6   input "mod";N
+    8   A=A
+    9   Y=1
+   10   Con=0
+   11   A=A
+   12   Nrt=sqrt(N)
+   14   Nrt=int(Nrt)
+   16   print "nrt",Nrt
+   19   Q=1
+   20   P=0
+   21   Inrt=Nrt
+   22   P=(P-Inrt*Q)*(-1)
+   23   Con=Con+1
+   24   Q=(N-P^2)/Q
+   26   if P^2+Q^2=N then goto 40
+   28   Inrt=(P+Nrt)/Q
+   30   Inrt=int(Inrt)
+   32   goto 22
+   40   print "p",int(P),"q",int(Q),"con",Con
+   42   stop
+   50   M=(X^2+1)/N
+   51   print "m",M
+   52   Itemp=int(X/M)
+   54   Xa=X-Itemp*M
+   55   Xb=Xa-M
+   56   Itemp=int(Y/M)
+   57   Ya=Y-Itemp*M
+   58   Xz=abs(Xb)
+   60   goto 138
+   62   X2=(Xa*X+Y*Ya)/M
+   64   Y2=(X*Ya-Xa*Y)/M
+   65   if X2^2+Y2^2=N then goto 100
+   66   X=X2
+   67   M=(X2^2+Y2^2)/N
+   68   X=X2
+   69   print "m",M,"x2",X2,"y2",Y2,"xa",Xa,"xb",Xb
+   70   Y=Y2
+   71   Con=Con+1
+   72   if Con<3 then goto 52
+   73   goto 52
+   80   X2=(Xb*X+1)/M
+   82   Y2=(X-Xb)/M
+   84   goto 66
+  100   X2=abs(X2)
+  101   X2=int(X2)
+  102   Y2=abs(Y2)
+  103   Y2=int(Y2)
+  105   print "x",X2,"y",Y2
+  106   stop
+  120   print "x",X,"y",Y
+  122   stop
+  138   if M=1 then goto 120
+  140   if Xa*2<M then goto 150
+  142   Xa=Xa-M
+  150   if 2*Ya<M then goto 62
+  152   Ya=Ya-M
+  154   goto 62

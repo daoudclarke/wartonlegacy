@@ -1,0 +1,10 @@
+   10   N=34720401669540098819891283826314003404513999
+   12   Jvv=1091298128090447848840368851883084030594837
+   14   Ndiv=int(N/1000)
+   16   Iahit=988*Ndiv
+   18   Itemp=Jvv*988*Ndiv
+   20   Jvv2=int(Itemp/N)
+   22   Ibhit=Itemp-Jvv2*N
+   24   Irat=Iahit/Ibhit
+   26   print "good",Iahit,Ibhit,Irat
+   28   end

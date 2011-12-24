@@ -1,0 +1,59 @@
+   10   dim Loc1(50)
+   12   N=61
+  100   K=1
+  102   Num=(N*K)^0.5
+  104   A0=int(Num)
+  106   Rem2=Num-A0
+  108   A1=int(1/Rem2)
+  110   Rem2=1/Rem2-A1
+  112   Pn2=A0
+  114   Pn1=A1*A0+1
+  116   Qn2=1
+  118   Qn1=A1
+  120   Acurr2=A0
+  122   Acurr1=A1
+  124   I=1
+  126   Acurr=int(1/Rem2)
+  127   print Acurr
+  128   Rem2=1/Rem2-Acurr
+  130   Pcurr=Acurr*Pn1+Pn2
+  132   Qcurr=Acurr*Qn1+Qn2
+  133   Cfr=Pcurr/Qcurr
+  135   Pn2=Pn1
+  136   Qn2=Qn1
+  138   Pn1=Pcurr
+  140   Qn1=Qcurr
+  141   I=I+1
+  143   if Rem2=0 then goto 146
+  144   if I>20 then goto 210
+  146   Litd=Pcurr^2-Qcurr^2*N*K
+  147   Litd2=Litd
+  150   J=1
+  152   Loc1(J)=0
+  154   J=J+1
+  156   if J<51 then goto 152
+  158   Ab=1
+  160   J=1
+  162   Prx1=nxtprm(Ab)
+  164   Ab=Prx1
+  166   Temp=int(Litd/Ab)
+  168   Rem1=Litd-Temp*Ab
+  169   if Temp=0 then goto 186
+  170   if Rem1>0 then goto 180
+  172   Loc1(J)=Loc1(J)+1
+  174   Litd=Temp
+  178   goto 166
+  180   J=J+1
+  182   if J<51 then goto 162
+  184   goto 200
+  186   J=J
+  188   J2=1
+  190   if Loc1(J2)=0 then goto 194
+  192   print Num,Litd2,J2,Loc1(J2)
+  194   J2=J2+1
+  196   if J2<51 then goto 190
+  200   if Rem2>0 then goto 126
+  210   K=K+1
+  212   if K<1 then goto 102
+  214   print "endwell"
+  216   end

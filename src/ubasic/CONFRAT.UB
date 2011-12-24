@@ -1,0 +1,11 @@
+   10   *Confrat(&C(),Leng,&A,&B)
+   15   ' Converts a finite continued fraction to a rational a/b.
+   20   ' C() is an input parameter, passed by reference for efficiency.
+   30   ' Modeled on the Pascal version.
+   40   ' 3 May 1990
+   50   local H1=0,H2=1,K1=1,K2=0,Te,I
+   60   for I=0 to Leng
+   70   Te=H1+H2*C(I):H1=H2:H2=Te
+   80   Te=K1+K2*C(I):K1=K2:K2=Te
+   90   next I
+  100   A=H2:B=K2:return ' End of Subroutine Confrat

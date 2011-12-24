@@ -1,0 +1,19 @@
+   10   *Gpcftoq(&Cf(),Leng1,Leng2,&A,&B,&C)
+   20   ' General periodic continued fraction to quadratic irrational.
+   30   ' Modeled on the Pascal version.
+   40   ' 8 May 1990
+   60   local H=0,Hh=1,K=1,Kk=0,P=0,Pp=1,Q=1,Qq=0,Te,I
+   70   for I=0 to Leng1
+   80   Te=P+Pp*Cf(I):P=Pp:Pp=Te
+   90   Te=Q+Qq*Cf(I):Q=Qq:Qq=Te
+  100   next I
+  110   for I=Leng1+1 to Leng2
+  120   Te=H+Cf(I)*Hh:H=Hh:Hh=Te
+  130   Te=K+Cf(I)*Kk:K=Kk:Kk=Te
+  140   next I
+  150   A=Q*Q*Kk+Qq*(Q*(Hh-K)-H*Qq)
+  160   B=P*(K*Qq-2*Q*Kk-Hh*Qq)+Pp*(Q*K-Q*Hh+2*H*Qq)
+  170   C=P*(P*Kk-K*Pp+Pp*Hh)-H*Pp*Pp
+  180   Te=gcd(A,B):Te=gcd(Te,C)
+  190   A=A\Te:B=B\Te:C=C\Te
+  200   return ' End of subroutine Gpcftoq.

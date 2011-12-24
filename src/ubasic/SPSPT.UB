@@ -1,0 +1,16 @@
+   10   fnSpspt(N,B)
+   15   ' Strong pseudoprime test of N using witness B.  21 May 1990.
+   20   local Q,M,I,Count=0,F%=0
+   30   if N<2 then return(0) endif
+   40   M=N-1
+   50   repeat Q=M\2:if not res then M=Q:inc Count endif
+   70   until res
+   80   ' Now n-1 = (2^count)*m with m odd.
+   90   Q=modpow(B,M,N):if Q=0 then return(0) endif
+  110   if or{Q=1,Q=N-1} then F%=1 else I=1
+  120   :while and{I<Count,F%=0}
+  130   :Q=(Q*Q)@N
+  140   :if Q=N-1 then F%=1 else if Q=1 then I=Count endif endif
+  150   :inc I
+  160   :wend endif
+  170   return(F%) 'End of function Spspt

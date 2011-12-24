@@ -1,0 +1,154 @@
+   10   ' REALQF3  based on REALQF version 2.3
+   20   ' 1st version         by Y.KIDA
+   30   ' corrected & revised by A.KUDO & Y.KIDA
+   40   '
+   50   word 3
+   60   OF=2^23:CR%=2^15-1:XF=32000:UN%=200
+   70   dim X(XF+1)
+   80   print:print "実二次体の基本単数及び類数"
+   90   print "単数は標準整数基の係数で表示"
+  100   *INPUT:print:input "ルートの中身=";M
+  110   clr time
+  120   if M<2 then end
+  130   if M-97>2^36 then print "大き過ぎます":goto 100
+  140   if and{M@4<>1,M-25>2^34} then print "大き過ぎます":goto 100
+  150   if fnSqDiv(M)>1 then print "平方因子があります":goto 100
+  160   gosub *RealQuadratic(M)
+  170   if UB# then print "基本単数は (";UA#;",";UB#;")"
+  180   print "類数は     ";H
+  190   print "( F=";F;")";tab(20);time
+  200   goto *INPUT
+  210   '
+  220   'PART1
+  230   '
+  240   *RealQuadratic(M)
+  250   D=M:if M@4<>1 then D=4*M
+  260   '
+  270   'PART 2 : 既約二次無理数を登録(半数のみ)
+  280   '
+  290   F=0:QD=isqrt(D)
+  300   A=QD:if odd(D-A) then A=A-1
+  310   DA#=pack(0):DD#=DA#:F0=F+1:IP=0
+  320   loop
+  330     if A<=0 goto *EXPAND_IN
+  340     IA=(QD-A)\2:Y=(D-A^2)\4
+  350     QY=isqrt(Y):W=Y:Z=1:P=1:Q=0:goto 390
+  360     '
+  370     '必要な素因数(1を含む)と被除数を取得
+  380     '
+  390     while Z<=IA:P=prmdiv(W):if P>QY goto 730 endif:Z*=P:W\=P:wend
+  400     loop
+  410       inc IP:member(DA#,IP)=P:member(DD#,IP)=Z:Q=P
+  420       P=prmdiv(W):if P=W goto 450
+  430       Z*=P:W\=P:if P=Q then member(DD#,IP)=Z:goto 420
+  440     endloop
+  450     if P>QY then 490 else Z=Y:if P=Q then dec IP endif:goto 510
+  460     '
+  470     '取得した最後の素数を含む既約二次無理数を登録
+  480     '
+  490     P=member(DA#,IP):Z=member(DD#,IP):dec IP
+  500     J=Z:if odd(Z) then P=P*2 endif:goto 520
+  510     J=QY-QY@P:if odd(Z) then J=J-P*even(J):P=P*2
+  520     if CR%<P goto *ENTR1
+  530     for C=J to IA+1 step -P
+  540       if Z@C else inc F:X(F)=A*OF+2*C
+  550     next
+  560     if IP then 600 else 720
+  570     '
+  580     '取得した残りの素数を含む既約二次無理数を登録
+  590     '
+  600     P=member(DA#,IP):Z=member(DD#,IP):dec IP
+  610     if Z<=QY then J=Z:if odd(Z) then P=P*2 endif:goto 630
+  620     J=QY-QY@P:if odd(Z) then J=J-P*even(J):P=P*2
+  630     FI=F0
+  640     if CR%<P goto *ENTR2
+  650     for C=J to IA+1 step -P:if Z@C goto 700
+  660       X=A*OF+2*C
+  670       while FI<=F:if X<X(FI) then inc FI else 690 endif:wend
+  680       inc FI:inc F:X(F)=X:goto 700
+  690       inc FI:inc F:for I=F to FI step -1:X(I)=X(I-1):next:X(I)=X
+  700     next
+  710     if IP then 600
+  720     F0=F+1
+  730     A=A-2
+  740   endloop
+  750   '
+  760   *ENTR1
+  770     while IA<J
+  780       if Z@J else inc F:X(F)=A*OF+2*J
+  790       J=J-P
+  800     wend
+  810     goto 560
+  820   '
+  830   *ENTR2
+  840     while IA<J:if Z@J goto 890
+  850       X=A*OF+2*J
+  860       while FI<=F:if X<X(FI) then inc FI else 880 endif:wend
+  870       inc FI:inc F:X(F)=X:goto 890
+  880       inc FI:inc F:for I=F to FI step -1:X(I)=X(I-1):next:X(I)=X
+  890       J=J-P
+  900     wend
+  910     goto 710
+  920   '
+  930   'PART 3 : 連分数展開して分類
+  940   '         最初は基本単数も同時に計算
+  950   '
+  960   *EXPAND_IN
+  970   P=(F+1)\2:Q=F-P:Z=P+1:W=X(P):X(F+1)=0
+  980   H=0:II=1:N=1
+  990   X0=X(II):A=X0\OF:C=res
+ 1000   UA#=A:UB#=1:UC#=C
+ 1010   '
+ 1020   loop
+ 1030     C0=C:A=QD-(A+QD)@C:C=(D-A^2)\C
+ 1040     if C>C0 goto 1090:'登録しなかった分
+ 1050     X=A*OF+C
+ 1060     if X=X0 goto *EXP1_END:'展開が循環
+ 1070     if X<W then I=find(X,X(Z),Q)+Z else I=find(X,X(1),P)+1
+ 1080     inc X(I):'同じ類にあるものは抹消
+ 1090     WA#=UA#*A+UB#*D:WB#=UA#+UB#*A:WC#=UC#*C
+ 1100     G#=gcd(WA#,gcd(WB#,WC#))
+ 1110     UA#=WA#\G#:UB#=WB#\G#:UC#=WC#\G#
+ 1120     inc N:if N>UN% then UA#=0:UB#=0:goto 1150
+ 1130   endloop
+ 1140   '
+ 1150   loop
+ 1160     C0=C:A=QD-(A+QD)@C:C=(D-A^2)\C:if C>C0 goto 1200
+ 1170     X=A*OF+C:if X=X0 goto *ALLDONE?
+ 1180     if X<W then I=find(X,X(Z),Q)+Z else I=find(X,X(1),P)+1
+ 1190     inc X(I)
+ 1200     inc N
+ 1210   endloop
+ 1220   '
+ 1230   *EXP1_END
+ 1240   if D@4 then
+ 1250     :if UC#<>2 then UA#=2*UA#:UB#=2*UB# endif
+ 1260     :UA#=(UA#-UB#)\2
+ 1270   :else
+ 1280     :if UC#=1 then UB#=2*UB# else UA#=UA#\2 endif
+ 1290   :endif
+ 1300   '
+ 1310   *ALLDONE?
+ 1320   repeat:inc II:until even(X(II))
+ 1330   inc H:if II<=F goto *NEXT_CLASS
+ 1340   if N@2 then H=-H
+ 1350   return
+ 1360   '
+ 1370   *NEXT_CLASS
+ 1380   X0=X(II):A=X0\OF:C=res
+ 1390   '
+ 1400   loop
+ 1410     repeat:C0=C:A=QD-(A+QD)@C:C=(D-A^2)\C:until C<=C0
+ 1420     X=A*OF+C:if X=X0 goto *ALLDONE?
+ 1430     if X<W then I=find(X,X(Z),Q)+Z else I=find(X,X(1),P)+1
+ 1440     inc X(I)
+ 1450   endloop
+ 1460   '
+ 1470   ' get a square divisor
+ 1480   '
+ 1490   fnSqDiv(N)
+ 1500     local SD
+ 1510     SD=prmdiv(N):if SD=0 then 1530 else if SD=N then SD=1:goto 1540
+ 1520     N=N\SD:if N@SD then 1510 else 1540
+ 1530     SD=isqrt(N):if SD^2<>N then SD=1
+ 1540   return(SD)

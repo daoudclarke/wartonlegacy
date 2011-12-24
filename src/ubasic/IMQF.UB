@@ -1,0 +1,35 @@
+   10   ' File name " IMQF "
+   20   '        1987 by T.AZUHATA
+   30   '
+   40   print:print " * Class numbers of imaginary quadratic fields"
+   50         print "   (counting points in the fundamental domain)"
+   60   *NEXT_N
+   70    print:input "Absolute value inside the square root=";N
+   80    if N<=0 then end
+   90    if N<4 then H=1:goto 130
+  100    if N>3*2^30 then print "Too big.":goto *NEXT_N
+  110    if fnSqDiv(N)>1 then print:print "It has a square divisor.":goto *NEXT_N
+  120    H=fnClassImqf(N)
+  130    print:locate 10:print "Class number =";H
+  140   goto *NEXT_N
+  150   '
+  160   fnClassImqf(N)
+  170   local A,B,BE,D,H
+  180    if N@4=3 then D=N:B=1 else D=4*N:B=0
+  190    clr H
+  200    for B=B to isqrt(D\3) step 2
+  210       BE=(B^2+D)\4
+  220       for A=max(1,B) to isqrt(BE)
+  230          if BE@A=0 then inc H
+  240            :if and{B,A<>B,A^2<>BE} then inc H
+  250       next
+  260    next
+  270   return(H)
+  280   '
+  290   ' get a square divisor
+  300   '
+  310   fnSqDiv(N)
+  320   local SD
+  330    SD=prmdiv(N):N=N\SD
+  340    if N=1 then SD=1 else if N@SD then 330
+  350   return(SD)

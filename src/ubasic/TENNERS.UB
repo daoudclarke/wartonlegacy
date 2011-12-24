@@ -1,0 +1,17 @@
+   10   *Tenners(N,&A(),&Leng,&F,&Oddd)
+   20   ' Symmetric part of the continued fraction of n^(1/2). (A half period.)
+   30   ' Modeled on the Pascal version.
+   40   ' 3 May 1990
+   60   local Ub%=200,U,Uu,V,Vv,Sqn
+   70   if N<1 then Leng=-1:return endif
+   80   F=1:Leng=0:Sqn=isqrt(N):A(0)=Sqn
+   90   U=N-Sqn*Sqn:if U=0 then return endif
+  110   V=Sqn
+  120   repeat
+  130   Vv=V:Uu=U:inc Leng
+  140   if Leng>Ub% then dec Leng:F=0:return endif
+  150   A(Leng)=(Sqn+V)\U:V=U*A(Leng)-V
+  160   U=(N-V*V)\U
+  170   until or{V=Vv,U=Uu}
+  180   if (V=Vv) then Oddd=1 else Oddd=0 endif
+  190   return ' End of subroutine Tenners.

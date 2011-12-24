@@ -1,0 +1,91 @@
+   10   'PPMP3B version 2.0
+   20   '
+   30   '  factorization by PPMPQS
+   40   '        1991/92 by Yuji KIDA
+   50   '
+   60   word -23:point -2
+   70   '
+   80   Drv$=""
+   90   '
+  100   Pc$#=version
+  110   if instr(Pc$#,"PC9801") then PC=0
+  120   :elseif instr(Pc$#,"IBM-PC") then PC=1
+  130   :elseif instr(Pc$#,"FMR") then PC=2
+  140   :else PC=10
+  150   '
+  160   'enable 20-31 bit address lines
+  170   if PC=0 then
+  180     :out 0xf2,0
+  190     :out 0xf2,0
+  200   :elseif PC=1 then
+  210     :out 0x64,0xd1:while bit(1,inp(0x64)) wend
+  220     :out 0x60,0xdf:while bit(1,inp(0x64)) wend
+  230     :out 0x64,0xff:while bit(1,inp(0x64)) wend
+  240   :elseif PC=2 then
+  250     :out 0x24,1
+  260     :out 0x24,1
+  270   :else
+  280     :print "not yet supported":end
+  290   :endif
+  300   '
+  310   print:print "3b. make the decomposition file";:locate 56:print date
+  320   '
+  330   '  read data
+  340   '
+  350   *ReadParam
+  360   open Drv$+"PPMPCONT" for input as #1:input #1,MSG$:close #1
+  370   open Drv$+"PPMPDAT1" for input as #1
+  380     input #1,MSG$:print MSG$
+  390     input #1,N
+  400     input #1,SZ:NP=SZ-1
+  410     input #1,SieveWidth
+  420     input #1,KX:WN=N*KX:WNhalf=WN\2
+  430     input #1,IniLog
+  440     input #1,Scale
+  450     input #1,CutLog
+  460   close #1
+  470   '
+  480   dim MP%(7000)
+  490   bload "PPMP3b",MP%()
+  500   '
+  510   MP%(0)=0:MP%(1)=SZ\2:call MP%(P,C#)
+  520   '
+  530   gosub *SetPrimes
+  540   '
+  550   open Drv$+"PPMP-FX" for input as #1
+  560   FXs=0
+  570   while not eof(1)
+  580     inc FXs:print chr(13);SZ-FXs;
+  590     input #1,X,C#
+  600     MP%(0)=2:call MP%():if MP%(0)=-1 then 910
+  610   wend
+  620   print chr(13);"    ";chr(13);
+  630   close #1
+  640   MP%(0)=3:call MP%()
+  650   '
+  660   run "ppmp4a"
+  670   '
+  680   '  select P such that N is a quadratic residue mod P
+  690   '
+  700   *SetPrimes
+  710   P=1:MP%(0)=1:call MP%():if MP%(0)=-1 then 910
+  720   P=2:MP%(0)=1:call MP%():if MP%(0)=-1 then 910
+  730   Ct=2
+  740   for J=2 to 12251
+  750     P=prm(J)
+  760     if kro(WN,P)<>-1 then
+  770       :inc Ct
+  780       :MP%(0)=1:call MP%():if MP%(0)=-1 then 910 endif
+  790       :if Ct>=SZ then cancel for:jump
+  800   next
+  810   '
+  820   while Ct<SZ
+  830     P=nxtprm(P)
+  840     if kro(WN,P)<>-1 then
+  850       :inc Ct
+  860       :MP%(0)=1:call MP%():if MP%(0)=-1 then 910 endif
+  870   wend
+  880   **
+  890   return
+  900   '
+  910   print "disk error":beep:stop:end

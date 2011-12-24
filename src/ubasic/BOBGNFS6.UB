@@ -1,0 +1,231 @@
+   10   dim Umew(6,5),Ibar(6,5),Bsar(6,5),Ih(6,6),Bb(6),Itemb(6)
+   12   dim Ihtem(6)
+   14   Nl=6
+   16   Nnl=5
+   44   Lprx1=100000
+   46   Icon=0
+   48   Isivl=100
+   50   N=121932631137021795226185032752758725782151044046102621551703
+   52   M1=int(N^(1/6))+1
+   53   M2=M1-2
+   56   goto 2500
+   57   Num2=Num
+   58   M2=1
+   59   print "num2",Num2
+   60   Iab=1
+   62   Iprx1=nxtprm(Iab)
+   64   Iab=Iprx1
+   65   if Iab>Lprx1 then goto 90
+   66   Itemp=int(Num/Iab)
+   68   Irem1=Num-Itemp*Iab
+   70   if Irem1>0 then goto 62
+   72   M2=M2*Iab
+   74   if M2>Num2 then goto 90
+   76   Num=Itemp
+   78   goto 66
+   90   print "m2",M2
+   92   if M2>(M1^(1/2)) then goto 100
+   94   M1=M1-1
+   96   goto 56
+  100   if M1>M2 then goto 110
+  101   Big=M2
+  102   Little=M1
+  104   gosub 918
+  106   print "gcd2",Gcd2
+  108   goto 120
+  110   Big=M1
+  112   Little=M2
+  114   gosub 918
+  120   if Gcd2>1 then goto 94
+  122   Ia4=int(Num/M1^4)
+  124   Ibrem=Num-Ia4*M1^4
+  126   Ia3=int(Ibrem/(M1^3*M2))
+  128   Ibrem=Ibrem-Ia3*(M1^3*M2)
+  130   Ia2=int(Ibrem/(M1^2*M2^2))
+  132   Ibrem=Ibrem-Ia2*(M1^2*M2^2)
+  134   Ia1=int(Ibrem/(M1*M2^3))
+  136   Ibrem=Ibrem-Ia1*(M1*M2^3)
+  138   print "ibrem",Ibrem
+  140   print "m1",M1
+  142   print "m2",M2
+  144   print "ias",Ia4,Ia3,Ia2,Ia1,Ia0
+  146   Ia=N
+  148   Ib=M2
+  150   gosub 810
+  151   Iv=int(Iv)
+  152   print "iv",Iv
+  154   Mp5=M2^5
+  155   print "m1",M1
+  156   Item=int(Mp5/M1)
+  157   print "m2",M2
+  158   Mp5=Mp5-Item*M1
+  160   Ia=M1
+  162   Ib=Mp5
+  163   print "ib",Ib
+  164   gosub 810
+  165   Iv=int(Iv)
+  166   print "iv",Iv,Id
+  174   goto 3000
+  198   Ia=1
+  199   Ib=1
+  200   if Ib=1 then goto 300
+  201   if Ia=1 then goto 300
+  202   Iabia=abs(Ia)
+  203   Iabib=abs(Ib)
+  204   if Iabib>Iabia then goto 220
+  206   Big=Iabia
+  208   Little=Iabib
+  210   gosub 918
+  212   if Gcd2=1 then goto 300
+  214   Ia=Ia+1
+  215   if Ia>Isivl then goto 240
+  216   goto 200
+  220   Big=Iabib
+  222   Little=Iabia
+  224   gosub 918
+  226   if Gcd2=1 then goto 300
+  228   Ia=Ia+1
+  230   if Ia>Isivl then goto 240
+  232   goto 200
+  240   Ib=Ib+1
+  242   if Ib>Isivl then goto 400
+  244   Ia=1
+  246   goto 200
+  300   Ib=Ib
+  304   Kia=Ia
+  306   Kib=Ib
+  308   gosub 1000
+  312   Kia=Ia*(-1)
+  316   gosub 1000
+  326   Ia=Ia+1
+  328   if Ia>Isivl then goto 340
+  330   goto 200
+  340   Ib=Ib+1
+  342   if Ib>Isivl then goto 400
+  344   Ia=1
+  346   goto 200
+  400   end
+  810   Iu=1
+  811   Id=Ia
+  812   if Ib=0 then goto 888
+  813   Iv1=0
+  814   Iv3=Ib
+  815   if Iv3=0 then goto 830
+  816   Iqq=int(Id/Iv3)
+  817   It3=Id-Iqq*Iv3
+  818   It1=Iu-Iqq*Iv1
+  819   Iu=Iv1
+  820   Id=Iv3
+  821   Iv1=It1
+  822   Iv3=It3
+  823   goto 815
+  830   Iv=(Id-Ia*Iu)/Ib
+  860   if Iu=0 then goto 890
+  862   if Iu<0 then goto 890
+  863   Iv=Iv*(1-A)
+  866   Itemp=int(Iv/Ia)
+  869   Iv=Iv-Itemp*Ia
+  872   goto 890
+  888   Iv=Ib
+  890   return
+  918   Little=int(Little)
+  919   Temp=Big\Little
+  920   Rem1=Big-Little*Temp
+  922   if Rem1=0 then goto 940
+  924   Big=Little
+  926   Little=Rem1
+  928   goto 918
+  940   Gcd2=Little
+  944   return
+ 1000   Norma=Ia5*Kia^5-Ia4*Kia^4*Kib+Ia3*Kia^3*Kib^2-Ia2*Kia^2*Kib^3
+ 1002   Norma=Norma+Ia1*Kia*Kib^4-Ia0*Kib^5
+ 1004   Litt=(Kia*M2+Kib*M1)*Norma
+ 1005   Litd=abs(Litt)
+ 1006   Iab=1
+ 1008   Iprx1=nxtprm(Iab)
+ 1163   Iab=Iprx1
+ 1164   if Iprx1>Lprx1 goto 1190
+ 1166   Itemp=int(Litd/Iab)
+ 1168   Irem1=Litd-Itemp*Iab
+ 1170   if Itemp=0 then goto 1186
+ 1174   if Irem1>0 then goto 1008
+ 1176   Litd=Itemp
+ 1180   goto 1166
+ 1186   Icon=Icon+1
+ 1188   print "hitno",Icon,"a=",Kia,"b=",Kib,Litt
+ 1190   return
+ 2000   Itemp=M1
+ 2002   M1=M2
+ 2004   M2=Itemp
+ 2006   goto 154
+ 2500   Ia=M1
+ 2502   Ib=M2
+ 2504   gosub 810
+ 2506   if Id=1 then goto 2000
+ 2508   M2=M2-1
+ 2510   goto 2500
+ 3000   Mp5=Iv*N
+ 3002   Item=int(Mp5/M1)
+ 3004   Mp5=Mp5-Item*M1
+ 3006   Ia0=Mp5
+ 3007   print "ia0",Ia0
+ 3008   Ibrem=(N-Ia0*M2^5)/M1
+ 3009   print "ibrem",Ibrem
+ 3010   Mp4=M2^4
+ 3012   Item=int(Mp4/M1)
+ 3014   Mp4=Mp4-Item*M1
+ 3016   Ib=Mp4
+ 3018   gosub 810
+ 3020   print "iv",Iv,Id
+ 3022   Mp4=Iv*Ibrem
+ 3024   Item=int(Mp4/M1)
+ 3026   Mp4=Mp4-Item*M1
+ 3027   print "mp4",Mp4
+ 3028   Ia1=Mp4
+ 3030   print "ia1",Ia1
+ 3032   Ibrem=(Ibrem-Ia1*M2^4)/M1
+ 3033   print "ibrem",Ibrem
+ 3034   Mp3=M2^3
+ 3036   Item=int(Mp3/M1)
+ 3038   Mp3=Mp3-Item*M1
+ 3040   Ib=Mp3
+ 3042   gosub 810
+ 3044   print "iv",Iv,Id
+ 3046   Mp3=Iv*Ibrem
+ 3048   Item=int(Mp3/M1)
+ 3050   Mp3=Mp3-Item*M1
+ 3052   Ia2=Mp3
+ 3054   print "ia2",Ia2
+ 3056   Ibrem=(Ibrem-Ia2*M2^3)/M1
+ 3058   Mp2=M2^2
+ 3060   Item=int(Mp2/M1)
+ 3062   Mp2=Mp2-Item*M1
+ 3064   Ib=Mp2
+ 3066   gosub 810
+ 3068   print "iv",Iv,Id
+ 3070   Mp2=Iv*Ibrem
+ 3072   Item=int(Mp2/M1)
+ 3074   Mp2=Mp2-Item*M1
+ 3076   Ia3=Mp2
+ 3078   print "ia3",Ia3
+ 3080   Mp1=M2
+ 3082   Item=int(Mp1/M1)
+ 3084   Mp1=Mp1-Item*M1
+ 3086   Ibrem=(Ibrem-Ia3*M2^2)/M1
+ 3088   print "ibrem",Ibrem
+ 3090   Ib=Mp1
+ 3092   gosub 810
+ 3094   print "iv",Iv,Id
+ 3096   Mp1=Iv*Ibrem
+ 3098   Item=int(Mp1/M1)
+ 3100   Mp1=Mp1-Item*M1
+ 3102   Ia4=Mp1
+ 3104   print "ia4",Ia4
+ 3106   Ibrem=(Ibrem-Ia4*M2)/M1
+ 3108   print "ibrem",Ibrem
+ 3110   Ia5=Ibrem
+ 3112   print "ia5",Ia5
+ 3116   Isum=Ia5*M1^5+Ia4*M1^4*M2+Ia3*M1^3*M2^2
+ 3118   Isum=Isum+Ia2*M1^2*M2^3+Ia1*M1*M2^4+Ia0*M2^5
+ 3120   print "isum",Isum
+ 3122   stop

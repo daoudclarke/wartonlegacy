@@ -1,0 +1,18 @@
+   10   ' LUCAS-LEHMER TEST version 1.1
+   20   '
+   30   input "POWER=";P
+   40   clr time
+   50   MP=2^P:M1=MP-1
+   60   S=4
+   70   for I=2 to P-1
+   80    S=S^2-2
+   90    T=sft(S,-P)
+  100    S=S-sft(T,P)+T
+  110    if S>=M1 then S=S-M1
+  120   next I
+  130   '
+  140   print "For p=";P;", 2^p-1 is ";
+  150   if S then print "NOT ";
+  160   print "a prime."
+  170   print time
+  180   end

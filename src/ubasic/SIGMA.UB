@@ -1,0 +1,9 @@
+   10   *Sigma(&P(),&M(),K,&Sig)
+   20   ' Modeled on the Pascal version. P() and M() are input parameters.
+   30   ' 8 May 1990
+   50   local I,J,Tt,Te
+   60   Sig=1
+   70   for J=1 to K:Tt=1:Te=1
+   90   for I=1 to M(J):Tt*=P(J):Te+=Tt:next I
+  120   Sig*=Te
+  130   next J:return ' End of subroutine Sigma.

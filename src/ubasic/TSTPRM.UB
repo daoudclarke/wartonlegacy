@@ -1,0 +1,16 @@
+   10   *TestPrime(N,&Ans)
+   20   ' Primality test for numbers less than 50 billion(U.S.).  Returns 1
+   30   ' for prime, 0 for composite (or 1) and -1 for error (out of range).
+   40   ' 21 May 1990
+  100   local Mc,Mb,Ma,A,B,C
+  110   N=abs(N)
+  120   if or{N=0,N>50000000000} then Ans=-1:return endif
+  130   if N<131072 then if N=nxtprm(N-1) then Ans=1 else Ans=0 endif
+  140   :return endif
+  170   if fnSpspt(N,2)=0 then Ans=0:return endif
+  180   gosub *Perrin(N,&Mc,&Mb,&Ma,&A,&B,&C)
+  190   if or{B<>0,Mb<>(N-1)} then Ans=0:return endif
+  200   if or{N=27664033,N=1235188597,N=14735895301} then Ans=0:return endif
+  210   if or [N=19267579361,N=39675460001,N=43522383061} then Ans=0
+  220   :return endif
+  230   Ans=1:return ' End of subroutine TestPrime.

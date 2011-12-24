@@ -1,0 +1,23 @@
+ 1070   *Peralta(P,X,&S)
+ 1080   ' Computes a square root of the quadratic residue X, modulo
+ 1090   ' the odd prime P, returning the result in S.
+ 1100   ' 15 May 1990
+ 1110   local R,Q,U,V,A,B,Te,Qq
+ 1120   if P@4=3 then S=modpow(X,(P+1)\4,P):return endif
+ 1130   R=0:Q=(P-1)\2
+ 1140   while even(Q):Q=Q\2 wend
+ 1150   repeat
+ 1160   repeat inc R:until (R*R+X)@P<>0
+ 1170   U=1:V=0:A=R:B=1:Qq=Q
+ 1180   while Qq<>0
+ 1190   if odd(Qq) then Te=(U*A-B*V*X)@P:V=(A*V+U*B)@P:U=Te endif
+ 1200   Qq=Qq\2:Te=(A*A-B*B*X)@P:B=(2*A*B)@P:A=Te
+ 1210   wend
+ 1220   until and{U<>0,V<>0}
+ 1230   A=U:B=V
+ 1240   U=(A*A-B*B*X)@P:V=(2*A*B)@P
+ 1250   while U<>0
+ 1260   A=U:B=V:U=(A*A-B*B*X)@P:V=(2*A*B)@P
+ 1270   wend
+ 1280   S=modinv(B,P):S=(A*S)@P
+ 1290   return ' End of subroutine Peralta.

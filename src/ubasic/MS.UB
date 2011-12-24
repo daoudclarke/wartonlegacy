@@ -1,0 +1,69 @@
+ 2320   *Mst(N,&F)
+ 2330   ' Test for probable primality or compositeness devised by Malm.
+ 2340   ' Returns F=1 if N is a probable prime, and F=0 if N is composite.
+ 2350   ' Calls the subroutine Lehmerc.  Assumes N >100, and N is odd.
+ 2360   ' 21 August 1990
+ 2370   local P,Q,D=1,G,Nw,Vs,Vb,Vm,T,Ta,Vv
+ 2380   local I,J,K,Ok
+ 2390   dim Bit%(400)
+ 2400   G=isqrt(N):if res=0 then F=0:return endif
+ 2410   Ok=0
+ 2420   repeat ' Loop to find D,Q, and P.
+ 2430   repeat inc D:K=kro(D,N) until K<1
+ 2440   if and{K=0,D@N<>0} then F=0:return endif
+ 2450   Q=D
+ 2460   repeat inc Q:K=kro(Q,N) until K<1
+ 2470   if and{K=0,Q@N<>0} then F=0:return endif
+ 2480   ' Now (Q|N)=(D|N)= -1
+ 2490   G=D+4*Q:Ta=gcd(G,N):if and{Ta>1,Ta<N} then F=0:return endif
+ 2500   if kro(G,N)=1 then Ok=1 else
+ 2510   :G=Q+4*D:Ta=gcd(G,N):if and{Ta>1,Ta<N} then F=0:return endif
+ 2520   :if kro(G,N)=1 then Ok=1:swap Q,D endif endif
+ 2540   if Ok=0 then D=Q
+ 2550   until Ok
+ 2560   gosub *Lehmerc(N,D+4*Q,&Globalp)
+ 2562   P=Globalp
+ 2570   if (P*P-D-4*Q)@N<>0 then F=0:return endif
+ 2580   ' Here we have acceptable P,Q, and D. Now the test.
+ 2590   Nw=(N-1)\2
+ 2600   J=-1:repeat inc J:Nw=Nw\2:Bit%(J)=res until Nw=0
+ 2610   Vs=P:Vb=(P*Vs-2*Q)@N:T=Q
+ 2620   for I=J-1 to 0 step -1
+ 2630   Ta=2*T
+ 2640   if Bit%(I) then Vs=(Vs*Vb-P*T)@N:Vb=(Vb*Vb-Q*Ta)@N:T=(T*T*Q)@N
+ 2650   :else Vb=(Vs*Vb-P*T)@N:Vs=(Vs*Vs-Ta)@N:T=(T*T)@N endif
+ 2670   next I
+ 2680   '
+ 2690   Vv=Vs:Vm=(Vs*Vb-P*T)@N:Vs=(Vs*Vs-2*T)@N
+ 2700   if Vm<>P then F=0:return endif
+ 2710   if (Vv*Vv+2-Vs)@N<>0 then F=0:return endif
+ 2720   if (2*Q*Vs-P*P-D)@N<>0 then F=0:return endif
+ 2730   F=1:return ' End of subroutine Mst.
+ 3730   *Lehmerc(P,Q,&R)
+ 3740   ' Method of D. H. Lehmer to solve x^2 = Q (mod P), assuming that
+ 3750   ' P is odd and (Q|P) = 1. The result is returned in R.
+ 3760   ' There may be no solution since Q may not be a quadratic
+ 3770   ' residue modulo P.
+ 3780   ' 8 June 1990
+ 3790   dim Bit%(400) ' Holds bits of (P+1)\2, handles 120-digit numbers
+ 3800   local Te,H,W,Vs,Vb,T
+ 3810   local I,J
+ 3820   Te=P@8:if or{Te=3,Te=7} then R=modpow(Q,(P+1)\4,P):return endif
+ 3830   if Te=5 then T=modpow(Q,(P-1)\4,P)
+ 3840   :if T=1 then R=modpow(Q,(P+3)\8,P):return endif
+ 3850   :R=modpow(4*Q,(P+3)\8,P)
+ 3860   :if odd(R) then R=(R+P)\2 else R=R\2 endif
+ 3870   :return endif
+ 3880   H=1:repeat inc H:Te=(H*H-4*Q)@P:T=gcd(Te,P)
+ 3890   until or{kro(Te,P)=-1,and{T>1,T<P}}
+ 3900   if and{T>1,T<P} then R=0:return endif
+ 3910   W=(P+1)\2:J=-1
+ 3920   repeat inc J:W=W\2:Bit%(J)=res until W=0
+ 3930   Vs=H:Vb=(H*Vs-2*Q)@P:T=Q
+ 3940   for I=J-1 to 0 step -1
+ 3950   Te=2*T
+ 3960   if Bit%(I) then Vs=(Vs*Vb-H*T)@P:Vb=(Vb*Vb-Q*Te)@P:T=(T*T*Q)@P
+ 3970   :else Vb=(Vs*Vb-H*T)@P:Vs=(Vs*Vs-Te)@P:T=(T*T)@P endif
+ 3980   next I
+ 3990   if odd(Vs) then R=(Vs+P)\2 else R=Vs\2 endif
+ 4000   return ' End of subroutine Lehmerc.

@@ -1,0 +1,370 @@
+    1   dim Barr(30),Xsq(30),Ysq(30),Xpw(4),Ypw(4),Xn(9),Yn(9)
+    2   input "code";N
+    3   input "what is the likely maximum prime as approx. power of 10";Nr
+    4   Nr=10^Nr
+    5   Pow=log(log(Nr))
+    6   Pow=(log(Nr)*Pow)^0.5
+    7   L1=exp(Pow)
+    8   L1=L1^(1/(2^0.5))
+   10   Aa=1
+   12   X=0
+   14   Y=1
+   23   Precod=N
+   25   I=1
+   26   Temp=int(Precod/2)
+   28   Rem1=Precod-Temp*2
+   30   Precod=Temp
+   32   if Temp=0 then goto 700
+   33   if Rem1>0 then goto 40
+   35   I=I+1
+   36   if I<200 then goto 26
+   40   I=1
+   41   Precod=Precod*2+Rem1
+   42   Temp=int(Precod/3)
+   44   Rem1=Precod-Temp*3
+   46   Precod=Temp
+   48   if Temp=0 then goto 700
+   50   if Rem1>0 then goto 53
+   51   I=I+1
+   52   if I<200 then goto 42
+   53   Prn=L1
+   54   print "prn",Prn
+   56   N=Precod*3+Rem1
+   64   X=0
+   66   Y=1
+  110   Ab=1
+  111   I=1
+  114   Prx1=nxtprm(Ab)
+  115   A=A
+  116   Ab=Prx1
+  118   if Ab>Prn then goto 360
+  119   gosub 121
+  120   goto 271
+  121   Q=Ab
+  123   Q1=Q
+  125   L=int(L1/Q)
+  128   if Q1>L then goto 131
+  129   Q1=Q1*Q
+  130   goto 128
+  131   print Aa,Prx1
+  132   Ind1=1
+  134   P1=Q1
+  136   Pr=int(P1/2)
+  138   Temp=P1-Pr*2
+  140   Barr(Ind1)=Temp
+  141   A=A
+  142   P1=Pr
+  144   if Pr=0 then goto 150
+  146   Ind1=Ind1+1
+  148   goto 136
+  150   Icon=2
+  151   Xsq(1)=X
+  152   Ysq(1)=Y
+  154   Dy=Y*2
+  156   if Dy<N then goto 162
+  158   Temp=int(Dy/N)
+  160   Dy=Dy-Temp*N
+  162   Little=Dy
+  164   if Little=0 then goto 350
+  170   A=N
+  172   B=Dy
+  174   gosub 800
+  175   Dock=2
+  176   Dyin=V
+  177   if D>1 then goto 1500
+  182   M1=3*X^2+Aa
+  184   M1=M1*Dyin
+  186   X3=(-2)*X+M1*M1
+  188   Y3=(-1)*Y+M1*(X-X3)
+  189   gosub 1000
+  190   Xsq(Icon)=X3
+  192   Ysq(Icon)=Y3
+  194   if Icon=Ind1 then goto 210
+  196   Icon=Icon+1
+  198   X=X3
+  200   Y=Y3
+  202   goto 154
+  210   X1=Xsq(Ind1)
+  212   Y1=Ysq(Ind1)
+  214   Ind2=Ind1
+  216   Ind2=Ind2-1
+  217   if Ind2=0 then goto 270
+  218   if Barr(Ind2)=0 then goto 216
+  220   X2=Xsq(Ind2)
+  222   Y2=Ysq(Ind2)
+  224   Dx=X1-X2
+  226   Temp=int(Dx/N)
+  228   Dx=Dx-Temp*N
+  229   if Dx<0 then goto 1100
+  230   if Dx=0 then goto 350
+  232   Little=Dx
+  238   A=N
+  240   B=Dx
+  242   gosub 800
+  243   if D>1 then goto 1500
+  244   Dxin=V
+  245   Dock=49.3
+  246   M1=(Y1-Y2)*Dxin
+  248   X3=-1*X1-1*X2+M1*M1
+  250   Y3=-1*Y1+M1*(X1-X3)
+  251   gosub 1000
+  252   X1=X3
+  254   Y1=Y3
+  256   goto 216
+  270   return
+  271   X=X1
+  272   Y=Y1
+  274   goto 114
+  300   print "gcd",Gcd2
+  302   goto 600
+  350   Aa=Aa+1
+  352   goto 64
+  360   Prv=int(Prn/10)
+  362   Prv=Prv*10
+  363   A=A
+  364   Xp=X1
+  365   X=X1
+  366   Yp=Y1
+  367   Y=Y1
+  368   for Izz=1 to 4
+  370   Q1=Prv
+  372   gosub 132
+  374   Xpw(Izz)=X1
+  376   Ypw(Izz)=Y1
+  377   X=X1
+  378   Y=Y1
+  379   next Izz
+  380   Q1=240000
+  381   X=Xp
+  382   Y=Yp
+  383   gosub 132
+  384   Xn(1)=X1
+  386   Yn(1)=Y1
+  388   Q1=24000
+  390   X=Xpw(1)
+  392   Y=Ypw(1)
+  394   gosub 132
+  396   Xtm=X1
+  398   Ytm=Y1
+  400   Q1=480000
+  402   X=Xp
+  404   Y=Yp
+  406   gosub 132
+  408   X2=Xtm
+  410   Y2=Ytm
+  412   gosub 1200
+  414   Xn(2)=X1
+  416   Yn(2)=Y1
+  418   X=Xpw(2)
+  420   Y=Ypw(2)
+  422   Q1=1200
+  424   gosub 132
+  426   Xtm=X1
+  428   Ytm=Y1
+  430   X=Xpw(1)
+  432   Y=Ypw(1)
+  434   Q1=36000
+  436   gosub 132
+  438   X2=Xtm
+  440   Y2=Ytm
+  442   gosub 1200
+  444   Xtm=X1
+  446   Ytm=Y1
+  448   X=Xp
+  450   Y=Yp
+  452   Q1=286000
+  454   gosub 132
+  456   X2=Xtm
+  458   Y2=Ytm
+  460   gosub 1200
+  462   Xn(4)=X1
+  464   Yn(4)=Y1
+  466   X=Xpw(3)
+  468   Y=Ypw(3)
+  470   Q1=40
+  472   gosub 132
+  473   Xtm=X1
+  474   Ytm=Y1
+  475   X=Xpw(2)
+  476   Y=Ypw(2)
+  478   Q1=1200
+  480   gosub 132
+  482   X2=Xtm
+  484   Y2=Ytm
+  486   gosub 1200
+  488   Xtm=X1
+  490   Ytm=Y1
+  492   X=Xpw(1)
+  494   Y=Ypw(1)
+  496   Q1=12600
+  498   goto 506
+  500   I=I+1
+  504   goto 350
+  506   gosub 132
+  508   X2=Xtm
+  510   Y2=Ytm
+  512   gosub 1200
+  514   Xtm=X1
+  516   Ytm=Y1
+  518   X=Xp
+  520   Y=Yp
+  522   Q1=46000
+  524   gosub 132
+  526   X2=Xtm
+  528   Y2=Ytm
+  530   gosub 1200
+  532   Xn(6)=X1
+  534   Yn(6)=Y1
+  536   X=Xpw(3)
+  538   Y=Ypw(3)
+  540   Q1=20
+  542   gosub 132
+  544   X2=Xpw(4)
+  546   Y2=Ypw(4)
+  548   gosub 1200
+  550   Xtm=X1
+  552   Ytm=Y1
+  554   X=Xpw(2)
+  556   Y=Ypw(2)
+  558   Q1=130
+  560   gosub 132
+  562   X2=Xtm
+  564   Y2=Ytm
+  566   gosub 1200
+  568   Xtm=X1
+  570   Ytm=Y1
+  572   X=Xpw(1)
+  573   Y=Ypw(1)
+  574   Q1=300
+  576   gosub 132
+  578   X2=Xtm
+  580   Y2=Ytm
+  582   gosub 1200
+  584   Xtm=X1
+  586   Ytm=Y1
+  588   X=Xp
+  590   Y=Yp
+  592   Q1=189
+  593   gosub 132
+  594   X2=Xtm
+  596   goto 704
+  600   print "found"
+  603   print " prime divisor = ",Gcd2
+  604   end
+  700   print "combination of 2's and 3's"
+  702   end
+  704   Y2=Ytm
+  706   gosub 1200
+  708   Xn(8)=X1
+  710   Yn(8)=Y1
+  711   Icc=1
+  712   Izz=2
+  714   X1=Xn(Izz)
+  716   Y1=Yn(Izz)
+  717   Izy=Izz+2
+  718   X2=Xn(Izy)
+  720   Y2=Yn(Izy)
+  722   gosub 1200
+  723   Izy=Izz+3
+  724   Xn(Izy)=X1
+  726   Yn(Izy)=Y1
+  728   if Izz=6 then goto 734
+  730   Izz=Izz+2
+  731   A=A
+  732   goto 714
+  734   X1=Xn(1)
+  736   Y1=Yn(1)
+  738   X2=Xn(2)
+  740   Y2=Yn(2)
+  742   gosub 1200
+  744   Xn(3)=X1
+  746   Yn(3)=Y1
+  748   print "icc",Icc
+  750   if Icc=4000 then goto 350
+  752   Icc=Icc+1
+  760   for Izz=1 to 4
+  761   Izy=Izz*2
+  762   Izh=Izy+1
+  763   Xn(Izy)=Xn(Izh)
+  764   Yn(Izy)=Yn(Izh)
+  765   A=A
+  766   next Izz
+  768   goto 712
+  800   if B<0 then goto 804
+  802   goto 810
+  804   B=B+A
+  810   U=1
+  811   D=A
+  812   if B=0 then goto 888
+  813   V1=0
+  814   V3=B
+  815   if V3=0 then goto 828
+  816   Qq=int(D/V3)
+  817   T3=D-Qq*V3
+  818   T1=U-Qq*V1
+  819   U=V1
+  820   D=V3
+  821   V1=T1
+  822   V3=T3
+  823   goto 815
+  828   if D>1 then goto 890
+  830   V=(D-A*U)/B
+  831   goto 860
+  840   V=0
+  850   A=A
+  860   if U=0 then goto 870
+  862   if U<0 then goto 870
+  863   V=V*(1-A)
+  864   V=int(V)
+  865   A=A
+  866   Temp=int(V/A)
+  869   V=V-Temp*A
+  870   A=A
+  872   goto 890
+  888   V=B
+  890   return
+  917   Big=N
+  918   Little=int(Little)
+  919   Temp=Big\Little
+  920   Rem1=Big-Little*Temp
+  922   if Rem1=0 then goto 940
+  924   Big=Little
+  926   Little=Rem1
+  928   goto 918
+  940   Gcd2=Little
+  942   A=A
+  950   return
+ 1000   Temp=int(X3/N)
+ 1002   X3=X3-Temp*N
+ 1004   Temp=int(Y3/N)
+ 1006   Y3=Y3-Temp*N
+ 1007   A=A
+ 1008   A=A
+ 1009   A=A
+ 1010   return
+ 1100   A=A
+ 1102   end
+ 1200   Dx=X1-X2
+ 1202   Temp=int(Dx/N)
+ 1203   Dx=Dx-Temp*N
+ 1204   if Dx<0 then goto 1100
+ 1205   if Dx=0 then goto 350
+ 1206   A=N
+ 1208   B=Dx
+ 1210   gosub 800
+ 1212   if D>1 then goto 1500
+ 1214   Dxin=V
+ 1216   M1=(Y1-Y2)*Dxin
+ 1218   X3=-1*X1-1*X2+M1*M1
+ 1220   Y3=-1*Y1+M1*(X1-X3)
+ 1222   gosub 1000
+ 1224   X1=X3
+ 1226   Y1=Y3
+ 1228   return
+ 1500   D=int(D)
+ 1502   print "endwell prime =",Prx1
+ 1504   print "prime divisor found on curve",Aa
+ 1506   print "prime divisor =",D
+ 1508   Fact2=int(N/D)
+ 1510   print "other factor =",Fact2
+ 1512   end

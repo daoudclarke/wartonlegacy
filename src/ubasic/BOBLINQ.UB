@@ -1,0 +1,140 @@
+    1   dim Barr(20),Xsq(20),Ysq(20)
+    2   input "number";N
+    3   input "limit ";Ssz
+    4   goto 500
+    5   gosub 800
+    6   print "v",int(V),"b",Bb,"a",A,"sig",Sig,"brt",Brt
+    7   A=A
+    8   Itemp=(N-C)*V
+    9   Atemp=N
+   10   Itemp2=int(Itemp/Atemp)
+   11   Xfirs=Itemp-Atemp*Itemp2
+   12   Itemp=Atemp
+   13   Atemp=Xfirs
+   14   A=A
+   15   goto 80
+   20   if int(Xfirs)=0 then goto 23
+   21   print "x",int(Xfirs),"b",Bb,"y",Igtemp,"c",C
+   22   end
+   23   goto 39
+   24   C=(Brt+1)^Ppow
+   25   goto 33
+   26   A=A
+   27   A=A
+   28   goto 20
+   30   Brt=int(N^(1/(Ppow+1)))
+   31   Bb=(int(Brt))^Ppow
+   32   C=(Brt+1)^Ppow
+   33   Big=N
+   34   Little=Bb
+   36   gosub 917
+   37   goto 300
+   38   if Gcd2=1 then goto 5
+   39   Brt=Brt+1
+   40   Bb=Brt^Ppow
+   41   B=Bb
+   42   goto 32
+   44   Bb=Brt^Ppow
+   46   goto 24
+   50   if Irem=0 then goto 23
+   52   goto 10
+   80   Igtemp=int((N-Xfirs*Bb)/C)
+   81   print "xfirs",Xfirs
+   82   Igrem=N-Xfirs*Bb-C*Igtemp
+   83   Isw1=0
+   84   if Igrem=0 then goto 20
+   85   print "xfirs",Xfirs,"c",C
+   86   Ib=Xfirs
+   87   A=A
+   88   Ia=N
+   90   Itemp=int(Ia/Ib)
+   92   Ibtes=Ia-Itemp*Ib
+   93   print "ibtes",Ibtes
+   94   if Ibtes=0 then goto 350
+   96   if Isw1=1 then goto 142
+   98   Isw1=1
+  100   Itemp=int(Xfirs/N)
+  101   print "sec xfirs",Xfirs
+  102   B=Xfirs-Itemp*N
+  104   Big=N
+  106   Little=B
+  108   gosub 917
+  110   print "gcd2",Gcd2
+  112   A=A
+  142   if Gcd2=1 then goto 156
+  144   Itemp=int(Ibtes/Gcd2)
+  146   Rem1=Ibtes-Gcd2*Itemp
+  148   if Rem1=0 goto 156
+  150   Ia=Ib
+  152   Ib=Ibtes
+  154   goto 90
+  156   A=N/Gcd2
+  158   B=Xfirs/Gcd2
+  160   gosub 800
+  162   print "vlater",V,"a",A,"b",B,"gcd2",Gcd2,"xfirs",Xfirs,"sig",Sig
+  164   Itemp=V*Ibtes/Gcd2
+  166   Itemp2=int(Itemp/N)
+  168   Yy=Itemp-Itemp2*N
+  170   Vvcomp=Ibtes*Bb+Yy*C
+  172   if Vvcomp/N<Ssz then goto 200
+  173   print "quo",Vvcomp/N
+  174   Ia=Ib
+  176   Ib=Ibtes
+  178   goto 90
+  200   print "x",Ibtes,"b",Bb,"y",int(Yy),"c",C,"brt",Brt,"mult",Vvcomp/N
+  201   print "limit",Ssz,"power",Ppow
+  202   end
+  300   B=Bb
+  302   A=N
+  303   A=A
+  304   goto 38
+  350   print "xfirs",Xfirs,"c",C,"bb",Bb
+  351   Sig=1
+  352   goto 39
+  354   stop
+  500   input "power";Ppow
+  502   goto 30
+  800   if B<0 then goto 804
+  802   goto 810
+  804   B=B+A
+  810   U=1
+  811   D=A
+  812   if B=0 then goto 888
+  813   V1=0
+  814   V3=B
+  815   if V3=0 then goto 828
+  816   Qq=int(D/V3)
+  817   T3=D-Qq*V3
+  818   T1=U-Qq*V1
+  819   U=V1
+  820   D=V3
+  821   V1=T1
+  822   V3=T3
+  823   goto 815
+  828   if D>1 then goto 890
+  830   V=(D-A*U)/B
+  831   goto 860
+  840   V=0
+  850   A=A
+  860   if U=0 then goto 870
+  862   if U<0 then goto 870
+  863   V=V*(1-A)
+  864   V=int(V)
+  865   A=A
+  866   Temp=int(V/A)
+  869   V=V-Temp*A
+  870   A=A
+  872   goto 890
+  888   V=B
+  890   return
+  917   Big=N
+  918   Little=int(Little)
+  919   Temp=int(Big/Little)
+  920   Rem1=Big-Little*Temp
+  922   if Rem1=0 then goto 940
+  924   Big=Little
+  926   Little=Rem1
+  928   goto 918
+  940   Gcd2=Little
+  942   print "gcd2",Gcd2
+  950   return

@@ -1,0 +1,32 @@
+ 1170   *Quadtocf(M,D,Q,&CF(),&Lengs,&Lengf,&S)
+ 1180   ' Quadratic irrational to continued fraction.
+ 1190   ' Modeled on the Pascal version.
+ 1200   '
+ 1210   ' ***************************************************************
+ 1220   ' Warning - Arrays Quadmm and Quadqq may clash with your globals.
+ 1230   ' ***************************************************************
+ 1240   '
+ 1250   ' 7 May 1990
+ 1260   local I=0,J,Te,K,Tt,T,Qqq,Ub%=100
+ 1270   dim Quadmm(100),Quadqq(100)
+ 1280   S=0:K=isqrt(D):if res=0 then return endif
+ 1290   T=(D-M*M)@Q
+ 1300   if T<>0 then T=abs(Q):M*=T:Q*=T:D=T*T*D:K=isqrt(D) endif
+ 1310   Quadmm(0)=M:Quadqq(0)=Q:Lengf=0:Lengs=0
+ 1320   Qqq=(D-M*M)\Q:T=M+K:Tt=Q
+ 1330   if Q<0 then inc T:neg T:neg Tt endif
+ 1340   CF(0)=T\Tt
+ 1350   Quadmm(1)=Q*CF(0)-M
+ 1360   Quadqq(1)=Qqq+CF(0)*(M-Quadmm(1))
+ 1370   if and{M=Quadmm(1),Q=Quadqq(1)} then S=1 endif
+ 1380   while and{S=0,I<(Ub%-1)}
+ 1390   inc I:T=K+Quadmm(I):Tt=Quadqq(I)
+ 1400   if Tt<0 then inc T:neg T:neg Tt endif
+ 1410   CF(I)=T\Tt
+ 1420   Quadmm(I+1)=CF(I)*Quadqq(I)-Quadmm(I)
+ 1430   Quadqq(I+1)=Quadqq(I-1)+CF(I)*(Quadmm(I)-Quadmm(I+1))
+ 1440   for J=I to 0 step -1
+ 1450   if and{Quadmm(I+1)=Quadmm(J),Quadqq(I+1)=Quadqq(J)} then S=1
+ 1460   :Lengf=I:Lengs=J endif
+ 1470   next J
+ 1480   wend:return ' End of subroutine Quadtocf.

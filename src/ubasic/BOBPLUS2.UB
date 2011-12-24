@@ -1,0 +1,197 @@
+    1   dim Barr(35),Uz(185)
+    2   input "code";N
+    3   Icc=1
+    4   Ip=1001
+    6   for I=1 to 200
+    8   Little=Ip^2-4
+    9   Limpr=100000
+   10   Big=N
+   11   Ibsw=0
+   12   gosub 917
+   14   if Gcd2=1 then goto 17
+   15   Ip=Ip+2
+   16   next I
+   17   print "ip",Ip
+   18   Pcon2=Limpr*200
+   19   Ipreh=Ip
+   20   Iprel=2
+   21   Ab=1
+   22   Iprx=nxtprm(Ab)
+   24   Ab=Iprx
+   26   if Iprx>Limpr then goto 1000
+   27   A=A
+   28   Ipow=int(log(Limpr)/log(Iprx))
+   29   Ipr1=Iprx
+   30   Ir=Iprx^Ipow
+   31   A=A
+   32   Q1=Ir
+   33   goto 190
+   34   gosub 416
+   36   Ind2=Ind1
+   38   if Barr(Ind2-1)=1 then goto 50
+   40   Itemp=Ipreh*Ipreh-2
+   42   Itemp2=int(Itemp/N)
+   43   Icurrh=Itemp-Itemp2*N
+   44   Itemp=Ipreh*Iprel-Ip
+   45   A=A
+   46   Itemp2=int(Itemp/N)
+   48   Icurrl=Itemp-Itemp2*N
+   49   goto 60
+   50   Itemp=Ip*Ipreh*Ipreh-Ipreh*Iprel-Ip
+   52   Itemp2=int(Itemp/N)
+   54   Icurrh=Itemp-Itemp2*N
+   56   Itemp=Ipreh*Ipreh-2
+   58   Itemp2=int(Itemp/N)
+   59   Icurrl=Itemp-Itemp2*N
+   60   Ipreh=Icurrh
+   61   A=A
+   62   Iprel=Icurrl
+   64   Ind2=Ind2-1
+   66   if Ind2>1 then goto 38
+   68   Ip=Icurrh
+   70   Ipreh=Ip
+   72   Iprel=2
+   73   if Ibsw>0 then goto 1020
+   74   goto 22
+  190   if N<10^12 then goto 196
+  191   Icc=Icc+1
+  192   if Icc=21 then goto 196
+  194   goto 34
+  196   print "iprx",Iprx
+  198   Icc=1
+  200   Little=Ipreh-2
+  201   if Little=0 then goto 1400
+  202   gosub 917
+  204   if Gcd2=1 then goto 34
+  206   goto 304
+  300   Little=Icurrh-2
+  301   A=A
+  302   gosub 917
+  304   print "gcd=",Gcd2
+  306   F2=int(N/Gcd2)
+  308   print "remaining factor=",F2
+  310   end
+  416   Ind1=1
+  418   P1=Q1
+  420   Pr=int(P1/2)
+  422   Temp=P1-Pr*2
+  424   Barr(Ind1)=Temp
+  425   A=A
+  426   P1=Pr
+  428   if Pr=0 then goto 434
+  430   Ind1=Ind1+1
+  432   goto 420
+  434   return
+  810   U=1
+  811   D=A
+  812   if B=0 then goto 888
+  813   V1=0
+  814   V3=B
+  815   if V3=0 then goto 830
+  816   Qq=int(D/V3)
+  817   T3=D-Qq*V3
+  818   T1=U-Qq*V1
+  819   U=V1
+  820   D=V3
+  821   V1=T1
+  822   V3=T3
+  823   goto 815
+  830   V=(D-A*U)/B
+  831   goto 860
+  840   V=0
+  850   A=A
+  860   if U=0 then goto 870
+  862   if U<0 then goto 870
+  863   V=V*(1-A)
+  864   V=int(V)
+  865   A=A
+  866   Temp=int(V/A)
+  869   V=V-Temp*A
+  870   A=A
+  872   goto 890
+  888   V=B
+  890   return
+  917   Big=N
+  918   Little=int(Little)
+  919   Temp=int(Big/Little)
+  920   Rem1=Big-Little*Temp
+  922   if Rem1=0 then goto 940
+  924   Big=Little
+  926   Little=Rem1
+  928   goto 918
+  940   Gcd2=Little
+  942   A=A
+  950   return
+ 1000   Uz(1)=1
+ 1002   Uz(2)=Ipreh
+ 1003   Iprem=Ipreh
+ 1004   Icon=3
+ 1006   Uz(Icon)=Ipreh*Uz(Icon-1)-Uz(Icon-2)
+ 1007   Itemp=int(Uz(Icon)/N)
+ 1008   Uz(Icon)=Uz(Icon)-Itemp*N
+ 1009   A=A
+ 1010   if Icon=185 then goto 1014
+ 1011   Icon=Icon+1
+ 1012   goto 1006
+ 1014   Ibsw=1
+ 1015   A=A
+ 1016   Ir=Iprx-2
+ 1018   goto 32
+ 1020   if Ibsw=2 then goto 1030
+ 1021   if Ibsw=3 then goto 1208
+ 1022   Vpre3=Ipreh
+ 1023   Ip=Iprem
+ 1024   Ir=Iprx-1
+ 1025   Ipreh=Iprem
+ 1026   Ibsw=2
+ 1028   goto 32
+ 1030   Vpre2=Ipreh
+ 1031   goto 1100
+ 1032   Tpre1=Iprem*Vpre1-2*Vpre2
+ 1034   Itemp=int(Tpre1/N)
+ 1036   Tpre1=Tpre1-Itemp*N
+ 1038   Tpre2=Iprem*Vpre2-2*Vpre3
+ 1040   Itemp=int(Tpre2/N)
+ 1042   Tpre2=Tpre2-Itemp*N
+ 1044   Iprod=Tpre1
+ 1046   Icon2=1
+ 1048   Ipr2=nxtprm(Iprx)
+ 1049   A=A
+ 1050   Dpr=Ipr2-Iprx
+ 1051   if Dpr>184 then goto 1090
+ 1052   Tcurr1=Tpre1*Uz(Dpr+1)-Tpre2*Uz(Dpr)
+ 1053   A=A
+ 1054   Tcurr2=Tpre1*Uz(Dpr)-Tpre2*Uz(Dpr-1)
+ 1055   Iprx=Ipr2
+ 1056   Itemp=int(Tcurr1/N)
+ 1058   Tpre1=Tcurr1-Itemp*N
+ 1060   Itemp=int(Tcurr2/N)
+ 1062   Tpre2=Tcurr2-Itemp*N
+ 1064   Iprod=Iprod*Tpre1
+ 1066   Itemp=int(Iprod/N)
+ 1068   Iprod=Iprod-Itemp*N
+ 1070   if Ipr2>Pcon2 then goto 300
+ 1071   Icon2=Icon2+1
+ 1072   if Icon2<201 then goto 1048
+ 1074   Little=Iprod
+ 1076   gosub 917
+ 1077   print "ipr2",Ipr2
+ 1078   if Gcd2=1 then goto 1046
+ 1080   goto 304
+ 1090   print "difference too large",Dpr
+ 1092   end
+ 1100   Vpre1=Iprem*Vpre2-Vpre3
+ 1102   Item=int(Vpre1/N)
+ 1104   Vpre1=Vpre1-Item*N
+ 1106   A=A
+ 1110   A=A
+ 1111   print "vpre1",Vpre1
+ 1112   goto 1032
+ 1200   Ipreh=Iprem
+ 1202   Ibsw=3
+ 1204   Ir=Iprx
+ 1206   goto 32
+ 1208   Vpre1=Ipreh
+ 1210   goto 1111
+ 1400   print "code trivial or algorithm unsuitable"
+ 1402   end

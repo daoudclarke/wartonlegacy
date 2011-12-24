@@ -1,0 +1,87 @@
+   10   ' fnMinPol(x,n) computes minimal polynomial of degree n for x.
+   20   ' This version uses ordinary memory.
+   30   ' See end of listing for a program description.
+   40   '
+   50   input "How many decimals after point";P%:P%=1+int(P%/4.8)
+   60   word -min(542,4*P%):point -P%:emaword -min(542,4*P%)
+   70   Noisy=1
+   80   if Noisy print:print "fnMinPol(x,n) computes a minimal polynomial ";
+   90   :print "of degree n for x."
+  100   :print "It also computes a logarithmic reliability index. Reliability"
+  110   :print "of 1 is often OK, around 4 is already very convincing."
+  120   :print "To find a polynomial of degree n with coefficients bounded by"
+  130   :print "10^c you will need at least n*c digits of accuracy for x."
+  140   :print:print "Here is an example:":print
+  150   :Inpt#=" x=sqrt(5)+1-sqrt(2)-sqrt(3) : print fnMinPol(x,8) "
+  160   :print Inpt#:print:eval(Inpt#)
+  170   end
+ 1220   fnMinPol(X,N%)
+ 1230   dim B(N%,N%),M(N%,N%),V(N%),R(N%) 'used by main algorithm
+ 1240   local PP=0.9,Rr=1
+ 1250   local RQ=10^(9*P%),J,K,L,A#=0,Af=0,A1=0,Af1=0,R,M,V
+ 1260   R(0)=1:for I=0 to N%-1:R(I+1)=R(I)*X:next
+ 1270   '
+ 1280   clr block M(0..N%,0..N%)
+ 1290   V(0)=re(R(0))^2+im(R(0))^2:V(1)=im(R(0)*conj(R(1)))
+ 1300   for J=1 to N%:M(J,0)=re(R(0)*conj(R(J)))/V(0):next
+ 1310   if V(1)=0 then V(1)=1:Rr=0:jump
+ 1320   for J=2 to N%:M(J,1)=im(R(0)*conj(R(J)))/V(1):next
+ 1330   V(1)=V(1)^2/V(0)*RQ
+ 1340   **:V(0)=V(0)*RQ
+ 1350   for J=2 to N%:V(J)=1:next
+ 1360   '
+ 1370   clr block B(0..N%,0..N%):for J=0 to N%:B(J,J)=1:next
+ 1380   '
+ 1390   K=1:goto *R1
+ 1400   *R2:M=M(K,K-1):V=V(K)+M*M*V(K-1):M(K,K-1)=M*V(K-1)/V
+ 1410   V(K)=V(K-1)*V(K)/V:V(K-1)=V
+ 1420   swap block B(K,0..N%),block B(K-1,0..N%)
+ 1430   if K>1 then swap block M(K,0..K-2),block M(K-1,0..K-2)
+ 1440   for J=K+1 to N%
+ 1450   V=M(J,K):M(J,K)=M(J,K-1)-M*V:M(J,K-1)=V+M(K,K-1)*M(J,K):next
+ 1460   if K>1 then dec K
+ 1470   *R1:L=K-1:gosub *R3
+ 1480   if V(K)/V(K-1)+M(K,K-1)*M(K,K-1)<PP goto *R2
+ 1490   for L=K-2 to 0 step -1:gosub *R3:next L
+ 1500   inc K:if K<=N% goto *R1
+ 1510   goto *DONE
+ 1520   *R3:if abs(M(K,L))<=0.5 then return
+ 1530   R=int(0.5+M(K,L))
+ 1540   for J=0 to N%:B(K,J)=B(K,J)-R*B(L,J):next J
+ 1550   M(K,L)=M(K,L)-R:for J=0 to L-1:M(K,J)=M(K,J)-R*M(L,J):next
+ 1560   return
+ 1570   '
+ 1580   *DONE
+ 1590   for J=0 to N%:
+ 1600   A#=A#+B(0,J)*_X^J:Af=Af+B(0,J)*B(0,J)
+ 1610   A1=A1+B(1,J)*R(J):Af1=Af1+B(1,J)*B(1,J):next
+ 1620   Af=Af+RQ*abs(val(A#,X))^2-B(0,0)^2-Rr*B(0,1)^2
+ 1630   Af1=Af1+RQ*abs(A1)^2-B(1,0)^2-Rr*B(1,1)^2
+ 1640   print "Reliability index: ";using(3,3),log(Af1/Af)/log(10)
+ 1650   return(A#)
+ 1660   ' This program uses the reduction algorithm of Lengstra, Lengstra,
+ 1670   ' Lovasz (Math. Ann. 261 (1982) 515-534) to obtain a "reduced basis"
+ 1680   ' for the following bilinear form over Z,  (N is a large parameter):
+ 1690   '
+ 1700   '   q(a0, ... ,an) = a2^2+a3^2+...+an^2+N*abs(a0+...+an*z^n)^2
+ 1710   '
+ 1720   ' Since a short vector for the form makes a0+...+an*z^n very small,
+ 1730   ' this tests if the number z is algebraic.
+ 1740   '
+ 1750   ' If z is real the program uses the following form Q instead of q
+ 1760   '
+ 1770   '   Q(a0, ... ,an) = a1^2+...+an^2+N*(a0+...+an*z^n)^2
+ 1780   '
+ 1790   ' The program uses a parameter RQ.   N is 10^RQ.
+ 1800   ' We use about 1.875*(number of digits carried).
+ 1810   '
+ 1820   ' Suggested values (assuming abs(z) not too far from 1):  To find
+ 1830   ' ai bounded by 10^c you will need a bit more than n*c digits of
+ 1840   ' accuracy for z.  Try RQ around n*c (2*n*c in the real case),
+ 1850   ' but below 2*(number of digits carried) to limit roundoff error.
+ 1860   '
+ 1870   ' Running time is roughly proportional to RQ*(n-1)^2 for given POINT.
+ 1880   ' Thus, with POINT and RQ optimized for for given c and n,
+ 1890   ' it is very roughly proportional to c^3*n^5.
+ 1900   '                                              W.D. Neumann
+ 1910   '

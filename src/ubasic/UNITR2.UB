@@ -1,0 +1,59 @@
+   10   'UNITR2  version 2.3
+   20   '
+   40   print "    * Fundamental Units of Real Quadratic Fields *"
+   50   print "    * coefficients w.r.t standard integer basis  *":print
+   60   *INPUT
+   70   input "start=";M
+   80   if M<2 then print:goto *INPUT
+   90   if M>=2^34 then print "too big":goto *INPUT
+  100   loop
+  110    print M;":";
+  120    if fnSqDiv(M)>1 then print:jump
+  130    gosub *UnitR2(M,&A#,&B#,&Norm)
+  140    print " ";Norm;"= Norm";
+  150    print "(";A#;",";B#;")"
+  160    **
+  170    inc M
+  180   endloop
+  190   end
+  200   '
+  210   *UnitR2(M,&A#,&B#,&Norm)
+  220   ' in: M
+  230   ' out: A#,B# are coefficients and Norm is its norm
+  240   local A,C,A0,C0,QM,C#,G#,WA#,WB#,WC#
+  250   '
+  260   '*get irreducible quadratic irrationals
+  270   '
+  280   QM=isqrt(M)
+  290   if M@4<>1 then A=QM:C=1
+  300          :else A=QM:C=2:if even(A) then dec A
+  310   A0=A:C0=C:A#=A0:B#=1:C#=C0
+  320   '
+  330   '*continued fraction expansion
+  340   '
+  350   loop
+  360    A=QM-(A+QM)@C
+  370    C=(M-A^2)\C
+  380    if and{C=C0,A=A0} then *Normalize
+  390    WA#=A#*A+B#*M:WB#=A#+A*B#:WC#=C#*C
+  400    G#=gcd(gcd(WA#,WC#),WB#)
+  410    A#=WA#\G#:B#=WB#\G#:C#=WC#\G#
+  420   endloop
+  430   '
+  440   '*normalize coefficients
+  450   '
+  460   *Normalize
+  470   if M@4<>1 then Norm=A#^2-B#^2*M
+  480          :else
+  490             :if C#<>2 then A#=2*A#:B#=2*B# endif
+  500             :A#=(A#-B#)\2
+  510             :Norm=((2*A#+B#)^2-M*B#^2)\4
+  520   return
+  530   '
+  540   ' get a square divisor
+  550   '
+  560   fnSqDiv(N)
+  570   local SD
+  580    SD=prmdiv(N):N=N\SD
+  590    if N=1 then SD=1 else if N@SD then 580
+  600   return(SD)

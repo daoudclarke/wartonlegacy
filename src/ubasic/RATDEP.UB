@@ -1,0 +1,136 @@
+   10   ' See end of listing for a program description.
+   20   input "decimals after point";P%:P%=1+int(P%/4.8)
+   30   word min(542,4*P%):point P%
+   40   D%=isqrt(10000/P%):print "Maximal dimension set to ";D%+1
+   50   dim R(D%),B(D%,D%),M(D%,D%),V(D%) 'used by main algorithm
+   60   dim X(D%),Y(D%),Z(D%) '            used by *SEARCH
+   70   PP=0.9
+   80   Ps=8 ' Display width for printing coefficients
+   90   '
+  100   gosub *MENU
+  110   loop:gosub *CHOICE:endloop
+  120   '
+  130   *MENU:print "1: Input data to check for linear dependence"
+  140   print "2: Input datum to test for algebraicity (previous value is x)"
+  150   print "3: Run form reduction"
+  160   print "4: Look for short vectors"
+  170   print "5: Change display width and redisplay"
+  180   '
+  190   *CHOICE:input "CHOICE (0 for menu)";A:if A=0 goto *MENU
+  200   if A=1 goto *LINEAR
+  210   if A=2 goto *ALG
+  220   if DT=0 then print "No data.":goto *CHOICE
+  230   if A=3 goto *INIT
+  240   if A=4 then if RD=0 print "First run reduction!" else goto *SEARCH
+  250   if A=5 then print "Width (Current is";Ps;")";:input Ps:goto *Howbig
+  260   goto *CHOICE
+  270   '
+  280   *LINEAR
+  290   input "Number of entries (n=0 to return)";M%
+  300   if or{M%<2,M%>D%} then return
+  310   N%=M%-1:RD=0:DT=0:for I=0 to N%:print "X(";I;") =";:input R(I)
+  320   if R(I)=0 then return
+  330   next:DT=1:return
+  340   '
+  350   *ALG:input "Degree";M%:if M%<1 then return
+  360   N%=M%:RD=0:DT=0:input "X";X:if X=0 then return
+  370   if abs(X)>1 then input "|X|<=1 is best. Invert X (0/1)";I
+  380     :if I then X=1/X:print "X inverted"
+  390   R(0)=1:for I=0 to N%-1:R(I+1)=R(I)*X:next:DT=1:return
+  400   '
+  410   *INIT
+  420   print "Parameter (best <";int(9.6*P%);"; see comments. 0 exits)";
+  430   input RQ:if RQ=0 then return else RQ=10^RQ
+  440   '
+  450   Rr=1
+  460   clr block M(0..N%,0..N%)
+  470   V(0)=re(R(0))^2+im(R(0))^2:V(1)=im(R(0)*conj(R(1)))
+  480   for J=1 to N%:M(J,0)=re(R(0)*conj(R(J)))/V(0):next
+  490   if V(1)=0 then V(1)=1:print "Assuming real entries. ":Rr=0:jump
+  500   for J=2 to N%:M(J,1)=im(R(0)*conj(R(J)))/V(1):next
+  510   V(1)=V(1)^2/V(0)*RQ
+  520   **:V(0)=V(0)*RQ
+  530   for J=2 to N%:V(J)=1:next
+  540   clr block B(0..N%,0..N%):for I=0 to N%:B(I,I)=1:next
+  550   '
+  560   K=1:goto *R1
+  570   *R2:M=M(K,K-1):V=V(K)+M*M*V(K-1):M(K,K-1)=M*V(K-1)/V
+  580   V(K)=V(K-1)*V(K)/V:V(K-1)=V
+  590   swap block B(K,0..N%),block B(K-1,0..N%)
+  600   if K>1 then swap block M(K,0..K-2),block M(K-1,0..K-2)
+  610   for I=K+1 to N%
+  620   V=M(I,K):M(I,K)=M(I,K-1)-M*V:M(I,K-1)=V+M(K,K-1)*M(I,K):next
+  630   if K>1 then dec K
+  640   *R1:L=K-1:gosub *R3
+  650   if V(K)/V(K-1)+M(K,K-1)*M(K,K-1)<PP goto *R2
+  660   for L=K-2 to 0 step -1:gosub *R3:next L
+  670   inc K:if K<=N% goto *R1
+  680   RD=1:goto *HOWBIG:'                       This is the exit line.
+  690   *R3:if abs(M(K,L))<=0.5 then return
+  700   R=int(0.5+M(K,L))
+  710   for I=0 to N%:B(K,I)=B(K,I)-R*B(L,I):next I
+  720   M(K,L)=M(K,L)-R:for I=0 to L-1:M(K,I)=M(K,I)-R*M(L,I):next
+  730   return
+  740   '
+  750   *HOWBIG:print " coefficients | value of linear comb. | value of form"
+  760   for I=0 to N%:clr AF,A:for J=0 to N%:print using(Ps),B(I,J);
+  770   A=A+B(I,J)*R(J):AF=AF+B(I,J)*B(I,J):next:print "|";
+  780   gosub *PR(A):print "|";
+  790   gosub *PR(AF+RQ*abs(A)^2-B(I,0)^2-Rr*B(I,1)^2):print
+  795   Ans=input$(1):if not Ans=" " then cancel for:return
+  800   next:return
+  810   '
+  820   *SEARCH:K=N%:clr Y(N%),Z(N%),NN
+  830   input "Search up to square length (try v(0) for shortest vector)";TT
+  840   input "Print vectors (0/1)";S%:if S% then print "vector | len. | form"
+  850   goto *S1
+  860   *S0:dec K:Z(K)=0:for I=K+1 to N%:Z(K)=Z(K)+M(I,K)*X(I):next
+  870   Y(K)=Y(K+1)+V(K+1)*(X(K+1)+Z(K+1))^2
+  880   *S1:X(K)=int(sqrt((TT-Y(K))/V(K))-Z(K))
+  890   *S2:while V(K)*(X(K)+Z(K))^2>TT-Y(K):inc K:dec X(K):wend
+  900   'if K=N%+1 then print "ERROR":stop:return
+  910   if K goto *S0
+  920   if or{X(0),Y(0)}-1 then print 2*NN;"nonzero vectors up to";using(,2),TT
+  930   :return
+  940   if S% then AF=0:for I=0 to N%:A=0:for J=0 to N%:A=A+X(J)*B(J,I)
+  950   :next:print using(Ps),A;:AF=AF+A*R(I)
+  960   :next:print "|";:gosub *PR(AF)
+  970   :print "|";:gosub *PR(V(0)*(X(0)+Z(0))^2+Y(0)):print
+  980   inc NN:dec X(K):goto *S2
+  990   '
+ 1000   *PR(PR)
+ 1010   local PE
+ 1020   PE=0:if PR=0 then jump
+ 1030   while abs(PR)>=10:PR=PR/10:PE=PE+1:wend
+ 1040   while abs(PR)<1:PR=PR*10:PE=PE-1:wend
+ 1050   **:print using(3,3),PR;" E";using(4),PE;
+ 1060   return
+ 1070   '
+ 1080   ' This program uses the reduction algorithm of Lengstra, Lengstra,
+ 1090   ' Lovasz (Math. Ann. 261 (1982) 515-534) to obtain a "reduced basis"
+ 1100   ' for the following bilinear form over Z,  (N is a large parameter):
+ 1110   '
+ 1120   '   q(a0, ... ,an) = a2^2+a3^2+...+an^2+N*abs(z0*a0+...+zn*an)^2
+ 1130   '
+ 1140   ' This tests integral dependence of the complex numbers z0,...,zn,
+ 1150   ' since a short vector for the form makes z0*a0+...+zn*an very small.
+ 1160   ' To test if a number z is algebraic, zi=z^i is used in the above.
+ 1170   '
+ 1180   ' If z0/z1 is real the program assumes the zi are ALL real and
+ 1190   ' uses the following form Q instead of q
+ 1200   '
+ 1210   '   Q(a0, ... ,an) = a1^2+...+an^2+N*(z0*a0+...+zn*an)^2
+ 1220   '
+ 1230   ' A search algorithm is included to find short vectors for the form.
+ 1240   '
+ 1250   ' The program prompts for a parameter RQ.   N is 10^RQ.
+ 1260   '
+ 1270   ' Suggested values (assuming the zi are not too far from 1):  To find
+ 1280   ' ai bounded by 10^c you will need a bit more than n*c digits of
+ 1290   ' accuracy for the zi.  Try RQ around n*c (2*n*c in the real case),
+ 1300   ' but below 2*(number of digits carried) to limit roundoff error.
+ 1310   '
+ 1320   ' Running time is roughly proportional to RQ*(n-1)^2 for given POINT.
+ 1330   ' Thus, with POINT and RQ optimized for for given c and n,
+ 1340   ' it is very roughly proportional to c^3*n^5.
+ 1350   '                                                        W.D. Neumann

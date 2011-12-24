@@ -1,0 +1,19 @@
+   10   *Ressol(P,A,&R)
+   20   ' Algorithm of Shanks to solve x^2 = A (mod P).  The solution
+   30   ' is returned in R.  It is assumed that P is an odd prime and
+   40   ' that A is a quadratic residue modulo P.
+   50   ' 15 May 1990
+  100   local S=0,I,J,Limit,N,Z=2,C,B,Te,K
+  110   Te=P-1:K=Te\2
+  120   repeat inc S:Te=K:K=Te\2 until res
+  130   N=modpow(A,Te,P):R=modpow(A,K+1,P)
+  140   if N=1 then return endif
+  150   while kro(Z,P)<>-1:inc Z wend
+  160   C=modpow(Z,Te,P)
+  165   repeat Limit=S:B=N
+  170   for I=1 to Limit
+  180   if B=1 then B=C:S=I-1 else B=(B*B)@P endif
+  185   next I
+  190   C=(B*B)@P:R=(B*R)@P:N=(C*N)@P
+  200   until N=1
+  210   return ' End of subroutine Ressol.

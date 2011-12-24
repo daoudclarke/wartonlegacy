@@ -1,0 +1,97 @@
+   10   'REALQF  version 2.3
+   20   ' 1st version         by Y.KIDA
+   30   ' corrected & revised by A.KUDO & Y.KIDA
+   40   '
+   50   word 3
+   60   XF=5000:OF=2^23
+   70   dim X(XF),MX%(XF)
+   80   print:print "Fundamental units and class numbers of real quadratic fields"
+   90   print "Displays fundamental units as coefficients of canonical integral basis"
+  100   *INPUT:print:input "Inside the square root=";M
+  110   clr time
+  120   if M<2 then end
+  130   if M>2^34 then print "Too big":goto 100
+  140   if fnSqDiv(M)>1 then print "It has a square divisor.":goto 100
+  150   gosub *RealQuadratic(M)
+  160   print "Fundamental units is (";UA#;",";UB#;")"
+  170   print "Class number is      ";H
+  180   print "( F=";F;")";tab(20);time
+  190   goto *INPUT
+  200   '
+  210   'PART1
+  220   '
+  230   *RealQuadratic(M)
+  240   D=M:A=1:if M@4<>1 then D=4*M:A=2
+  250   '
+  260   'PART 2 : Register irreducible quadratic irrational numbers (half numbers only)
+  270   '
+  280   QD=isqrt(D):F=0
+  290   loop
+  300    Y=(D-A^2)\4:if Y<=0 goto *EXPAND_IN
+  310    IA=(QD-A)\2
+  320    if even(Y) then
+  330       :for C=IA+1 to isqrt(Y)
+  340           :if Y@C else inc F:X(F)=A*OF+2*C endif
+  350       :next
+  360    :else
+  370       :for C=IA+IA@2+1 to isqrt(Y) step 2
+  380           :if Y@C else inc F:X(F)=A*OF+2*C endif
+  390       :next
+  400    A=A+2
+  410   endloop
+  420   '
+  430   'PART 3 : Expand in ontinued fraction and classify
+  440   '         Calculate fundamental units simultaneously first
+  450   '
+  460   *EXPAND_IN
+  470   X(F+1)=0:'sentinel
+  480   H=0:II%=1:N=1
+  490   X0=X(II%):A=X0\OF:C=res
+  500   UA#=A:UB#=1:UC#=C
+  510   '
+  520   loop
+  530    C0=C:A=QD-(A+QD)@C:C=(D-A^2)\C
+  540    if C>C0 goto 580:'unregistered
+  550    X=A*OF+C
+  560    if X=X0 goto *EXP1_END:'expansion cycles
+  570    I%=find(X,X(1),F)+1:MX%(I%)=1:'delete same class
+  580    WA#=UA#*A+UB#*D:WB#=UA#+UB#*A:WC#=UC#*C
+  590    G#=gcd(WA#,gcd(WB#,WC#))
+  600    UA#=WA#\G#:UB#=WB#\G#:UC#=WC#\G#
+  610    inc N
+  620   endloop
+  630   '
+  640   *EXP1_END
+  650   if D@4 then
+  660    :if UC#<>2 then UA#=2*UA#:UB#=2*UB# endif
+  670    :UA#=(UA#-UB#)\2
+  680   :else
+  690    :if UC#=1 then UB#=2*UB#
+  700    :else UA#=UA#\2 endif
+  710   '
+  720   *ALLDONE?
+  730   repeat:inc II%:until MX%(II%)=0
+  740   inc H:if II%<=F goto *NEXT_CLASS
+  750   if N@2 then H=-H
+  760   block MX%(0..F)=0
+  770   return
+  780   '
+  790   *NEXT_CLASS
+  800   X0=X(II%):A=X0\OF:C=res
+  810   '
+  820   loop
+  830    repeat
+  840       C0=C:A=QD-(A+QD)@C:C=(D-A^2)\C
+  850    until C<=C0
+  860    X=A*OF+C
+  870    if X=X0 goto *ALLDONE?
+  880    I%=find(X,X(1),F)+1:MX%(I%)=1
+  890   endloop
+  900   '
+  910   ' get a square divisor
+  920   '
+  930   fnSqDiv(N)
+  940   local SD
+  950    SD=prmdiv(N):N=N\SD
+  960    if N=1 then SD=1 else if N@SD then 950
+  970   return(SD)

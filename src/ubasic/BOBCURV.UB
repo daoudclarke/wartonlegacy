@@ -1,0 +1,39 @@
+   10   N1=370125431212791493973299299091711788985313459
+   11   print "n1",N1
+   12   N3=N1^(2/3)
+   14   N3=int(N3)
+   16   print N3
+   18   N4=N1/N3
+   20   print N4
+   22   Tn=+1*N1/(N3*N3)
+   24   print "tn",Tn
+   26   N5=N1/(N3-10^14)
+   28   N6=N4+Tn*10^14
+   30   print "n5n6",N5,N6
+   32   N=10^20
+   34   Litd=N4*10^20
+   36   print "litd",Litd
+   38   Litd2=int(Litd)
+   40   Temp=int(Litd2/(10^20))
+   42   print "temp",Temp
+   46   Little=Litd2-Temp*10^20
+   47   print "little",Little
+   48   N=10^20
+   50   N3=N1^(5/8)
+   52   N3=int(N3)
+   54   N4=N1/N3
+   56   print "n3",N3
+   58   Tn=N1/(N3*N3)
+   60   print "tn",Tn
+   62   end
+  917   Big=N
+  918   Little=int(Little)
+  919   Temp=int(Big/Little)
+  920   Rem1=Big-Little*Temp
+  922   if Rem1=0 then goto 940
+  924   Big=Little
+  926   Little=Rem1
+  928   goto 918
+  940   Gcd2=Little
+  942   print "gcdsub",Gcd2
+  950   return

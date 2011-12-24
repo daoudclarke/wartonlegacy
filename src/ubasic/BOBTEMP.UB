@@ -1,0 +1,8 @@
+   10   input "number";N
+   12   for I=2 to 108
+   14   Item=int((I*N)/109)
+   16   N2=I*N-Item*109
+   18   if N2=1 goto 30
+   20   next I
+   30   print I
+   32   end

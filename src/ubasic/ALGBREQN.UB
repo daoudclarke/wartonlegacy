@@ -1,0 +1,136 @@
+   10   'ALGBREQN
+   20   word -200:point 4
+   30   print " * Algeraic Equation of Integral Coefficients *"
+   40   print " * input example : x^3+2*x^2+3*x+4            *":print
+   50   '
+   60   strinput "f(x)=";W#
+   70   if len(W#)<2 then end
+   80   X=_X:F#=val(W#)
+   90   print:print "f(X)=";F#
+  100   A=deg(F#)
+  110   dim Alfa(A),C(A):E=alen(A)+1
+  120   for I=0 to A:Alfa(I)=coeff(F#,I):next
+  130   block C(*)=block Alfa(*)
+  140   '
+  150   C=A:B=A-1
+  160   dim Beta(B)
+  170   for J=0 to B:Beta(J)=(J+1)*Alfa(J+1):next J
+  180   '
+  190   P=Beta(B):Q=Alfa(A):G=gcd(P,Q):P\=G:Q\=G
+  200   if A<=B then
+  210     :for J=0 to B:Beta(J)*=Q:next J
+  220     :for J=0 to A:Beta(B-J)-=P*Alfa(A-J):next J
+  230     :for J=0 to B
+  240       :if Beta(B-J) then B-=J:cancel for:goto 190:endif
+  250     :next J
+  260     :clr G:for J=0 to A:G=gcd(G,Alfa(J)):next J
+  270     :L=A:dim G(L):if Alfa(L)<0 then neg G:endif
+  280     :for J=0 to L:G(J)=Alfa(J)\G:next J
+  290   :else
+  300     :for J=0 to A:Alfa(J)*=P:next J
+  310     :for J=0 to B:Alfa(A-J)-=Q*Beta(B-J):next J
+  320     :for J=0 to A
+  330       :if Alfa(A-J) then A-=J:cancel for:goto 190:endif
+  340     :next J
+  350     :clr G:for J=0 to B:G=gcd(G,Beta(J)):next J
+  360     :L=B:dim G(L):if Beta(L)<0 then neg G:endif
+  370     :for J=0 to L:G(J)=Beta(J)\G:next J
+  380   '
+  390   S=C-L:dim S(S):A=C
+  400   for J=0 to S:S(A-L)=C(A)\G(L)
+  410     if res<>0 then print "error":stop
+  420     for K=0 to L:C(A-K)-=S(A-L)*G(L-K):next K
+  430     for K=0 to A:if C(A-K) then A-=K:cancel for:goto 450
+  440     next K:cancel for:goto 460
+  450   next J
+  460   print:print "Roots of Mutiplicity  >";T;": ":print
+  470   gosub *ALGeqn
+  480   if L=0 then end
+  490   erase Alfa(),C():A=L:dim Alfa(A),C(A)
+  500   block Alfa(0..L)=block G(0..L):block C(0..L)=block G(0..L)
+  510   erase Beta(),G(),S():inc T
+  520   goto 150
+  530   '
+  540   '
+  550   *ALGeqn
+  560   dim A(S),X(S),A1(S),B1(S),C1(S)
+  570   N=S
+  580   randomize
+  590   US=int(-log(#eps)/log(10))-5
+  600   for I=0 to N:A(N-I)=S(I):next I
+  610   if N=1 then goto *Eins:goto 760
+  620   if N=2 then goto *Zwei:goto 760
+  630   '
+  640   block A1(*)=block A(*):N1=N:gosub *Qfac:N2=1
+  650   gosub *Quad:N2+=2:N1-=2:if N1<3 then 670
+  660   block A1(*)=block B1(*):gosub *Qfac:goto 650
+  670   if N1=1 then X(N2)=-B1(1)/B1(0)
+  680   :else P1=B1(1)/B1(0):Q1=B1(2)/B1(0):gosub *Quad:N2+=2
+  690   gosub *Newton
+  700   for I=1 to N
+  710     X=X(I):print " X(";using(E),SS+I;")= ";using(,US),X;
+  720     F=val(F#,X):if im(X)=0 then print spc(US+5);
+  730     print " ( absF(X)= ";using(,US),abs(F);" )"
+  740   next I:print
+  750   SS+=S
+  760   return
+  770   '
+  780   *Quad
+  790     DISC=sqrt(P1^2-4*Q1)
+  800     X(N2)=(-P1+DISC)/2:X(N2+1)=(-P1-DISC)/2
+  810   return
+  820   '
+  830   *Qfac
+  840     clr RT,Ml
+  850     clr CT:P1=2^(RT\2)*(rnd-0.5):Q1=2^(RT\2)*(rnd-0.5)
+  860     B1(0)=A1(0):B1(1)=A1(1)-P1*B1(0):C1(0)=B1(0):C1(1)=B1(1)-P1*C1(0)
+  870     for I1=2 to N1
+  880       B1(I1)=A1(I1)-P1*B1(I1-1)-Q1*B1(I1-2)
+  890       C1(I1)=B1(I1)-P1*C1(I1-1)-Q1*C1(I1-2)
+  900     next
+  910     A1=C1(N1-2):B1=C1(N1-3):C1=C1(N1-1)-B1(N1-1)
+  920     D1=C1(N1-2):X1=B1(N1-1):Y1=B1(N1)
+  930     gosub *Sol22
+  940     P1+=X2:Q1+=Y2
+  950     if and{abs(X2)<=#eps*abs(P1),abs(Y2)<=#eps*abs(Q1)} then return
+  960     inc CT:if CT<30 then 860
+  970     if (X2^2+Y2^2)<0.001 then
+  980       :if Ml=1 then print "poor approx":return
+  990       :else clr CT:Ml=1:goto 860
+ 1000     inc RT
+ 1010   goto 850
+ 1020   '
+ 1030   *Sol22
+ 1040     Det=A1*D1-B1*C1
+ 1050     X2=(D1*X1-B1*Y1)/Det:Y2=(-C1*X1+A1*Y1)/Det
+ 1060   return
+ 1070   '
+ 1080   *Newton
+ 1090     Eps1=#eps*100:Eps2=#eps*1000000000
+ 1100     for MM=1 to N
+ 1110       if absadd(X(MM))<Eps1 then clr X(MM):goto 1150
+ 1120       SX=A(0):for I=1 to N:SX=SX*X(MM)+A(I):next
+ 1130       DX=N*A(0):for I=1 to N-1:DX=DX*X(MM)+(N-I)*A(I):next
+ 1140       X(MM)-=SX/DX
+ 1150     next
+ 1160   return
+ 1170   '
+ 1180   *Eins
+ 1190     X=-A(1)/A(0)
+ 1200     print " X(";using(E),SS+1;")= ";:print using(,US),X;
+ 1210     F=val(F#,X):if im(X)=0 then print spc(US+5);
+ 1220     print " ( absF(X)= ";using(,US),abs(F);" )"
+ 1230     SS+=1
+ 1240   return
+ 1250   '
+ 1260   *Zwei
+ 1270     X=-A(1)+sqrt(A(1)^2-4*A(2)*A(0)):X=X/A(0)/2
+ 1280     print " X(";using(E),SS+1;")= ";:print using(,US),X;
+ 1290     F=val(F#,X):if im(X)=0 then print spc(US+5);
+ 1300     print " ( absF(X)= ";using(,US),abs(F);" )"
+ 1310     X=-A(1)-sqrt(A(1)^2-4*A(2)*A(0)):X=X/A(0)/2
+ 1320     print " X(";using(E),SS+2;")= ";:print using(,US),X;
+ 1330     F=val(F#,X):if im(X)=0 then print spc(US+5);
+ 1340     print " ( absF(X)= ";using(,US),abs(F);" )"
+ 1350     SS+=2
+ 1360   return

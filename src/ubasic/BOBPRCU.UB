@@ -1,0 +1,41 @@
+    1   Ghq=2469135780246913578024691357802469139103
+    2   Ncon=1
+    3   Ncon=Ncon+1
+    4   Rt=(Ghq/Ncon)^(1/3)
+    5   Irt=int(Rt)
+    6   Irem=Ghq-Ncon*Irt^3
+    7   Itemp=int(Irem/4)
+    8   if Irem-Itemp*4=0 then goto 3
+    9   if Irem-Itemp*4>1 then goto 3
+   10   N=Irem
+   11   Ipow=2
+   12   Iy=2
+   13   Iy2=Iy
+   14   if Ipow>N goto 20
+   16   Ipow=Ipow*2
+   18   goto 14
+   20   Ie=int(Ipow/2)
+   22   N1=N
+   24   N1=N1-Ie
+   26   if Ie=1 then goto 100
+   28   Ie=int(Ie/2)
+   30   Iy=Iy*Iy
+   32   Itemp=int(Iy/N)
+   34   Irem1=Iy-Itemp*N
+   36   Iy=Irem1
+   38   if N1<Ie then goto 26
+   40   N1=N1-Ie
+   42   Iy=Iy*Iy2
+   44   Itemp=int(Iy/N)
+   46   Irem1=Iy-Itemp*N
+   48   Iy=Irem1
+   50   goto 26
+  100   if Iy<Iy2 goto 110
+  102   if Iy>Iy2 goto 110
+  104   print N,"is prime"," ncon",Ncon,"irt",Irt
+  106   goto 120
+  110   print N,"is composite"
+  111   goto 3
+  112   N=N+2
+  114   goto 12
+  120   end

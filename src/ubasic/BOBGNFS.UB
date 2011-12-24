@@ -1,0 +1,82 @@
+   44   Lprx1=100000
+   46   Icon=0
+   48   Isivl=100
+   50   N=908309571742911139718930431296865108016652780097
+   52   M=int(N^(1/5))
+   54   print "m",M
+   56   Ibrem=N-M^5
+   58   Ia4=int(Ibrem/M^4)
+   60   Ibrem=Ibrem-Ia4*M^4
+   62   Ia3=int(Ibrem/M^3)
+   64   Ibrem=Ibrem-Ia3*M^3
+   66   Ia2=int(Ibrem/M^2)
+   68   Ibrem=Ibrem-Ia2*M^2
+   70   Ia1=int(Ibrem/M)
+   72   Ibrem=Ibrem-Ia1*M
+   74   Ia0=Ibrem
+   76   print Ia4,Ia3,Ia2,Ia1,Ia0
+  196   Ia=1
+  198   Ib=1
+  200   if Ib=1 then goto 300
+  201   if Ia=1 then goto 300
+  202   Iabia=abs(Ia)
+  203   Iabib=abs(Ib)
+  204   if Iabib>Iabia then goto 220
+  206   Big=Iabia
+  208   Little=Iabib
+  210   gosub 918
+  212   if Gcd2=1 then goto 300
+  214   Ia=Ia+1
+  215   if Ia>Isivl then goto 240
+  216   goto 200
+  220   Big=Iabib
+  222   Little=Iabia
+  224   gosub 918
+  226   if Gcd2=1 then goto 300
+  228   Ia=Ia+1
+  230   if Ia>Isivl then goto 240
+  232   goto 200
+  240   Ib=Ib+1
+  242   if Ib>Isivl then goto 400
+  244   Ia=1
+  246   goto 200
+  300   Ib=Ib
+  304   Kia=Ia
+  306   Kib=Ib
+  308   gosub 1000
+  312   Kia=Ia*(-1)
+  316   gosub 1000
+  326   Ia=Ia+1
+  328   if Ia>Isivl then goto 340
+  330   goto 200
+  340   Ib=Ib+1
+  342   if Ib>Isivl then goto 400
+  344   Ia=1
+  346   goto 200
+  400   end
+  918   Little=int(Little)
+  919   Temp=Big\Little
+  920   Rem1=Big-Little*Temp
+  922   if Rem1=0 then goto 940
+  924   Big=Little
+  926   Little=Rem1
+  928   goto 918
+  940   Gcd2=Little
+  944   return
+ 1000   Norma=Kia^5-Ia4*Kia^4*Kib+Ia3*Kia^3*Kib^2-Ia2*Kia^2*Kib^3
+ 1002   Norma=Norma+Ia1*Kia*Kib^4-Ia0*Kib^5
+ 1004   Litt=(Kia+Kib*M)*Norma
+ 1005   Litd=abs(Litt)
+ 1006   Iab=1
+ 1008   Iprx1=nxtprm(Iab)
+ 1163   Iab=Iprx1
+ 1164   if Iprx1>Lprx1 goto 1190
+ 1166   Itemp=int(Litd/Iab)
+ 1168   Irem1=Litd-Itemp*Iab
+ 1170   if Itemp=0 then goto 1186
+ 1174   if Irem1>0 then goto 1008
+ 1176   Litd=Itemp
+ 1180   goto 1166
+ 1186   Icon=Icon+1
+ 1188   print "hitno",Icon,"a=",Kia,"b=",Kib,Litt
+ 1190   return

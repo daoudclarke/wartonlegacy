@@ -1,0 +1,4 @@
+   10   input "number1";N1
+   12   input "number2";N2
+   14   N3=N1*N2
+   16   print N3

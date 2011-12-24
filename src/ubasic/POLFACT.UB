@@ -1,0 +1,566 @@
+   10   'POLFACT VER 2.02
+   20   '
+   30   '  Polynomial Factorization in Z and Q
+   40   '
+   50   '  reference:D.E.Knuth The Art of Computer Programming, Chapter 4
+   60   '
+   70   randomize
+   80   print
+   90   print " * polynomial factorization  *"
+  100   print " * use x or X for a variable *"
+  110   print " * example : x^3+2*x^2+3*x+4  *":print
+  120   strinput "f(x)=";W#
+  130   if len(W#)<2 then end
+  140   U0#=""
+  150   I%=instr2(W#,"xX")
+  160   if I% then U0#+=left(W#,I%-1)+"_X":W#=mid(W#,I%+1,*):goto 150
+  170   U0#=val(U0#+W#)
+  180   print:print "f(X)=";U0#
+  182   Den=1:for I=0 to deg(U0#):Den=lcm(Den,den(coeff(U0#,I))):next
+  184   U0#*=Den
+  190   X#=fnPolFact(U0#,0)
+  195   member(X#,1)=member(X#,1)//Den
+  200   print:gosub *PrintPoly(&X#):print
+  210   goto 120
+  220   '
+  230   *PrintPoly(&X#)
+  240   local I%,W#
+  250   if member(X#,1)<>1 then print member(X#,1);"* ";
+  260   for I%=2 to len(X#) step 2
+  270     W#="("+str(member(X#,I%))+")"
+  280     if member(X#,I%+1)>1 then W#+="^"+mid(str(member(X#,I%+1)),2,*)
+  290     if I%<len(X#)-1 then W#+=" * "
+  300     if posx then if posx+len(W#)>79 then print
+  310     print W#;
+  320   next:print
+  330   return
+  340   '
+  350   fnPolFact(U0#,Talksw%)
+  360   local I%,GoodDeg%,Deg%=deg(U0#)
+  370   local P,P1,Pa,Pb,R,R1,GoodR,Height,Cfactor,Gcdfactor,Powerfactor
+  380   local G#,X#,Ans#,Umem#
+  390   local Limitwords=540
+  400   ' get const factor
+  410   G#=lcoeff(U0#)
+  420   U0#=fnPrimitive(U0#)
+  430   Cfactor=lcoeff(U0#)
+  440   Gcdfactor=G#\Cfactor
+  450   ' get power of X
+  460   Powerfactor=0
+  470   while ccoeff(U0#)=0
+  480     inc Powerfactor:U0#\=_X
+  490   wend
+  500   if U0#=poly(1) then Umem#=poly(1):Ans#=pack():goto 930
+  510   ' get multi factor
+  520   Umem#=poly(1)
+  530   G#=fnPrimitive(monic(fnGcd(U0#,diff(U0#)))*Cfactor)
+  540   if deg(G#) then Umem#*=G#:U0#\=G#:goto 530
+  550   Cfactor=lcoeff(U0#)
+  560   '
+  570   if fnEisenstein(U0#) then Ans#=pack(U0#):goto 930
+  580   for I%=0 to Deg%:Height+=abs(coeff(U0#,I%)):next
+  590   Height+=abs(lcoeff(U0#))
+  600   Pa=nxtprm(10+min(log(Height)^2,10000)+irnd@50)
+  610   Pa=nxtprm(Pa):if Cfactor@Pa=0 then 610
+  620   Pb=Pa
+  630   Pb=nxtprm(Pb):if Cfactor@Pb=0 then 630
+  640   P=Pb
+  650   P=nxtprm(P):if Cfactor@P=0 then 650
+  660   GoodDeg%=fnGoodDeg(P,Height)
+  670   GoodR=Deg%\2
+  680   R=fnBadness(U0#,P)
+  690   if R<0 then
+  700     :P=nxtprm(P):if Cfactor@P=0 then 700 else 680
+  710   if Talksw% then print "For p=";P;"Badness=";R
+  720   if R=1 then Ans#=pack(U0#):goto 930
+  730   if R<=GoodR\2 then 880
+  740   P1=P
+  750   for I%=1 to deg(U0#)\10+1
+  760     P1=nxtprm(P1)
+  770     R1=fnBadness(U0#,P1)
+  780     if R1<0 then
+  790       :P1=nxtprm(P1):if Cfactor@P1=0 then 790 else 770
+  800     if Talksw% then print "For p=";P1;"Badness=";R1
+  810     if R1=1 then cancel for:Ans#=pack(U0#):goto 930
+  820     if R1>R then
+  830       :if Pa<P then Pa=P1 elseif Pb<P then Pb=P1
+  840     if R1<=R then P=P1:R=R1
+  850     if R<GoodR then cancel for:goto 880
+  860   next
+  870   '
+  880   if Talksw% then print "Use modulus";P
+  890   X#=fnPolfact3(U0#,P)
+  900   Ans#=fnPolFactMain(U0#,X#)
+  910   gosub *SortResult(&Ans#)
+  920   '
+  930   X#=pack(Gcdfactor):'set const factor
+  940   ' set power of X
+  950   if Powerfactor then X#+=pack(_X,Powerfactor)
+  960   for I%=1 to len(Ans#)
+  970     X#+=pack(member(Ans#,I%),1)
+  980   next
+  990   if Umem#=poly(1) then return(X#)
+ 1000   'set multiple factors
+ 1010   for I%=2 to len(X#) step 2
+ 1020     W#=member(X#,I%):J%=1
+ 1030     if W#=_X then 1060
+ 1040     if Umem#@W#=0 then Umem#\=W#:inc J%:goto 1040
+ 1050     member(X#,I%+1)=J%
+ 1060     if Umem#=poly(1) then cancel for:return(X#)
+ 1070   next
+ 1080   print "system error":stop:end
+ 1090   '
+ 1100   '
+ 1110   fnPolFactMain(U0#,X#)
+ 1120   local I%,J%,Deg%,Raisedsw%,UsedGoodDeg%,Pe,R,NewR
+ 1130   local A#,B#,G#,H#,Sw#,U1#,U2#,V#,W#,W1#,Y#,Z#,Ans#=pack()
+ 1140   dim V#(len(X#)),V1#(len(X#))
+ 1150   ' use global GoodDeg%,P,Height,Cfactor
+ 1160   for I%=1 to len(X#)
+ 1170     W#=member(X#,I%):V#=0
+ 1180     for J%=0 to deg(W#):Z#=coeff(W#,J%)
+ 1190       if Z#>P\2 then Z#-=P
+ 1200       coeff(V#,J%)=Z#
+ 1210     next
+ 1220     W#=V#
+ 1230     V#=V#*Cfactor@P
+ 1240     gosub *Reduction(&V#,P)
+ 1250     V#=fnPrimitive(V#)
+ 1260     if fnTry(V#) then U0#\=V#:Ans#+=V#:Cfactor=lcoeff(U0#):goto 1280
+ 1270     V#(R)=W#:inc R
+ 1280   next
+ 1290   if R=0 then return(Ans#)
+ 1300   if R=1 then return(Ans#+U0#)
+ 1310   gosub *RecalcGoodDeg(P)
+ 1320   '
+ 1330   ' check main
+ 1340   '
+ 1350   Pe=P:Pe1=Pe*P:if deg(V#(0))>2*GoodDeg% then *CheckEisen
+ 1360   *LoopforP
+ 1370   Sw#=1
+ 1380   repeat
+ 1390     Deg%=0:for I%=0 to R-1
+ 1400       if bit(I%,Sw#) then Deg%+=deg(V#(I%))
+ 1410     next
+ 1420      if Deg%<=UsedGoodDeg% then jump
+ 1430      if Deg%>min(GoodDeg%*2,deg(U0#)\2) then jump
+ 1440     V#=Cfactor
+ 1450     for I%=0 to R-1
+ 1460       if bit(I%,Sw#) then V#=V#*ccoeff(V#(I%))@Pe
+ 1470     next
+ 1480     if V#>Pe\2 then V#-=Pe
+ 1490     V#\=gcd(V#,Cfactor@Pe)
+ 1500     if ccoeff(U0#)@V# then jump
+ 1510     V#=poly(Cfactor)
+ 1520     for I%=0 to R-1
+ 1530       if bit(I%,Sw#) then V#=V#*V#(I%)@Pe
+ 1540     next
+ 1550     gosub *Reduction(&V#,Pe)
+ 1560     V#=fnPrimitive(V#)
+ 1570     if fnTry(V#) then *ResetV
+ 1580   **:inc Sw#
+ 1590   until Sw#>=2^R-1
+ 1600   if deg(U0#)<=2*GoodDeg% then return(Ans#+U0#)
+ 1610   if (deg(U0#)-deg(V#(R-1)))<=GoodDeg% then return(Ans#+U0#)
+ 1620   UsedGoodDeg%=GoodDeg%
+ 1630   *CheckEisen
+ 1640   if fnEisenstein(U0#) then return(Ans#+U0#)
+ 1650   '
+ 1660   ' for higher power
+ 1670   '
+ 1680   Raisedsw%=1
+ 1690   G#=poly(1):for J%=0 to R-1 step 2:G#=modmul(G#,V#(J%),Pe):next
+ 1700   gosub *Reduction(&G#,Pe)
+ 1710   H#=poly(1):for J%=1 to R-1 step 2:H#=modmul(H#,V#(J%),Pe):next
+ 1720   gosub *Reduction(&H#,Pe)
+ 1730   GHwords=(deg(G#)+deg(H#)+1)*((len(Cfactor)+len(Pe)+31)\16)+1
+ 1740   'if GHwords>Limitwords then
+ 1750   ' :if Raisedsw%>1 then *LoopforP:else return(0):'giveup
+ 1760   modulus=P
+ 1770     V#=fnTransPoly(G#)
+ 1780     W#=fnTransPoly(H#)
+ 1790     A#=fnModpolyModInv(V#,W#)
+ 1800     B#=fnModpolyModInv(W#,V#)
+ 1810     if 2*GHwords<=Limitwords then
+ 1820       :W1#=fnTransPoly((U0#-Cfactor*G#*H#)\Pe)/Cfactor
+ 1830     :else W1#=fnHenselsub(G#,H#)
+ 1840     X#=W1#*B#@V#:Y#=W1#*A#@W#
+ 1850   modulus=0
+ 1860   U1#=fnTransPoly(X#)*Pe+G#
+ 1870   U2#=fnTransPoly(Y#)*Pe+H#
+ 1880   gosub *Reduction(&U1#,Pe1)
+ 1890   gosub *Reduction(&U2#,Pe1)
+ 1900   '
+ 1910   if R=2 then V1#(0)=U1#:goto 2080
+ 1920   for I%=0 to R-1 step 2
+ 1930     G#=V#(I%):H#=poly(1)
+ 1940     for J%=0 to R-1 step 2:if J%<>I% then H#=modmul(H#,V#(J%),Pe)
+ 1950     next
+ 1960     gosub *Reduction(&H#,Pe)
+ 1970     modulus=P
+ 1980       V#=fnTransPoly(G#)
+ 1990       W#=fnTransPoly(H#)
+ 2000       B#=fnModpolyModInv(W#,V#)
+ 2010       X#=fnTransPoly((U1#-modmul(G#,H#,Pe1))\Pe)*B#@V#
+ 2020     modulus=0
+ 2030     X#=fnTransPoly(X#)*Pe+V#(I%)
+ 2040     gosub *Reduction(&X#,Pe1)
+ 2050     V1#(I%)=X#
+ 2060   next
+ 2070   '
+ 2080   if R<=3 then V1#(1)=U2#:goto 2240
+ 2090   for I%=1 to R-1 step 2
+ 2100     G#=V#(I%):H#=poly(1)
+ 2110     for J%=1 to R-1 step 2:if J%<>I% then H#=modmul(H#,V#(J%),Pe)
+ 2120     next
+ 2130     gosub *Reduction(&H#,Pe)
+ 2140     modulus=P
+ 2150       V#=fnTransPoly(G#)
+ 2160       W#=fnTransPoly(H#)
+ 2170       B#=fnModpolyModInv(W#,V#)
+ 2180       X#=fnTransPoly((U2#-modmul(G#,H#,Pe1))\Pe)*B#@V#
+ 2190     modulus=0
+ 2200     X#=fnTransPoly(X#)*Pe+V#(I%)
+ 2210     gosub *Reduction(&X#,Pe1)
+ 2220     V1#(I%)=X#
+ 2230   next
+ 2240   block V#(0..R-1)=block V1#(0..R-1)
+ 2250   Pe*=P:Pe1*=P:GoodDeg%=fnGoodDeg(Pe,Height)
+ 2260   if Talksw% then print chr(5);
+ 2270   :print chr(13);"Use modulus";Pe;"valid for degree <=";GoodDeg%
+ 2280   if GoodDeg%<=1 then 1680
+ 2290   if Raisedsw%=1 then inc Raisedsw%:goto 1690 else *LoopforP
+ 2300   '
+ 2310   *ResetV
+ 2320   U0#\=V#:Ans#+=V#:Cfactor=lcoeff(U0#):if U0#=1 then return(Ans#)
+ 2330   gosub *RecalcGoodDeg(Pe)
+ 2340   if Talksw% then print chr(5);
+ 2350   :print chr(13);"Use modulus";Pe;"valid for degree <=";GoodDeg%
+ 2360   NewR=0
+ 2370   for I%=0 to R-1
+ 2380     if bit(I%,Sw#)=0 then V#(NewR)=V#(I%):inc NewR
+ 2390   next
+ 2400   R=NewR
+ 2410   if R=1 then return(Ans#+U0#) else *LoopforP
+ 2420   '
+ 2430   fnPolymod(X#,Y#):'Y# must be monic
+ 2440   local I%
+ 2450   for I%=deg(X#) to deg(Y#) step -1
+ 2460     X#=(X#-coeff(X#,I%)*Y#*_X^(I%-deg(Y#)))@(Pe*P)
+ 2470   next
+ 2480   return(X#)
+ 2490   '
+ 2500   fnHenselsub(G#,H#)
+ 2510   local I%,K%,V#,W#,Cfinv
+ 2520   Cfinv=modinv(Cfactor,P)
+ 2530   for K%=0 to deg(G#)+deg(H#):W#=0
+ 2540     for I%=max(K%-deg(H#),0) to min(deg(G#),K%)
+ 2550       W#+=coeff(G#,I%)*coeff(H#,K%-I%)@Pe1
+ 2560     next
+ 2570     coeff(V#,K%)=(coeff(U0#,K%)-Cfactor*W#@Pe1)\Pe*Cfinv
+ 2580   next
+ 2590   return(V#)
+ 2600   '
+ 2610   fnGoodDeg(P,Height)
+ 2620   local Deg%=0
+ 2630   while P>2*Height*combi(Deg%,Deg%\2)
+ 2640     inc Deg%
+ 2650   wend
+ 2660   return(Deg%)
+ 2670   '
+ 2680   *RecalcGoodDeg(P)
+ 2690   local I%,W#
+ 2700   for I%=0 to deg(U0#):W#+=abs(coeff(U0#,I%)):next
+ 2710   W#+=abs(lcoeff(U0#))
+ 2720   if W#>Height then return
+ 2730   Height=W#:GoodDeg%=fnGoodDeg(P,Height):return
+ 2740   '
+ 2750   fnTry(V#)
+ 2760   local I%,WU#,WV#
+ 2770   if ccoeff(U0#)@ccoeff(V#) then return(0)
+ 2780   if lcoeff(U0#)@lcoeff(V#) then return(0)
+ 2790   modulus=Pa
+ 2800     WU#=fnTransPoly(U0#):WV#=fnTransPoly(V#)
+ 2810     if WU#@WV# then modulus=0:return(0)
+ 2820   modulus=Pb
+ 2830     WU#=fnTransPoly(U0#):WV#=fnTransPoly(V#)
+ 2840     if WU#@WV# then modulus=0:return(0)
+ 2850   modulus=0
+ 2860   if U0#@V# then return(0)
+ 2870   return(1)
+ 2880   '
+ 2890   *Reduction(&W#,P)
+ 2900   local I%,Z#
+ 2910   for I%=0 to deg(W#)
+ 2920     Z#=coeff(W#,I%)@P:if Z#>P\2 then Z#-=P
+ 2930     coeff(W#,I%)=Z#
+ 2940   next
+ 2950   return
+ 2960   '
+ 2970   fnTransPoly(X#)
+ 2980   local I%,W#
+ 2990   for I%=0 to deg(X#)
+ 3000     coeff(W#,I%)=coeff(X#,I%)
+ 3010   next
+ 3020   return(W#)
+ 3030   '
+ 3040   fnEisenstein(X#)
+ 3050   local I%,J%,X%,P,X,W#,Z#,Modmem=modulus
+ 3060   for I%=0 to 2:X%=(I%+1)\2:if res then neg X%
+ 3070     X=X%:W#=abs(val(str(X#)))
+ 3080     if W#=0 then cancel for:goto 3270
+ 3090     if W#=1 then 3260
+ 3100     P=prmdiv(W#):if or{P>2^16,P=0} then 3260
+ 3110     if lcoeff(X#)@P=0 then 3130
+ 3120     W#\=P:if W#@P then 3140
+ 3130     W#\=P:if W#@P then 3090 else 3130
+ 3140     modulus=P
+ 3150     Z#=fnTranspoly(X#)
+ 3160     X=X%+_X:Z#=val(str(Z#))
+ 3170     for J%=1 to deg(Z#)-1
+ 3180       if coeff(Z#,J%) then cancel for:goto 3260
+ 3190     next
+ 3200     if Talksw% then print "primarity by Eisenstein";
+ 3210     :if X% then print " after X -> X";
+ 3220       :if X%<0 then print str(X%);
+ 3230       :else print "+";mid(str(X%),2,*); endif
+ 3240       :print " with prime";P
+ 3250     cancel for:modulus=Modmem:return(1)
+ 3260   next
+ 3270   modulus=Modmem:return(0)
+ 3280   '
+ 3290   fnGcd(X#,Y#)
+ 3300   local P,G#,W#,Z#
+ 3310   P=prm(5000+irnd@1000)
+ 3320   modulus=P
+ 3330   W#=fnTransPoly(X#):Z#=fnTransPoly(Y#)
+ 3340   if or{deg(W#)<deg(X#),deg(Z#)<deg(Y#)} then P=nxtprm(P):goto 3320
+ 3350   if deg(gcd(W#,Z#))=0 then modulus=0:return(poly(1))
+ 3360   modulus=0
+ 3370   X#=fnPrimitive(X#):Y#=fnPrimitive(Y#)
+ 3380   if X#=0 then return(Y#)
+ 3390   if Y#=0 then return(X#)
+ 3400   if deg(X#)<deg(Y#) then swap X#,Y#
+ 3410   W#=lcoeff(X#):Z#=lcoeff(Y#)
+ 3420   G#=gcd(W#,Z#):W#\=G#:Z#\=G#
+ 3430   if W#<>1 then Y#*=W#
+ 3440   if Z#<>1 then X#*=Z#
+ 3450   X#-=Y#*_X^(deg(X#)-deg(Y#))
+ 3460   if X# then X#=fnPrimitive(X#)
+ 3470     :goto 3400
+ 3480   return(fnPrimitive(Y#))
+ 3490   '
+ 3500   fnPrimitive(X#)
+ 3510   local I%,G#
+ 3520   for I%=0 to deg(X#)
+ 3530     G#=gcd(G#,coeff(X#,I%)):if G#=1 then cancel for:goto 3550
+ 3540   next
+ 3550   if lcoeff(X#)<0 then neg G#
+ 3560   if G#=1 then return(X#)
+ 3570   return(X#\G#)
+ 3580   '
+ 3590   '
+ 3600   fnPolfact3(U0#,P)
+ 3610   local I%,Deg%=deg(U0#),U#,X#,Z#,Ans#=pack()
+ 3620   dim Z#(Deg%)
+ 3630   modulus=P
+ 3640   X#=modinv(lcoeff(U0#),P)
+ 3650   for I%=0 to Deg%:coeff(U#,I%)=coeff(U0#,I%)*X#@P:next
+ 3660   if deg(U#)<Deg% then modulus=0:return(pack())
+ 3670   gosub *RemoveMultiFactor:'U# -> U# * MF#
+ 3680   if deg(U#)<Deg% then modulus=0:return(pack())
+ 3690   '
+ 3700   'get product of factors for each degree
+ 3710   '
+ 3720   gosub *MakeZPZ
+ 3730   Deg%=1
+ 3740   *DegreeLoop
+ 3750     X#=monic(gcd(U#,Z#))
+ 3760     if deg(X#) then Ans#+=fnIrredFactor(X#)
+ 3770       :U#\=X#
+ 3780     if deg(U#)<=2*Deg%+1 then 3830
+ 3790     gosub *RaiseZPZ
+ 3800     inc Deg%
+ 3810   goto *DegreeLoop
+ 3820   '
+ 3830   if deg(U#) then Ans#+=U#
+ 3840   gosub *SortResult(&Ans#)
+ 3850   modulus=0
+ 3860   return(Ans#)
+ 3870   '
+ 3880   ' power of polynomial mod U#
+ 3890   '
+ 3900   fnPolyPower(Z#,E#)
+ 3910   local I%,W#
+ 3920   if E#=0 then return(poly(1))
+ 3930   W#=Z#
+ 3940   for I%=len(E#)-2 to 0 step -1
+ 3950     W#=W#^2@U#
+ 3960     if bit(I%,E#) then W#=W#*Z#@U#
+ 3970   next
+ 3980   return(W#)
+ 3990   '
+ 4000   ' remove multiple factors
+ 4010   '
+ 4020   *RemoveMultiFactor
+ 4030   local I%,DU#,W#,G#
+ 4040   MF#=U#
+ 4050   DU#=diff(U#):if deg(DU#)=0 then jump
+ 4060   if DU#=0 then W#=U#:U#=1:goto 4150:'p-th power poly
+ 4070   G#=monic(gcd(U#,DU#))
+ 4080   if deg(G#)=0 then jump:'no multiple
+ 4090   :else U#\=G#:W#=G#
+ 4100   repeat:'extract p-th power part
+ 4110     G#=monic(gcd(U#,W#))
+ 4120     W#\=G#
+ 4130   until deg(G#)=0
+ 4140   if deg(W#)<=0 then jump:'no p-th power
+ 4150   G#=0:for I%=0 to deg(W#)\P:coeff(G#,I%)=coeff(W#,I%*P):next
+ 4160   U#*=G#:'restore 1-st power
+ 4170   goto 4050
+ 4180   **
+ 4190   MF#\=U#
+ 4200   return
+ 4210   '
+ 4220   ' Get Irreducible Factors
+ 4230   '	find factors of Deg% degree
+ 4240   '
+ 4250   fnIrredFactor(F#)
+ 4260   local I%,G#,U#,PowNeg#,W#,Z#,Ans#=pack()
+ 4270   if deg(F#)=Deg% then return(pack(F#))
+ 4280   U#=F#
+ 4290   Tmp#=pack(F#)
+ 4300   repeat
+ 4310     W#=fnRndPoly(2*Deg%-1)
+ 4320     W#=fnWPD(W#,Deg%)+poly(1)
+ 4330     U#=poly(1)
+ 4340     for I%=1 to len(Tmp#)
+ 4350       F#=member(Tmp#,I%)
+ 4360       if F#=0 then 4440
+ 4370       G#=monic(gcd(F#,W#))
+ 4380       if and{0<deg(G#),deg(G#)<deg(F#)} then
+ 4390         :F#\=G#
+ 4400         :if deg(F#)=Deg% then Ans#+=F#:F#=0 else U#*=F# endif
+ 4410         :member(Tmp#,I%)=F#
+ 4420         :if deg(G#)=Deg% then Ans#+=G# else Tmp#+=G#:U#*=G# endif
+ 4430       :else U#*=F#
+ 4440     next
+ 4450   until U#=poly(1)
+ 4460   return(Ans#)
+ 4470   '
+ 4480   fnRndPoly(Deg%)
+ 4490   local W#
+ 4500   Deg%=2+int(rnd*rnd*Deg%)
+ 4510   for I%=0 to Deg%
+ 4520     coeff(W#,I%)=int(rnd*P)
+ 4530   next
+ 4540   return(W#)
+ 4550   '
+ 4560   *SortResult(&X#)
+ 4570   local I%,J%,Ptr%,W#,W1#,W2#
+ 4580   W#=X#:X#=pack()
+ 4590   for I%=1 to len(W#)-1
+ 4600     Ptr%=I%:W1#=member(W#,I%)
+ 4610     for J%=I%+1 to len(W#)
+ 4620       W2#=member(W#,J%)
+ 4630       if fnPolycmp(&W1#,&W2#)>0 then Ptr%=J%:W1#=W2#
+ 4640     next
+ 4650     X#+=W1#:if Ptr%<>I% then W1#=member(W#,I%):member(W#,Ptr%)=W1#
+ 4660   next
+ 4670   X#+=member(W#,len(W#))
+ 4680   return
+ 4690   '
+ 4700   fnPolyCmp(&W1#,&W2#)
+ 4710   local I%
+ 4720   if deg(W1#)>deg(W2#) then return(1)
+ 4730   if deg(W1#)<deg(W2#) then return(-1)
+ 4740   for I%=deg(W1#) to 0 step -1
+ 4750     if abs(coeff(W1#,I%))>abs(coeff(W2#,I%)) then cancel for:return(1)
+ 4760     if abs(coeff(W1#,I%))<abs(coeff(W2#,I%)) then cancel for:return(-1)
+ 4770     if coeff(W1#,I%)>coeff(W2#,I%) then cancel for:return(1)
+ 4780     if coeff(W1#,I%)<coeff(W2#,I%) then cancel for:return(-1)
+ 4790   next
+ 4800   return(0)
+ 4810   '
+ 4820   *Badness(U0#,P)
+ 4830   local I%,Deg%,DU#,G#,U#,Badness
+ 4840   dim Z#(deg(U0#))
+ 4850   modulus=P
+ 4860   for I%=0 to deg(U0#):coeff(U#,I%)=coeff(U0#,I%)@P:next
+ 4870   if deg(U#)<deg(U0#) then return(-1)
+ 4880   '
+ 4890   DU#=diff(U#):if deg(DU#)=0 then 4940
+ 4900   if DU#=0 then return(-1)
+ 4910   G#=gcd(U#,DU#)
+ 4920   if deg(G#) then return(-1)
+ 4930   '
+ 4940   gosub *MakeZPZ
+ 4950   Deg%=1
+ 4960   '
+ 4970   G#=gcd(U#,Z#)
+ 4980   if deg(G#) then U#\=G#
+ 4990   for I%=1 to deg(U#):Z#(I%)@=U#:next
+ 5000     :if deg(G#)=Deg% then inc Badness else Badness+=(deg(G#)\Deg%)^2
+ 5010   if deg(U#)>2*Deg%+1 then inc Deg%
+ 5020     :gosub *RaiseZPZ
+ 5030     :goto 4970
+ 5040   if deg(U#) then inc Badness
+ 5050   modulus=0
+ 5060   return(Badness)
+ 5070   '
+ 5080   ' polynomial inverse modulo polynomial
+ 5090   ' A#=fnPolyModInv(X#,Y#)
+ 5100   ' B#=(poly(1)-A#*X#)\Y#
+ 5110   ' print A#*X#+B#*Y#
+ 5120   ' must set modulus in advance
+ 5130   fnModpolyModInv(X#,Y#)
+ 5140   local R#,Q#,A#,A1#,W#
+ 5150   if or{X#=0,Y#=0} then print "illegal parameter":stop
+ 5160   A#=poly(1):A1#=0
+ 5170   repeat
+ 5180     Q#=X#\Y#:R#=res:X#=Y#:Y#=R#
+ 5190     W#=A1#:A1#=A#-Q#*W#:A#=W#
+ 5200   until R#=0
+ 5210   if deg(X#)<>0 then print "not coprime":stop
+ 5220   A#\=X#
+ 5230   return(A#)
+ 5240   '
+ 5250   ' MAKE Z^P-Z
+ 5260   '
+ 5270   *MakeZPZ
+ 5280   local I%,W#
+ 5290   if deg(U#)>P then Z#=_X^P:goto 5360
+ 5300   W#=poly(0,1):Z#=poly(1)
+ 5310   for I%=0 to len(P)-2
+ 5320     if bit(I%,P) then Z#=Z#*W#@U#
+ 5330     W#=W#^2@U#
+ 5340   next
+ 5350   Z#=Z#*W#@U#
+ 5360   W#=Z#:Z#(1)=Z#
+ 5370   for I%=2 to deg(U#):W#=W#*Z#@U#:Z#(I%)=W#:next
+ 5380   Z#=(Z#-poly(0,1))@U#
+ 5390   return
+ 5400   '
+ 5410   ' MAKE Z^(P^deg)-Z
+ 5420   '
+ 5430   *RaiseZPZ
+ 5440   local I%,W#
+ 5450   W#=Z#+poly(0,1)
+ 5460   Z#=poly(ccoeff(W#))
+ 5470   for I%=1 to deg(W#):Z#+=Z#(I%)*coeff(W#,I%):next
+ 5480   Z#=(Z#-poly(0,1))@U#
+ 5490   return
+ 5500   '
+ 5510   ' MAKE W#^((P^deg%-1)\2)
+ 5520   '
+ 5530   fnWPD(W#,Deg%)
+ 5540   local I%,J%,V#,X#
+ 5550   W#=fnPolyPower(W#,(P-1)\2)
+ 5560   V#=W#
+ 5570   for I%=1 to Deg%-1
+ 5580     X#=poly(ccoeff(V#))
+ 5590     for J%=1 to deg(V#):X#+=Z#(J%)*coeff(V#,J%):next
+ 5600     V#=X#
+ 5610     W#=W#*V#@U#
+ 5620   next
+ 5630   return(W#)

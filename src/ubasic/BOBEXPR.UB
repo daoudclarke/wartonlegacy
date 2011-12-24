@@ -1,0 +1,231 @@
+    1   dim Iu(5,5),Ia(5,5),Ib(5),Itens(5),Kmark(5)
+   10   Mm=4
+   12   Nn=5
+   14   for I=1 to Nn
+   16   for J=1 to Nn
+   18   Iu(I,J)=0
+   20   next J
+   22   next I
+   24   for I=1 to Nn
+   26   Iu(I,I)=1
+   27   Kmark(I)=0
+   28   next I
+   29   J=Nn
+   30   K=Nn
+   31   I=Mm
+   32   if Mm<Nn then goto 40
+   34   if Mm=Nn then goto 40
+   36   Ll=Mm-Nn+1
+   38   goto 42
+   40   Ll=1
+   42   Ia(1,1)=7
+   44   Ia(2,1)=5
+   45   Ia(3,1)=3
+   46   Ia(4,1)=1
+   47   Ia(1,2)=9
+   48   Ia(2,2)=10
+   49   Ia(3,2)=7
+   50   Ia(4,2)=12
+   51   Ia(1,3)=9
+   52   Ia(2,3)=10
+   53   Ia(3,3)=11
+   54   Ia(4,3)=12
+   55   Ia(1,4)=13
+   56   Ia(2,4)=14
+   57   Ia(3,4)=15
+   58   Ia(4,4)=4
+   59   Ia(1,5)=17
+   60   Ia(2,5)=18
+   61   Ia(3,5)=19
+   62   Ia(4,5)=3
+   64   if J=1 then goto 300
+   65   J=J-1
+   66   if Ia(I,J)=0 then goto 64
+   67   A=A
+   68   Kmark(K)=1
+   69   Mul1=Ia(I,K)
+   70   Itemp=int(abs(Ia(I,K))/abs(Ia(I,J)))
+   71   Mul2=Ia(I,J)
+   72   Irem=abs(Ia(I,K))-Itemp*abs(Ia(I,J))
+   73   A=A
+   74   if Irem=0 then goto 86
+   76   Itemp=int(abs(Ia(I,J))/abs(Ia(I,K)))
+   78   Irem=abs(Ia(I,J))-Itemp*abs(Ia(I,K))
+   79   print "irem",Irem,"iaik",Ia(I,K),"iaij",Ia(I,J)
+   80   if Irem=0 then goto 91
+   81   A=A
+   82   goto 100
+   86   Uu=0
+   87   Itemp=Ia(I,J)/abs(Ia(I,J))
+   88   Vv=int(Itemp)
+   89   Iquo=int(abs(Ia(I,J)))
+   90   goto 96
+   91   Vv=0
+   92   Itemp=Ia(I,K)/abs(Ia(I,K))
+   94   Uu=int(Itemp)
+   95   Iquo=abs(Ia(I,K))
+   96   print "uu",Uu,"vv",Vv
+   97   A=A
+   98   goto 144
+  100   Big=abs(Ia(I,K))
+  102   Little=abs(Irem)
+  103   Istr=Little
+  104   gosub 917
+  106   print "d",D,"i",I,"k",K,"big",Mul1,"little",Mul2
+  107   D=abs(D)
+  108   Iquo=int(D)
+  110   D=int(D)
+  112   A=abs(Ia(I,K))/D
+  113   A=int(A)
+  114   B=int(Istr/D)
+  115   print "a",A,"b",B
+  116   gosub 800
+  117   Vv=int(V)
+  118   print "2prin","v",Vv,"d",D,"a",A,"b",B
+  119   if Ia(I,J)<0 then goto 130
+  121   Uu=(Vv*Ia(I,J)-Iquo)/Ia(I,K)
+  123   Uu=Uu*(-1)
+  124   print "uu",Uu,"i",I,"k",K,"iaik",Ia(I,K)
+  125   goto 138
+  130   Vv=abs(Ia(I,K))-abs(Istr)
+  132   goto 121
+  138   for II=1 to Mm
+  140   Ib(II)=0
+  142   next II
+  144   for II=1 to Mm
+  146   Ib(II)=Uu*Ia(II,K)+Vv*Ia(II,J)
+  147   print "ii",II,"uu",Uu,"iaiik",Ia(II,K),"vv",Vv,"iaiij",Ia(II,J)
+  148   next II
+  150   for II=1 to Mm
+  152   Itens(II)=int(Mul1/Iquo)*Ia(II,J)-int(Mul2/Iquo)*Ia(II,K)
+  154   next II
+  162   for II=1 to Mm
+  164   Ia(II,J)=Itens(II)
+  165   A=A
+  166   next II
+  167   goto 200
+  168   for II=1 to Nn
+  170   Itens(II)=int(Mul1/Iquo)*Iu(II,J)-int(Mul2/Iquo)*Iu(II,K)
+  171   A=A
+  172   next II
+  173   A=A
+  174   for II=1 to Nn
+  176   Iu(II,J)=Itens(II)
+  178   next II
+  180   for II=1 to Nn
+  182   Iu(II,K)=Ib(II)
+  183   print "iuk",Iu(II,K),"mul1",Mul1,"mul2",Mul2
+  184   next II
+  185   print "iu3",Iu(3,1),Iu(3,2),Iu(3,3),Iu(3,4),"iquo",Iquo
+  186   print "iu4",Iu(4,1),Iu(4,2),Iu(4,3),Iu(4,4),"iu33",Ia(3,3)
+  187   if J>3 goto 64
+  188   print "j",J,"ia3j",Ia(3,J),"ia2j",Ia(2,J),"ia1j",Ia(1,J)
+  190   goto 64
+  200   for II=1 to Mm
+  202   Ia(II,K)=Ib(II)
+  204   next II
+  205   if Ia(I,K)=0 then goto 660
+  206   for II=1 to Nn
+  208   Ib(II)=Uu*Iu(II,K)+Vv*Iu(II,J)
+  210   next II
+  212   goto 168
+  300   Bb=Ia(I,K)
+  301   print "ia3",Ia(3,1),Ia(3,2),Ia(3,3),Ia(3,4),Ia(3,5)
+  302   if Bb<0 then goto 306
+  303   if B=0 then goto 600
+  304   goto 320
+  306   for II=1 to Nn
+  308   Ia(II,K)=Ia(II,K)*(-1)
+  310   Iu(II,K)=Iu(II,K)*(-1)
+  311   print "iu1",Iu(II,1),Iu(II,2),Iu(II,3),Iu(II,4),Iu(II,5)
+  312   next II
+  313   A=A
+  314   Bb=Bb*(-1)
+  320   if Bb=0 then goto 356
+  321   if K=Nn then goto 360
+  322   for Jj=K+1 to Nn
+  324   Iqq=int(Ia(I,Jj)/Bb)
+  326   for II=1 to Mm
+  328   Itens(II)=Ia(II,Jj)-Iqq*Ia(II,K)
+  330   next II
+  332   A=A
+  334   for II=1 to Mm
+  336   Ia(II,Jj)=Itens(II)
+  338   next II
+  340   for II=1 to Nn
+  342   Itens(II)=Iu(II,Jj)-Iqq*Iu(II,K)
+  344   next II
+  346   for II=1 to Nn
+  348   Iu(II,Jj)=Itens(II)
+  350   next II
+  352   next Jj
+  354   goto 360
+  356   K=K+1
+  360   if I=Ll then goto 370
+  362   I=I-1
+  364   K=K-1
+  366   J=K
+  368   goto 64
+  370   Ir=K-1
+  372   print "ir",Ir
+  373   print "ia2",Ia(2,1),Ia(2,2),Ia(2,3),Ia(2,4),Ia(2,5)
+  374   print "iu1",Iu(1,1),Iu(2,1),Iu(3,1),Iu(4,1),Iu(5,1)
+  376   stop
+  600   print "big bigstop","k=",K,"i",I,"iaik",Ia(I,K)
+  601   print "iai",Ia(I,1),Ia(I,2),Ia(I,3),Ia(I,4),Ia(I,5)
+  602   K=K+1
+  604   if K>Nn then goto 650
+  606   goto 300
+  620   if Ia(I,J)=0 then goto 300
+  622   print "real mess"
+  624   stop
+  640   K=K+1
+  641   if K>Nn then goto 650
+  642   goto 67
+  650   print "bigstop"
+  652   stop
+  660   print "special inv","k",K,"i",I,"iaik=",Ia(I,K)
+  662   stop
+  800   if B<0 then goto 804
+  802   goto 810
+  804   B=B+A
+  810   U=1
+  811   D=A
+  812   if B=0 then goto 888
+  813   V1=0
+  814   V3=B
+  815   if V3=0 then goto 828
+  816   Qq=int(D/V3)
+  817   T3=D-Qq*V3
+  818   T1=U-Qq*V1
+  819   U=V1
+  820   D=V3
+  821   V1=T1
+  822   V3=T3
+  823   goto 815
+  828   if D>1 then goto 890
+  830   V=(D-A*U)/B
+  831   goto 860
+  840   V=0
+  850   A=A
+  860   if U=0 then goto 870
+  862   if U<0 then goto 870
+  863   V=V*(1-A)
+  864   V=int(V)
+  865   A=A
+  866   Temp=int(V/A)
+  869   V=V-Temp*A
+  870   A=A
+  872   goto 890
+  888   V=B
+  890   return
+  917   Big=Big
+  919   Itemp=int(Big/Little)
+  920   Irem=Big-Little*Itemp
+  922   if Irem=0 then goto 940
+  924   Big=Little
+  926   Little=Irem
+  928   goto 919
+  940   D=Little
+  942   return
+  944   print "bobexpr"

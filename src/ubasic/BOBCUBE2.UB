@@ -1,0 +1,368 @@
+    1   dim Prod(10)
+    4   input "number";Aa
+    5   input "mod";P
+    6   Isw=0
+    8   Icong=0
+    9   Iconz=0
+   10   A=A
+   11   if Aa>-1 then goto 13
+   12   Aa=Aa+P
+   13   A=A
+   14   Itemp=int(Aa/P)
+   16   Aa=Aa-Itemp*P
+   17   if Aa>0 then goto 20
+   18   X=0
+   19   goto 200
+   20   Itemp=int(P/3)
+   21   Qrem=P-3*Itemp
+   22   if Qrem=2 then goto 1000
+   23   Precod=P-Qrem
+   25   I=0
+   26   Temp=int(Precod/3)
+   28   Rem1=Precod-Temp*3
+   30   if Temp=0 then goto 46
+   32   if Rem1>0 then goto 40
+   34   Precod=Temp
+   36   I=I+1
+   38   if I<200 then goto 26
+   40   Q=Precod
+   42   E=I
+   43   print "q",Q,"e",E
+   44   goto 48
+   46   Q=Precod
+   47   E=I
+   48   I=1
+   49   print "q",Q,"e",E,"qrem",Qrem
+   50   Itemp=int(Q/3)
+   51   A=A
+   52   Irem=Q-Itemp*3
+   53   Y=Z
+   54   R=E
+   56   Pn=(Q+3-Irem)/3
+   58   Prem=Irem
+   60   Aas=Aa
+   62   gosub 516
+   63   X=Bprod
+   64   Pn=Q
+   66   Aas=Aa
+   68   gosub 516
+   69   B=Bprod
+   70   Bperm=Bprod
+   72   Xperm=X
+   73   N=1
+   74   N=N*607
+   75   Temp=int(N/1000)
+   76   Rem1=N-1000*Temp
+   78   N=Rem1
+   92   B=B*Aa^Icong
+   93   print "bbb",B
+   94   Aas=N
+   95   Pn=Q
+   96   gosub 516
+   98   Z=Bprod
+  100   Temp=int(B/P)
+  102   Rem1=B-P*Temp
+  104   if Rem1=1 then goto 200
+  105   Icon=1
+  106   Bbz=B
+  107   B=B*Z
+  108   Item=int(B/P)
+  110   B=B-Item*P
+  111   if B=1 then goto 115
+  112   Icon=Icon+1
+  113   if Icon=3^E*500^(Qrem-1) then goto 180
+  114   goto 107
+  115   Itemp=int(Icon/3)
+  116   Irem=Icon-Itemp*3
+  117   if Irem>0 then goto 180
+  118   goto 900
+  120   Itemp=int(X/P)
+  121   X=X-Itemp*P
+  122   goto 200
+  128   print "m",M,"x",X
+  129   stop
+  130   if M=R then goto 180
+  132   Pow=3^(R-M-1)
+  133   goto 800
+  134   T=Bprod
+  142   Y=T*T*T
+  144   Temp=int(Y/P)
+  146   Rem1=Y-Temp*P
+  148   Y=Rem1
+  150   Temp=int(M/P)
+  152   Rem1=M-P*Temp
+  154   M=Rem1
+  156   R=Rem1
+  158   Temp=X*T
+  160   Temp2=int(Temp/P)
+  162   Rem1=Temp-Temp2*P
+  164   X=Rem1
+  166   Temp=B*Y
+  168   Temp2=int(Temp/P)
+  170   Rem1=Temp-Temp2*P
+  172   B=Rem1
+  174   goto 100
+  180   print "no cube root exists","icong=",Icong,"ind=",3-Prem,"qrem=",Qrem
+  181   print "e=",E,"icon",Icon
+  182   if Iconz=30 then goto 188
+  183   X=Xperm
+  184   Iconz=Iconz+1
+  185   B=Bperm
+  186   if Iconz=0 then goto 73
+  187   goto 74
+  188   if Qrem=1 then goto 196
+  189   Icong=Icong+1
+  190   if Icong=3 then goto 196
+  192   Iconz=0
+  194   goto 183
+  196   end
+  200   Ix=P-X
+  201   print "cube root =",X,"qrem=",Qrem,"ind=",3-Prem,"e",E
+  202   print "icon",Icon
+  204   Anew=X
+  206   if Prem=1 then goto 2000
+  208   goto 2142
+  400   D=D
+  401   P=P
+  402   De=int(D/2)
+  404   Pe=int(P/2)
+  406   De2=D-De*2
+  408   Pe2=P-Pe*2
+  410   if De2=0 then goto 414
+  412   goto 416
+  414   if Pe2=0 then goto 512
+  416   V=0
+  417   Pe=P
+  418   Ii=0
+  419   print "pefirst",Pe
+  420   Pe2=int(Pe/2)
+  422   Pe3=Pe-Pe2*2
+  424   if Pe3=1 then goto 432
+  426   Pe=Pe2
+  428   V=V+1
+  429   Ii=Ii+1
+  430   if Ii<50 then goto 419
+  432   Ve=int(V/2)
+  434   Ve2=V-Ve*2
+  436   if Ve2=0 then goto 450
+  438   Ae=(D^2-1)/8
+  440   Ae1=int(Ae/2)
+  442   Ae2=Ae-Ae1*2
+  444   Ae3=Ae2+2
+  446   K=(-1)^Ae3
+  448   goto 451
+  450   K=1
+  451   De=D
+  452   if De=0 then goto 510
+  453   V=0
+  454   Ii=0
+  456   De1=int(De/2)
+  458   De2=De-De1*2
+  460   if De2=1 then goto 470
+  462   V=V+1
+  464   De=De1
+  465   Ii=Ii+1
+  466   if Ii<50 then goto 456
+  470   Ve=int(V/2)
+  472   Ve2=V-Ve*2
+  474   if Ve2=0 then goto 486
+  476   Ae=(Pe^2-1)/8
+  478   Ae2=int(Ae/2)
+  480   Ae3=Ae-Ae2*2
+  482   Ae3=Ae3+2
+  484   K=(-1)^Ae3*K
+  486   Ae2=((De-1)*(Pe-1))/4
+  488   Ae3=int(Ae2/2)
+  490   Ae4=Ae2-Ae3*2
+  492   Ae4=Ae4+2
+  494   K=(-1)^Ae4*K
+  496   R=abs(De)
+  497   print "r",R,Pe
+  498   Temp=int(Pe/R)
+  500   De=Pe-Temp*R
+  502   Pe=R
+  503   print "pe",Pe,De
+  504   goto 452
+  510   if Pe=1 then goto 513
+  512   K=0
+  513   print K,Pe
+  514   return
+  516   Coun=1
+  517   Q1=Pn
+  518   if Q1=0 then goto 604
+  520   Ipow=2
+  522   if Ipow>Q1 then goto 526
+  523   Ipow=Ipow*2
+  524   goto 522
+  526   Ie=int(Ipow/2)
+  527   N1=Q1
+  528   Igg1=Aas
+  530   Bprod=Aas
+  532   N1=N1-Ie
+  534   if Ie=1 then goto 620
+  535   Ie=int(Ie/2)
+  536   Bprod=Bprod*Bprod
+  537   if Bprod<P then goto 541
+  538   Itemp=int(Bprod/P)
+  539   Bprod=Bprod-Itemp*P
+  541   if N1<Ie then goto 534
+  543   N1=N1-Ie
+  544   Bprod=Bprod*Igg1
+  545   if Bprod<P then goto 534
+  560   Itemp=int(Bprod/P)
+  561   Bprod=Bprod-Itemp*P
+  562   goto 534
+  563   Coun=Coun+1
+  565   I=I+1
+  567   goto 527
+  590   Bprod=Prod(1)
+  592   if Coun=1 then goto 620
+  593   I=2
+  594   Bprod=Bprod*Prod(I)
+  596   Temp=int(Bprod/P)
+  598   Rem1=Bprod-Temp*P
+  600   Bprod=Rem1
+  601   I=I+1
+  602   if I<Coun+1 then goto 594
+  603   goto 620
+  604   Itemp=int(Aas/P)
+  606   Bprod=Aas-Itemp*P
+  620   return
+  700   Pn=Pow
+  702   Aas=B
+  704   gosub 516
+  706   goto 112
+  800   Pn=Pow
+  802   Aas=Y
+  804   gosub 516
+  806   goto 134
+  900   Aas=Z
+  902   Pn=Itemp
+  904   gosub 516
+  906   X=X*Bprod
+  908   goto 120
+ 1000   Pn=(P+1)/6
+ 1002   Aas=Aa
+ 1004   gosub 516
+ 1006   print "cube root=",Bprod,"or",P-Bprod,"ind=1"
+ 1007   A=A
+ 1008   Itemp=Bprod^3-Aa
+ 1010   Itemp2=int(Itemp/P)
+ 1012   Irem=Itemp-Itemp2*P
+ 1014   Keep1=Bprod
+ 1016   if Irem=0 then goto 2160
+ 1018   Keep1=P-Bprod
+ 1020   goto 2160
+ 2000   gosub 3000
+ 2002   gosub 3134
+ 2003   B=Bperm
+ 2004   Itemp=int(B/P)
+ 2006   Rem1=B-Itemp*P
+ 2007   print "rem1",Rem1,"b",B,"p",P
+ 2008   if Rem1=1 then goto 2140
+ 2010   Icon=1
+ 2011   print "b",B
+ 2012   B=B*Z
+ 2014   Itemp=int(B/P)
+ 2016   B=B-Itemp*P
+ 2017   print "b",B,"z",Z,"iconh",Iconh,"icon",Icon,"bperm",Bperm,"k",K
+ 2018   if B=1 then goto 2030
+ 2019   A=A
+ 2020   Icon=Icon+1
+ 2022   if Icon=100 then goto 2160
+ 2024   goto 2012
+ 2030   Itemp=int(Icon/2)
+ 2032   Irem=Icon-Itemp*2
+ 2034   if Irem=0 then goto 2040
+ 2036   goto 2060
+ 2040   Pn=Itemp
+ 2042   Aas=Z
+ 2044   gosub 516
+ 2046   X=X*Bprod
+ 2047   Itemp=int(X/P)
+ 2048   X=X-Itemp*P
+ 2050   print "x final",X,"or",P-X
+ 2052   goto 2141
+ 2060   print "not yet",Iconh
+ 2062   Iconh=Iconh+1
+ 2064   goto 2002
+ 2100   Keep1=X
+ 2140   print "final soln.=",X,"or",P-X
+ 2141   goto 2200
+ 2142   Itemp=int((P-1)/6)
+ 2144   Irem=P-1-6*Itemp
+ 2146   Keep1=X
+ 2147   if Irem>0 then goto 2160
+ 2148   Anew=P-3
+ 2150   Isw=1
+ 2152   goto 2000
+ 2160   print "prime no good"," single solution=",Keep1
+ 2162   stop
+ 2200   if Isw=1 then goto 2300
+ 2202   Itemp=X^3-Aa
+ 2204   Itemp2=int(Itemp/P)
+ 2206   Irem=Itemp-P*Itemp2
+ 2208   print "irem",Irem
+ 2210   if Irem=0 then goto 2142
+ 2212   Keep1=P-X
+ 2214   goto 2148
+ 2300   Keep2=(P-Keep1)+X*Keep1
+ 2302   Keep2=Keep2*(P+1)/2
+ 2304   Itemp=int(Keep2/P)
+ 2306   Keep2=int(Keep2-Itemp*P)
+ 2308   Keep3=(P-Keep1)+(P-X)*Keep1
+ 2309   Keep3=Keep3*(P+1)/2
+ 2310   Itemp=int(Keep3/P)
+ 2312   Keep3=int(Keep3-Itemp*P)
+ 2314   print "keep1",Keep1,"keep2",Keep2,"keep3",Keep3
+ 2316   stop
+ 3000   Itemp=P-1
+ 3002   Itemp2=int(Itemp/2)
+ 3004   Irem1=Itemp-2*Itemp2
+ 3006   if Irem1>0 then goto 3114
+ 3008   if Itemp=1 then goto 3114
+ 3110   Itemp=Itemp2
+ 3112   goto 3002
+ 3114   Q=Itemp
+ 3115   Iconh=0
+ 3116   if Q=1 then goto 3151
+ 3118   Aas=Anew
+ 3120   Pn=Q
+ 3122   gosub 516
+ 3124   B=Bprod
+ 3126   Bperm=Bprod
+ 3128   Pn=(Q+1)/2
+ 3130   Aas=Anew
+ 3131   gosub 516
+ 3132   X=Bprod
+ 3133   goto 3200
+ 3134   print "n",N
+ 3135   A=A
+ 3136   N=N*7^9
+ 3138   Itemp=int(N/10000000)
+ 3140   N=N-Itemp*10000000
+ 3142   Itemp=int(N/P)
+ 3143   N=N-Itemp*P
+ 3144   gosub 4500
+ 3145   if K>-1 then goto 3136
+ 3146   Pn=Q
+ 3147   gosub 516
+ 3148   Z=Bprod
+ 3149   print "bprod",Bprod
+ 3150   goto 3200
+ 3151   Pn=2
+ 3152   Aas=Anew
+ 3154   gosub 516
+ 3156   X=Bprod
+ 3158   Pn=3
+ 3160   Aas=Anew
+ 3162   gosub 516
+ 3164   B=Bprod
+ 3166   A=A
+ 3200   A=A
+ 3202   return
+ 4000   print "bobcube2"
+ 4500   D=N
+ 4502   gosub 400
+ 4503   Aas=N
+ 4504   return

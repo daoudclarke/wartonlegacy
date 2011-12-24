@@ -1,0 +1,23 @@
+ 1060   *BWppt1(N,&F)
+ 1070   ' Baillie-Wagstaff Lucas preudoprime test.  See their paper.
+ 1080   ' We assume n is odd and >11.  D is chosen by method "A".
+ 1090   ' F is 1 to indicate probable prime, 0 for composite, and -1 if
+ 1100   ' N is a square.
+ 1110   ' 5  June 1990.
+ 1120   local Q,D=-3,Us=0,Um,Ub=1,Vs,Vb,Wn,J=-1,I,T
+ 1130   dim Bit%(400)
+ 1140   Wn=isqrt(N):if res=0 then F=-1:return endif
+ 1150   repeat D=-sgn(D)*(abs(D)+2) until kro(D,N)<1
+ 1155   if kro(D,N)=0 then F=0:return endif
+ 1160   Q=(1-D)\4:Wn=N+1
+ 1165   T=gcd(Q,N):if and{T>1,T<N} then F=0:return endif
+ 1170   repeat inc J:Wn=Wn\2:Bit%(J)=res until Wn=0
+ 1180   Wn=((N+1)\2)
+ 1190   for I=J to 0 step -1
+ 1200   Vs=(2*Ub-Us)@N:Vb=((Vs+D*Us)*Wn)@N
+ 1210   Us=(Us*Vs)@N:Ub=(Ub*Vb)@N
+ 1220   Um=(Ub+Q*Us)@N
+ 1230   if Bit%(I) then Us=Um else Ub=Um endif
+ 1240   next I
+ 1250   if Us=0 then F=1 else F=0 endif
+ 1260   return ' End of subroutine BWppt1.

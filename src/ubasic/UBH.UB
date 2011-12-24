@@ -1,0 +1,37 @@
+   10   'UBH.UB
+   20   '  Make UBHELP.TBL ( pointer table ).
+   30   '
+   40   '  1989/10/31  file name : ubh
+   50   '
+   60   cls:print "    ** UBHELP command table **":print
+   70   'strinput "Do you need to make 'UBHELP.TBL' (y/n)";Y#
+   80   'Y#=upper(Y#)
+   90   Y#="Y"
+  100   if Y#="Y" then OP=1:goto 120
+  110   if Y#="N" then OP=0:goto 130 else 70
+  120   kill "UBHELP.TBL"
+  130   open "UBHELP.XXX" for input as #1
+  140   if OP then open "UBHELP.TBL" for output as #2
+  150   CT%=0:PT=0:L%=0
+  160   while not eof(1)
+  170     input #1,Y#
+  180     if left(Y#,2)="~~" then
+  190       :Y1#=left(mid(Y#,3,*)+spc(10),10)
+  200       :inc CT%
+  210       :print using(6),CT%;" ";
+  220       :print Y1#;:print using(7),PT;
+  230       :PT0=PT:if CT%@3=0 then print endif
+  240       :if len(Y#)>L% then L%=len(Y#) endif
+  250       :if OP then gosub *Maketable:endif
+  260     PT+=len(Y#)+2
+  270   wend
+  280   Y2#=" ----------"
+  290   inc CT%:print using(6),CT%;:print Y2#;:print using(7),PT;
+  300   'if OP then gosub *Maketable
+  310   print:print "Max length of command is";L%-2
+  320   close:end
+  330   '
+  340   *Maketable
+  350   T2%=PT\65536:T1%=res\256:T0%=res
+  360   print #2,Y1#;chr(T0%);chr(T1%);chr(T2%);chr(0);
+  370   return

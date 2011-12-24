@@ -1,0 +1,256 @@
+   10   'PPMP2 (for 32bit CPU) version 2.0
+   20   '
+   30   '  Factorization by PPMPQS
+   40   '        1991/92 by Yuji KIDA
+   50   '
+   60   word -23:point -2
+   70   DRV$="":'drive for making files
+   80   key 8,"system"+chr(13)
+   90   PC$=version
+  100   if instr(PC$,"PC9801") then PC=0
+  110   :elseif instr(PC$,"IBM-PC") then PC=1
+  120   :elseif instr(PC$,"FMR") then PC=2
+  130   :else PC=10
+  140   '
+  150   'enable 20-31 bit address lines
+  160   if PC=0 then
+  170     :out 0xf2,0
+  180     :out 0xf2,0
+  190   :elseif PC=1 then
+  200     :out 0x64,0xd1:while bit(1,inp(0x64)) wend
+  210     :out 0x60,0xdf:while bit(1,inp(0x64)) wend
+  220     :out 0x64,0xff:while bit(1,inp(0x64)) wend
+  230   :elseif PC=2 then
+  240     :out 0x24,1
+  250     :out 0x24,1
+  260   :else
+  270     :print "not yet supported":end
+  280   :endif
+  290   '
+  300   open "PPMPDAT1" for input as #1:input #1,MSG$:close #1
+  310   '
+  320   if not exist(DRV$+"ppmpcont.ubd") then NewFlg%=1:goto *NewWork
+  330   NewFlg%=0
+  340   open DRV$+"ppmpcont" for input as #1:input #1,MSG2$:close #1
+  350   if MSG2$<>MSG$ then print "different data":end
+  360   print "2. sieve main(continue)";:locate 56:print date
+  370   goto *ReadParam
+  380   '
+  390   *NewWork
+  400   print:print "2. sieve main";:locate 56:print date
+  410   '
+  420   '  read data
+  430   '
+  440   *ReadParam
+  450   open "PPMPDAT1" for input as #1
+  460   input #1,MSG$:print MSG$
+  470   input #1,N
+  480   input #1,SZ:NP=SZ-1
+  490   input #1,SieveWidth
+  500   input #1,KX:WN=N*KX
+  510   input #1,IniLog
+  520   input #1,Scale
+  530   input #1,CutLog
+  540   while not eof(1)
+  550     input #1,Success
+  560   wend
+  570   close #1
+  580   '
+  590   dim MP%(1600)
+  600   bload "ppmp2",MP%()
+  610   dim MP2%(2200)
+  620   bload "ppmp2p",MP2%()
+  630   '
+  640   dim Work%(0)
+  650   MP%(1)=SZ\2:MP%(2)=IniLog:MP%(3)=CutLog
+  660   MP%(0)=0:call MP%(Work%(0),P,Y,L,X,D,B,SieveWidth,W,MP2%(0))
+  670   if MP%(1)=0 then print "lack of main memory":beep:end
+  680   defseg=MP%(1)*2
+  690   '
+  700   gosub *SetPrimes
+  710   '
+  720   MP%(0)=6:call MP%()
+  730   LP%=MP%(0):SieveUnit=peekw(0x44)+65536*peekw(0x46)
+  740   SieveWidth=SieveUnit*LP%\2
+  750   '
+  760   X=Pmax*len(N)/360
+  770   LpvLim=Pmax+int(X*100)
+  780   LpvLimX=Pmax^2
+  790   LpvLimY=int(LpvLim^1.78)
+  800   RhoCount=isqrt(LpvLim)\100
+  810   '
+  820   clr FF,Lp1,LpvAll,Done
+  830   '
+  840   if NewFlg%=0 then *Continue
+  850   'print "target    ";N
+  860   print "size of FB";SZ
+  870   'print "sievewidth 2 *";SieveWidth
+  880   gosub *NewOpen
+  890   '
+  900   *StartSieve
+  910   randomize
+  920   Ct=0:A=date:repeat:inc Ct:until A<>date
+  930   for I=1 to Ct:A=rnd:next
+  940   W1=0.733+0.01*rnd
+  950   D=isqrt(sqrt(WN)/SieveWidth*W1)\4*4+3
+  960   '
+  970   '  main routine
+  980   '
+  990   D=D+4:if gcd(D,15015)<>1 goto 990
+ 1000   if kro(WN,D)<>1 goto 990
+ 1010     if (modpow(2,(D-1)\2,D)-kro(2,D))@D then 990
+ 1020     if (modpow(3,(D-1)\2,D)-kro(3,D))@D then 990
+ 1030   H0=modpow(WN,(D-3)\4,D):H1=WN*H0@D:H2=(WN-H1^2)\D*H0*(D+1)\2@D
+ 1040   A=D^2:A2=2*A:D2=modinv(2*D,WN):B=(H1+H2*D)@A:if B@2=0 then B=A-B
+ 1050   C=(B^2-WN)\4\A:if res then 990
+ 1060   Offset=-SieveWidth
+ 1070   MP%(0)=1:call MP%()
+ 1080   for I=1 to LP%
+ 1090     MP%(0)=2:call MP%()
+ 1100     for J=1 to peekw(0x0300)
+ 1110       X1=peekw(0x0300+4*J):X2=peekw(0x0302+4*J):X=X1+X2*65536
+ 1120       pokew 0x0,X1:pokew 0x02,X2
+ 1130       X=X+Offset:Q=A*X^2+B*X+C:X=(A2*X+B)*D2@WN
+ 1140       gosub *DataSet
+ 1150       if Done>SZ then cancel for,for:goto *PPMP2END
+ 1160     next
+ 1170     Offset+=SieveUnit
+ 1180   next
+ 1190   goto 990
+ 1200   '
+ 1210   *PPMP2END
+ 1220   print:locate 56:print date
+ 1230   run "ppmp3a"
+ 1240   end
+ 1250   '
+ 1260   '  divide exactly
+ 1270   '
+ 1280   *DataSet
+ 1290   W=abs(Q):MP%(0)=5:call MP%():if W>Pmax then *SetP
+ 1300   print #1,X
+ 1310   inc FF,Done
+ 1320   print FF;Done;chr(13);
+ 1330   if AutoClose then close:gosub *AppendOpen
+ 1340   return
+ 1350   '
+ 1360   '  remaining part
+ 1370   '
+ 1380   *SetP
+ 1390   if W<=LpvLim then print #2,W,X
+ 1400     :elseif W<=LpvLimX then 1450
+ 1410     :elseif W<=LpvLimY then *SetPP
+ 1420     :else 1450
+ 1430   inc LpvAll:Done=FF+int(LpvAll*Success)
+ 1440   print FF;Done;chr(13);
+ 1450   return
+ 1460   '
+ 1470   *SetPP
+ 1480   if (modpow(2,(W-1)\2,W)-kro(2,W))@W=0 then return
+ 1490   Wold=W:P=fnRho(W)
+ 1500   if P=0 then return
+ 1510   W=Wold\P:if W<P then swap W,P
+ 1520   if W<=LpvLim then print #3,W,P,X:goto 1430
+ 1530   goto 1450
+ 1540   '
+ 1550   ' continue to sieve
+ 1560   *Continue
+ 1570   clr FF,LpvAll
+ 1580   open DRV$+"ppmp-f" for input as #1
+ 1590   while not eof(1)
+ 1600     input #1,X
+ 1610     inc FF
+ 1620   wend
+ 1630   close #1
+ 1640   open DRV$+"ppmp-p" for input as #1
+ 1650   while not eof(1)
+ 1660     input #1,R,X
+ 1670     inc LpvAll
+ 1680   wend
+ 1690   close #1
+ 1700   open DRV$+"ppmp-pp" for input as #1
+ 1710   while not eof(1)
+ 1720     input #1,R1,R2,X
+ 1730     inc LpvAll
+ 1740   wend
+ 1750   close #1
+ 1760   'print MSG$
+ 1770   print "target    ";N
+ 1780   print "size of FB";SZ
+ 1790   print "sievewidth 2 *";SieveWidth
+ 1800   Done=FF+int(LpvAll*Success)
+ 1810   print FF;Done
+ 1820   gosub *AppendOpen
+ 1830   goto *StartSieve
+ 1840   '
+ 1850   *NewOpen
+ 1860   open DRV$+"ppmpcont" for output as #1:print #1,MSG$:close #1
+ 1870   kill DRV$+"ppmp-f+":open DRV$+"ppmp-f" for output as #1
+ 1880   kill DRV$+"ppmp-p+":open DRV$+"ppmp-p" for output as #2
+ 1890   kill DRV$+"ppmp-pp+":open DRV$+"ppmp-pp" for output as #3
+ 1900   return
+ 1910   '
+ 1920   *AppendOpen
+ 1930   open DRV$+"ppmp-f" for append as #1
+ 1940   open DRV$+"ppmp-p" for append as #2
+ 1950   open DRV$+"ppmp-pp" for append as #3
+ 1960   return
+ 1970   '
+ 1980   'RHO METHOD ver 1.2 (function version)
+ 1990   '
+ 2000   fnRho(N)
+ 2010     local X1,X2,I%,J%,GD
+ 2020     X1=6:X2=(X1^2+1)@N
+ 2030     for I%=1 to RhoCount
+ 2040       GD=1
+ 2050       for J%=1 to 100
+ 2060         GD=GD*(X2-X1)@N:X1=(X1^2+1)@N:X2=((X2^2@N+1)^2+1)@N
+ 2070       next
+ 2080       GD=gcd(GD,N)
+ 2090       if and{GD>1,GD<N} then cancel for:goto 2120
+ 2100     next
+ 2110     GD=0
+ 2120   return(GD)
+ 2130   '
+ 2140   '  collect P such that N is a quadratic residue MOD P
+ 2150   '
+ 2160   *SetPrimes
+ 2170   P=2:Y=1:L=int(log(P)*Scale):MP%(0)=4:call MP%()
+ 2180   Ct=2
+ 2190   for J=2 to 12251
+ 2200     P=prm(J)
+ 2210     if kro(WN,P)<>-1 then
+ 2220       :inc Ct
+ 2230       :if P=KN then
+ 2240         :Y=fnSqrtMod(P):L=int(log(P)*Scale/2):MP%(0)=4:call MP%()
+ 2250       :else Y=fnSqrtMod(P):L=int(log(P)*Scale):MP%(0)=4:call MP%()
+ 2260       :endif
+ 2270       :if Ct>=SZ then cancel for:jump
+ 2280   next
+ 2290   '
+ 2300   while Ct<SZ
+ 2310     P=nxtprm(P)
+ 2320     if kro(WN,P)<>-1 then
+ 2330       :inc Ct
+ 2340       :Y=fnSqrtMod(P):L=int(log(P)*Scale):MP%(0)=4:call MP%()
+ 2350   wend
+ 2360   **
+ 2370   Pmax=P
+ 2380   return
+ 2390   '
+ 2400   '  solve (Y^2-N)@P=0 (P>2)
+ 2410   '
+ 2420   fnSqrtMod(P):'   KX,WN global
+ 2430   local E%,J,K,KX,Q,W,X,Y,Z
+ 2440   if P=KX then Y=0:goto 2560
+ 2450   if P@4=3 then Y=modpow(WN,(P+1)\4,P):goto 2560
+ 2460   X=P-1:E%=-1
+ 2470   repeat:inc E%:X=X\2:until res
+ 2480   Q=2*X+1
+ 2490   Z=1:repeat:inc Z:until modpow(Z,(P-1)\2,P)<>1
+ 2500   Z=modpow(Z,Q,P)
+ 2510   X=modpow(WN,Q,P):Y=modpow(WN,(Q+1)\2,P):K=(P-1)\Q\4
+ 2520   for J=E%-2 to 0 step -1
+ 2530     if modpow(X,K,P)<>1 then W=modinv(Z,P):X=X*W^2@P:Y=Y*W@P
+ 2540     Z=Z^2@P:K=K\2
+ 2550   next
+ 2560   return(Y)

@@ -1,0 +1,126 @@
+   10   'PPMP6 version 2.0
+   20   '
+   30   '  Factorization by PPMPQS
+   40   '        1991/92 by Yuji KIDA
+   50   '
+   60   word -23:point -2
+   70   '
+   80   Pc$#=version
+   90   if instr(Pc$#,"PC9801") then PC=0
+  100   :elseif instr(Pc$#,"IBM-PC") then PC=1
+  110   :elseif instr(Pc$#,"FMR") then PC=2
+  120   :else PC=10
+  130   '
+  140   'enable 20-31 bit address lines
+  150   if PC=0 then
+  160     :out 0xf2,0
+  170     :out 0xf2,0
+  180   :elseif PC=1 then
+  190     :out 0x64,0xd1:while bit(1,inp(0x64)) wend
+  200     :out 0x60,0xdf:while bit(1,inp(0x64)) wend
+  210     :out 0x64,0xff:while bit(1,inp(0x64)) wend
+  220   :elseif PC=2 then
+  230     :out 0x24,1
+  240     :out 0x24,1
+  250   :else
+  260     :print "not yet supported":end
+  270   :endif
+  280   '
+  290   print:print "6. final step";:locate 56:print date
+  300   '
+  310   open "ppmpdrv" for input as #1
+  320     input #1,XMEMsize
+  330     input #1,DataDrv$
+  340   close #1
+  350   '
+  360   open DataDrv$+"ppmpdat1" for input as #1
+  370     input #1,MSG$
+  380     input #1,N
+  390     input #1,SZ:NP=SZ-1
+  400     input #1,SieveWidth
+  410     input #1,KX:WN=N*KX
+  420     input #1,IniLog
+  430     input #1,Scale
+  440     input #1,CutLog
+  450   close #1
+  460   '
+  470   dim PrMem(6):Prs=0
+  480   dim DvMem(12):Dvs=0
+  490   inc Dvs:DvMem(Dvs)=N:Remain=N
+  500   '
+  510   dim Ans%(SZ\16),MP%(15000)
+  520   bload "ppmp6",MP%()
+  530   '
+  540   MP%(0)=0:MP%(1)=XMEMsize:MP%(2)=SZ\2:call MP%(Ans%(0),P,E,Y,DataDrv$)
+  550   if MP%(0)=-1 then print "disk error":stop:end
+  560   if MP%(0)=-2 then print "lack of memory":stop:end
+  570   '
+  580   '  get divisor from the square relation
+  590   '
+  600   open DataDrv$+"PPMP-FX" for input as #1
+  610   '
+  620   repeat
+  630     DD=fnPPMPQS()
+  640     if DD=0 then print "Warning:Incomplete!":goto 800
+  650     '
+  660     for I=1 to Dvs
+  670       Dv=DvMem(I)
+  680       if Dv then Dg=gcd(DD,Dv)
+  690         :if and{Dg>1,Dg<Dv} then inc Dvs:DvMem(I)=Dg:DvMem(Dvs)=Dv\Dg
+  700     next
+  710     '
+  720     for I=1 to Dvs
+  730       Dv=DvMem(I)
+  740       if Dv then if fnPrpChk(Dv) then
+  750         :inc Prs:PrMem(Prs)=Dv
+  760         :DvMem(I)=0:Remain\=Dv
+  770     next
+  780   until Remain=1
+  790   '
+  800   for I=1 to Prs-1:print PrMem(I);"*";:next:print PrMem(I)
+  810   if Remain<>1 then print "* (";Remain;"is still unfactored.)"
+  820   '
+  830   MP%(0)=3:call MP%()
+  840   close #1
+  850   locate 56:print date
+  860   print "I am not sure these factors are really prime."
+  870   end
+  880   '
+  890   ' pseudo primality test w.r.t. 2,3,5,7
+  900   '
+  910   fnPrpChk(N)
+  920   local OK%
+  930    if or{(modpow(2,(N-1)\2,N)-kro(2,N))@N,
+  940         :(modpow(3,(N-1)\2,N)-kro(3,N))@N,
+  950         :(modpow(5,(N-1)\2,N)-kro(5,N))@N,
+  960         :(modpow(7,(N-1)\2,N)-kro(7,N))@N}
+  970    :then OK%=0
+  980    :else OK%=1
+  990   return(OK%)
+ 1000   '
+ 1010   '  Get & Check Answers
+ 1020   '
+ 1030   fnPPMPQS()
+ 1040   local I,J,E
+ 1050   Adr=varptr(Ans%(0))
+ 1060   Ansseg=Adr\65536+res\16
+ 1070   restore #1
+ 1080   MP%(0)=1:call MP%():if MP%(0)=0 then DD=0:goto 1260
+ 1090   defseg=Ansseg
+ 1100   X=1
+ 1110   for I=1 to peekw(0):W#=peekw(I*2)
+ 1120     for J=0 to 15
+ 1130       input #1,X1,F#
+ 1140       if bit(J,W#) then X=X*X1@N
+ 1150     next
+ 1160   next
+ 1170   '
+ 1180   Y=1:clr Evenc,Oddc
+ 1190   MP%(0)=2:call MP%():'get P and E
+ 1200   if even(E) then inc Evenc else inc Oddc:print "fatal error":stop:end
+ 1210   if P<>0 then Y=Y*modpow(P,E\2,N)@N:goto 1190
+ 1220   'print:print "evens=";Evenc;"odds=";Oddc
+ 1230   if gcd(X^2-Y^2,N)<>N then print "bad data!!":goto 1070
+ 1240   DD=gcd(X-Y,N)
+ 1250   if or{DD=1,DD=N} then print "trivial relation":goto 1070
+ 1260   return(DD)

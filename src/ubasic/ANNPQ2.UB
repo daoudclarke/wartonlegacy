@@ -1,0 +1,176 @@
+    1   dim Aas(2),Iacn(2),Ibcn(2),Bprod(2),Cprod(2),Igg1(2),Aprod1(2)
+    2   dim Pdiff(60,2),Aprod(2)
+    3   HHcon=1
+    8   input "code number";N
+   10   Astar=20
+   11   Aas(1)=Astar
+   12   Aas(2)=1
+   13   Iran=1
+   14   Gcon=1
+   15   Mdis=Aas(1)*Aas(1)-1
+   16   Ab=1
+   18   B1=120000
+   20   B2=10^9
+   22   Prm=nxtprm(Ab)
+   24   if Prm>B1 then goto 1513
+   26   Ab=Prm
+   28   Rq=Ab
+   30   Rq1=Ab
+   32   L=int(B1/Rq)
+   34   if Rq1>L then goto 40
+   36   Rq1=Rq1*Rq
+   38   goto 34
+   40   Qqs=Rq1
+   41   A=A
+   42   gosub 510
+   43   Aas(1)=Bprod(1)
+   44   Aas(2)=Bprod(2)
+   45   if N<10^12 then goto 48
+   46   Gcon=Gcon+1
+   47   if Gcon<21 then goto 22
+   48   print "powered prime",Prm,"hhcon=",HHcon
+   50   Gcon=1
+   60   if Bprod(1)=1 then goto 400
+   62   Little=Bprod(1)-1
+   64   gosub 917
+   66   if Gcd2>1 then goto 300
+   68   goto 22
+  200   A=A
+  202   Aas(1)=Aprod(1)
+  203   Aas(2)=Aprod(2)
+  208   Qqs=Prm
+  209   Ab=Prm
+  210   gosub 510
+  213   Aprod1(1)=Bprod(1)
+  214   Aprod1(2)=Bprod(2)
+  220   if Aprod1(1)=1 then goto 400
+  221   Gprod=Aprod1(1)-1
+  222   Little=Aprod1(1)-1
+  224   gosub 917
+  225   print "aprod1",Aprod1(1)
+  226   if Gcd2>1 then goto 300
+  227   Hcon=1
+  228   Prm=nxtprm(Ab)
+  229   goto 1100
+  235   Ab=Prm
+  236   if Hcon<201 then goto 228
+  237   Hcon=1
+  238   print "prime2",Prm
+  239   A=A
+  240   Little=Gprod
+  242   gosub 917
+  244   if Gcd2>1 then goto 300
+  246   if Prm>10^9 then goto 400
+  250   A=A
+  252   goto 228
+  280   Temp=int(Aprod1/N)
+  282   Aprod1=Aprod1-Temp*N
+  284   return
+  300   print "factor found =",int(Gcd2)
+  302   Fact2=int(N/Gcd2)
+  304   print "remaining factor =",Fact2
+  306   end
+  400   print "algorithm unsuitable or number is prime"
+  404   goto 1500
+  510   Coun=1
+  517   Q1=Qqs
+  518   if Q1=0 then goto 620
+  520   Ipow=2
+  522   if Ipow>Q1 then goto 526
+  523   Ipow=Ipow*2
+  524   goto 522
+  526   Ie=int(Ipow/2)
+  528   Igg1(1)=Aas(1)
+  530   Igg1(2)=Aas(2)
+  532   Bprod(1)=Aas(1)
+  534   Bprod(2)=Aas(2)
+  535   A=A
+  536   N1=Q1
+  538   N1=N1-Ie
+  540   if Ie=1 then goto 620
+  541   A=A
+  542   Ie=int(Ie/2)
+  544   Iacn(1)=Bprod(1)
+  546   Iacn(2)=Bprod(2)
+  548   Ibcn(1)=Bprod(1)
+  550   Ibcn(2)=Bprod(2)
+  552   gosub 1300
+  554   Bprod(1)=Cprod(1)
+  556   Bprod(2)=Cprod(2)
+  557   A=A
+  558   if N1<Ie then goto 540
+  560   N1=N1-Ie
+  562   Iacn(1)=Bprod(1)
+  564   Iacn(2)=Bprod(2)
+  566   Ibcn(1)=Igg1(1)
+  568   Ibcn(2)=Igg1(2)
+  570   gosub 1300
+  572   Bprod(1)=Cprod(1)
+  574   Bprod(2)=Cprod(2)
+  576   goto 540
+  620   return
+  917   Big=N
+  918   Temp=int(Big/Little)
+  920   Rem1=Big-Little*Temp
+  922   if Rem1=0 then goto 940
+  924   Big=Little
+  926   Little=Rem1
+  928   goto 918
+  940   Gcd2=Little
+  942   A=A
+  950   return
+ 1000   Icon=0
+ 1001   Aprod(1)=Bprod(1)
+ 1002   Qqs=0
+ 1003   Aas(1)=Aprod(1)
+ 1004   Qqs=Qqs+2
+ 1005   Aas(2)=Bprod(2)
+ 1006   Aprod(2)=Bprod(2)
+ 1007   gosub 510
+ 1008   Icon=Icon+1
+ 1010   Pdiff(Icon,1)=Bprod(1)
+ 1011   Pdiff(Icon,2)=Bprod(2)
+ 1012   if Icon<60 then goto 1003
+ 1014   goto 200
+ 1100   Rq2=int((Prm-Ab)/2)
+ 1102   if Rq2>60 then goto 1120
+ 1104   Iacn(1)=Aprod1(1)
+ 1106   Iacn(2)=Aprod1(2)
+ 1108   Ibcn(1)=Pdiff(Rq2,1)
+ 1110   Ibcn(2)=Pdiff(Rq2,2)
+ 1112   gosub 1300
+ 1113   Aprod1(1)=Cprod(1)
+ 1114   Aprod1(2)=Cprod(2)
+ 1116   goto 1200
+ 1120   print "difference too large",Rq2
+ 1122   goto 1500
+ 1200   Gprod=Gprod*(Aprod1(1)-1)
+ 1201   Hcon=Hcon+1
+ 1202   if Gprod<N then goto 1208
+ 1204   Itemp=int(Gprod/N)
+ 1206   Gprod=Gprod-Itemp*N
+ 1208   if Gprod=1 then goto 400
+ 1210   goto 235
+ 1300   Cprod(1)=Iacn(1)*Ibcn(1)+Iacn(2)*Ibcn(2)*Mdis
+ 1302   Itemp=int(Cprod(1)/N)
+ 1304   Cprod(1)=Cprod(1)-Itemp*N
+ 1306   Cprod(2)=Iacn(1)*Ibcn(2)+Iacn(2)*Ibcn(1)
+ 1308   Itemp=int(Cprod(2)/N)
+ 1310   Cprod(2)=Cprod(2)-Itemp*N
+ 1312   A=A
+ 1314   return
+ 1500   Iran=Iran*7^9
+ 1502   Itemp=int(Iran/N)
+ 1504   Iran=Iran-Itemp*N
+ 1506   Aas(1)=Iran
+ 1508   Iran=Iran*7^9
+ 1510   Itemp=int(Iran/N)
+ 1512   Iran=Iran-Itemp*N
+ 1513   Aas(1)=Astar+HHcon
+ 1514   Aas(2)=1
+ 1515   Mdis=Aas(1)*Aas(1)-1
+ 1516   HHcon=HHcon+1
+ 1518   if HHcon=10 then goto 1600
+ 1520   goto 14
+ 1600   end
+ 1602   print "annpq2"

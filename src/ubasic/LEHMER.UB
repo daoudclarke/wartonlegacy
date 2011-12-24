@@ -1,0 +1,25 @@
+ 1070   *Lehmer(P,Q,&R)
+ 1080   ' Method of D. H. Lehmer to solve x^2 = Q (mod P), assuming that
+ 1090   ' P is an odd prime and Q is a quadratic residue modulo P.  The
+ 1100   ' result is returned in R.
+ 1110   ' 8 June 1990
+ 1120   dim Bit%(400) ' Holds bits of (P+1)\2, handles 120-digit numbers
+ 1130   local Te,H,W,Vs,Vb,T
+ 1140   local I,J
+ 1150   Te=P@8:if or{Te=3,Te=7} then R=modpow(Q,(P+1)\4,P):return endif
+ 1160   if Te=5 then T=modpow(Q,(P-1)\4,P)
+ 1170   :if T=1 then R=modpow(Q,(P+3)\8,P):return endif
+ 1180   :R=modpow(4*Q,(P+3)\8,P)
+ 1190   :if odd(R) then R=(R+P)\2 else R=R\2 endif
+ 1200   :return endif
+ 1210   H=1:repeat inc H:until kro(H*H-4*Q,P)=-1
+ 1220   W=(P+1)\2:J=-1
+ 1230   repeat inc J:W=W\2:Bit%(J)=res until W=0
+ 1240   Vs=H:Vb=(H*Vs-2*Q)@P:T=Q
+ 1250   for I=J-1 to 0 step -1
+ 1260   Te=2*T
+ 1270   if Bit%(I) then Vs=(Vs*Vb-H*T)@P:Vb=(Vb*Vb-Q*Te)@P:T=(T*T*Q)@P
+ 1280   :else Vb=(Vs*Vb-H*T)@P:Vs=(Vs*Vs-Te)@P:T=(T*T)@P endif
+ 1300   next I
+ 1310   if odd(Vs) then R=(Vs+P)\2 else R=Vs\2 endif
+ 1320   return ' End of subroutine Lehmer.

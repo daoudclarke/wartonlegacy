@@ -1,0 +1,49 @@
+    4   input "1 or -1";Apar
+    6   input "mod";N
+    8   A=A
+    9   Y=1
+   10   A=A
+   11   A=A
+   12   Nrt=sqrt(N)
+   14   Nrt=int(Nrt)
+   16   print "nrt",Nrt
+   17   A0=Nrt
+   19   Q=1
+   20   P=0
+   21   Inrt=Nrt
+   22   P=(P-Inrt*Q)*(-1)
+   24   Q=(N-P^2)/Q
+   26   A=A
+   28   Inrt=(P+Nrt)/Q
+   30   Inrt=int(Inrt)
+   32   A1=Inrt
+   34   Pm2=A0
+   36   Pm1=A1*A0+1
+   38   Qm2=1
+   39   Qm1=A1
+   40   A1=Inrt
+   41   if Pm2^2-N*Qm2^2=Apar then goto 110
+   42   if Pm1^2-N*Qm1^2=Apar then goto 120
+   44   for I=1 to 100
+   46   P=(P-Inrt*Q)*(-1)
+   48   Q=(N-P^2)/Q
+   49   Inrt=(P+Nrt)/Q
+   50   Inrt=int(Inrt)
+   52   Ann=Inrt
+   54   Pm0=Ann*Pm1+Pm2
+   56   Qm0=Ann*Qm1+Qm2
+   57   print "pm0",Pm0,"qm0",Qm0,"ann",Ann
+   58   if Pm0^2-N*Qm0^2=Apar then goto 100
+   60   Pm2=Pm1
+   62   Pm1=Pm0
+   64   Qm2=Qm1
+   66   Qm1=Qm0
+   68   next I
+   70   print "loop too small"
+   72   stop
+  100   print "p",Pm0,"q",Qm0,"n",N
+  102   stop
+  110   print "p",Pm2,"q",Qm2,"n",N
+  112   stop
+  120   print "p",Pm1,"q",Qm1,"n",N
+  122   stop

@@ -1,0 +1,47 @@
+   10   'PPMP2A version 2.0
+   20   '
+   30   '  prime fatorization of integers by PPMPQS
+   40   '        1991/92 by Yuji KIDA
+   50   '
+   60   word -23:point -2
+   70   if not exist("PPMPCONT.UBD") then print "no data":end
+   80   open "PPMPCONT" for input as #1:input #1,Msg0$:close #1
+   90   cls
+  100   Drv0$="e:"
+  110   print Drv0$+" read data from ";Drv$
+  120   dim PPMP%(20000):bload "PPMP2A",PPMP%()
+  130   '
+  140   *MENU
+  150   print
+  160   print "Read data (R<cr>) "
+  170   print "Quit      (Q<cr>) "
+  180   strinput Cmd$
+  190   if or{Cmd$="q",Cmd$="Q"} then print "END":end
+  200   if and{Cmd$<>"r",Cmd$<>"R"} then beep:goto *MENU
+  210   '
+  220   ' from root
+  230   '
+  240   Drv$=Drv0$+"\"
+  250   print Drv$;"  : ";
+  260   if not exist(Drv$+"PPMPCONT.UBD") then print "no data":goto *Subdir
+  270   open Drv$+"PPMPCONT" for input as #1:input #1,Msg$:close #1
+  280   if Msg$<>Msg0$ then print "data of different target":stop:goto *Subdir
+  290   call PPMP%(Drv$)
+  300   if PPMP%(0)=-1 then print "disk error":beep:stop:end
+  310   print
+  320   '
+  330   ' from subdir
+  340   '
+  350   *Subdir
+  360   for D=1 to 2
+  370     Drv$=Drv0$+cutspc(str(D))+"\"
+  380     print Drv$;" : ";
+  390     if not exist(Drv$+"PPMPCONT.UBD") then print "no data":goto 450
+  400     open Drv$+"PPMPCONT" for input as #1:input #1,Msg$:close #1
+  410     if Msg$<>Msg0$ then print "data of ";Msg$:goto 450
+  420     call PPMP%(Drv$)
+  430     if PPMP%(0)=-1 then print "disk error":beep:stop:end
+  440     print
+  450   next
+  460   print "Finished.":print
+  470   goto *MENU

@@ -1,0 +1,106 @@
+   10   'MAILLET3
+   20   'Carlitz's version of Maillet's determinant
+   30   'cf. Rev Numb Th LeVEQUE, C20-18 by Carlitz & Olson
+   40   'sample of calculation of integer determinants
+   50   'by using multi-modulo
+   60   'better upper bound will make it faster
+   70   '
+   80   cls:print "Maillet's determinant"
+   90   word -2
+  100   dim PP(50),DP(50):'primes for modulus and DET mod p
+  110   input "prime (P>5)";P:print
+  120   if P<>prmdiv(P) then print "not a prime.":goto 110
+  130   clr time
+  140   N=(P-1)\2-2
+  150   dim A%(N-1,N-1),W(N-1,N-1)
+  160   gosub *CARLITZ
+  170   print
+  180   print "Maillet's determinant"
+  190   print "=relative class number of"
+  200   print P;"th cyclotomic field is"
+  210   print abs(D#)
+  220   print:print time
+  230   erase W(),A%()
+  240   end
+  250   '
+  260   *CARLITZ
+  270   '
+  280   'make matrix
+  290   '
+  300   for R%=0 to N-1
+  310    for S%=0 to N-1
+  320       A%(R%,S%)=(R%+3)*(S%+3)\P-(R%+2)*(S%+3)\P
+  330       print using(2),A%(R%,S%);
+  340    next:print
+  350   next:print
+  360   '
+  370   'get upper bound
+  380   '
+  390   Ubound#=fnHadamard
+  400   '
+  410   'decide primes to use
+  420   '
+  430   PP=nxtprm(2^31):M#=PP:PP(0)=PP:PR%=0
+  440   while M#<2*Ubound#
+  450      PP=nxtprm(PP):M#=M#*PP:inc PR%:PP(PR%)=PP
+  460   wend
+  470   print "Use";PR%+1; if PR% then print "primes:" else print "prime:"
+  480   '
+  490   'calculate determinant for each prime
+  500   '
+  510   for I%=0 to PR%
+  520      block W(0..N-1,0..N-1)=block A%(0..N-1,0..N-1)
+  530      PP=PP(I%):print "DET mod";PP;
+  540      DP=fnDETP(PP)
+  550      DP(I%)=DP:print "is";DP
+  560   next
+  570   '
+  580   'decide exact determinant
+  590   '
+  600   gosub *Chinese
+  610   if D#>Ubound# then D#=D#-M#
+  620   return
+  630   '
+  640   *DETP(P):'           assume every elements >=0 and <p
+  650      local I%,J%,K%,DP,A
+  660   DP=1:'                                     determinant mod p
+  670   for J%=0 to N-2
+  680      for I%=J% to N-1:'                      search non_zero
+  690         if W(I%,J%) then cancel for:goto 720
+  700      next
+  710      cancel for:DP=0:goto 840
+  720      if I%<>J% then neg DP
+  730        :swap block W(I%,J%..N-1),W(J%,J%..N-1)
+  740      A=W(J%,J%)
+  750      DP=DP*A@P
+  760      Inv=modinv(W(J%,J%),P)
+  770      for I%=J%+1 to N-1
+  780         C=W(I%,J%)
+  790         if C then C=C*Inv@P
+  800           :for K%=J%+1 to N-1:W(I%,K%)=(W(I%,K%)-C*W(J%,K%))@P:next
+  810      next
+  820   next
+  830   DP=DP*W(N-1,N-1)@P
+  840   return(DP)
+  850   '
+  860   *Hadamard
+  870   local I%,J%,Ubound#=1
+  880    for I%=0 to N-1
+  890       W#=0
+  900       for J%=0 to N-1
+  910          W#=W#+A%(I%,J%)^2
+  920       next
+  930       Ubound#=Ubound#*W#
+  940    next
+  950   return(isqrt(Ubound#))
+  960   '
+  970   *Chinese
+  980   local I%
+  990    MD#=PP(0):D#=DP(0)
+ 1000    for I%=1 to PR%
+ 1010       PP=PP(I%):D1=DP(I%)
+ 1020       W#=modinv(MD#,PP)*MD#
+ 1030       MD#=MD#*PP
+ 1040       D#=(D1*W#+D#*(1-W#))@MD#
+ 1050    next
+ 1060   return

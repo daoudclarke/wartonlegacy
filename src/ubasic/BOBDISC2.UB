@@ -1,0 +1,196 @@
+   50   N=19
+   51   X=int(N^0.25)
+   52   Brem=N-X^4
+   53   print "n=",N
+   54   A3=int(Brem/X^3)
+   55   print "x=",X
+   56   Brem=Brem-A3*X^3
+   58   A2=int(Brem/X^2)
+   60   Brem=Brem-A2*X^2
+   62   A1=int(Brem/X)
+   64   Brem=Brem-A1*X
+   66   C=Brem
+   68   print "a3=",A3
+   70   print "a2=",A2
+   72   print "a1=",A1
+   74   print "a0=",C
+   80   X=int(N^(1/3))
+   81   print "x=",X
+   82   Brem=N-X^3
+   84   B2=int(Brem/X^2)
+   86   Brem=Brem-B2*X^2
+   88   B1=int(Brem/X)
+   90   Brem=Brem-B1*X
+   92   B0=Brem
+  100   X1=sqrt(N)
+  101   X=int(X1)
+  102   print "x=",X
+  103   Y=X^2
+  104   Brem=N-X^2
+  105   print "brem=",Brem
+  106   C1=int(Brem/X)
+  107   print "xsq=",Y
+  108   Brem=Brem-C1*X
+  110   C0=Brem
+  112   print "c1=",C1
+  114   print "c0=",C0
+  199   Pi=3.14159265358979323846
+  200   S1=-1*A3
+  202   S2=A2
+  204   S3=-1*A1
+  206   S4=C
+  207   S12=S1*S1
+  208   P=(-3/8)*S12+S2
+  209   S13=S1*S12
+  210   Q=(-1/8)*S13+(1/2)*S1*S2-1*S3
+  212   S14=S1*S13
+  214   R=(-3/256)*S14+(1/16)*S12*S2-(1/4)*S1*S3+S4
+  216   Ts1=2*P
+  218   Ts2=P*P-4*R
+  220   Ts3=-1*Q*Q
+  221   Ts12=Ts1*Ts1
+  222   A=(-1/3)*Ts12+Ts2
+  223   Ts13=Ts1*Ts12
+  224   B=(-2/27)*Ts13+1/3*Ts1*Ts2-Ts3
+  225   print "a,b",A,B
+  226   Hsq0=B*B*729+108*A*A*A
+  227   print "hsq0",Hsq0,A,B
+  228   if Hsq0>0 then goto 232
+  229   Him0=sqrt(-1*Hsq0)
+  230   print "him0",Him0
+  231   goto 260
+  232   H0=sqrt(Hsq0)
+  234   Hcr0=(-27*B+H0)/2
+  236   Hr1=Hcr0^(1/3)
+  238   Hr2=Hr1*(-1/2)
+  240   Hr3=Hr2
+  241   Hi1=0
+  242   Hi2=Hr1*0.5*sqrt(3)
+  244   Hi3=-1*Hi2
+  246   goto 282
+  260   if B>0 then goto 267
+  262   Ang=atan(Him0/(-27*B))
+  263   print "ang263",Ang,Him0,B
+  266   goto 270
+  267   Argy=Him0/(27*B)
+  268   Ang=Pi-atan(Argy)
+  269   print "ang269",Ang,Him0,B,Argy
+  270   Rr=sqrt(729*B*B-Hsq0)/2
+  271   print "rr",Rr
+  272   Rrr=Rr^(1/3)
+  274   Hr1=Rrr*cos(Ang/3)
+  276   Hr2=Rrr*cos(Ang/3+2*Pi/3)
+  277   Hr3=Rrr*cos(Ang/3+4*Pi/3)
+  278   Hi1=Rrr*sin(Ang/3)
+  279   Hi2=Rrr*sin(Ang/3+Pi*2/3)
+  280   Hi3=Rrr*sin(Ang/3+4*Pi/3)
+  281   print "his",Hi1,Hi2,Hi3
+  282   if Hsq0>0 then goto 306
+  284   if B>0 then goto 290
+  286   Ang=2*Pi-atan(Him0/(-27*B))
+  287   print "ang",Ang
+  288   goto 292
+  290   Ang=Pi+atan(Him0/(27*B))
+  292   Ir1=Rrr*cos(Ang/3)
+  293   print "ts1",Ts1
+  294   Ir2=Rrr*cos(Ang/3+2*Pi/3)
+  296   Ir3=Rrr*cos(Ang/3+4*Pi/3)
+  297   print "irs",Ir1,Ir2,Ir3
+  298   Ii1=Rrr*sin(Ang/3)
+  299   print "hrs299",Hr1,Hr2,Hr3
+  300   Ii2=Rrr*sin(Ang/3+2*Pi/3)
+  302   Ii3=Rrr*sin(Ang/3+4*Pi/3)
+  303   print "iis",Ii1,Ii2,Ii3
+  304   goto 318
+  306   Icr0=-27*B-H0
+  308   Ir1=Icr0^(1/3)
+  310   Ir2=Ir1*(-1/2)
+  312   Ir3=Ir2
+  313   Ii1=0
+  314   Ii2=Ir1*0.5*sqrt(3)
+  316   Ii3=-1*Ii2
+  317   print "hi1,ii1",Hi1,Ii1
+  318   Yr1=1/3*(Ts1+Hr1+Ir1)*(-1)
+  319   print "hi3,ii2",Hi3,Ii2
+  320   Yr2=(1/3)*(Ts1+Hr3+Ir2)*(-1)
+  321   print "hi2,ii3",Hi2,Ii3
+  322   Yr3=1/3*(Ts1+Hr2+Ir3)*(-1)
+  324   Yi1=1/3*(Hi1+Ii1)*(-1)
+  325   print "yr1,yi1",Yr1,Yi1
+  326   Yi2=1/3*(Hi3+Ii2)*(-1)
+  327   print "yr2,yi2",Yr2,Yi2
+  328   Yi3=1/3*(Hi2+Ii3)*(-1)
+  329   print "yr3,yi3",Yr3,Yi3
+  330   Rr1=sqrt(Yr1*Yr1+Yi1*Yi1)
+  331   print "ang",Ang
+  332   Rrr1=sqrt(Rr1)
+  333   if Yr1=0 then goto 360
+  334   if Yr1<0 then goto 342
+  336   if Yi1<0 then goto 348
+  338   Ang=atan(Yi1/Yr1)
+  340   goto 354
+  342   if Yi1>0 then goto 352
+  344   Ang=Pi+atan(Yi1/Yr1)
+  346   goto 354
+  348   Ang=2*Pi-atan(Yi1/Yr1)
+  350   goto 354
+  352   Ang=Pi-atan(Yi1/Yr1)
+  354   Jr1=Rrr1*cos(Ang/2)
+  356   Ji1=Rrr1*sin(Ang/2)
+  358   goto 430
+  360   Ang=Pi/2
+  362   goto 354
+  430   Rr2=sqrt(Yr2*Yr2+Yi2*Yi2)
+  432   Rrr2=sqrt(Rr2)
+  433   if Yr2=0 then goto 460
+  434   if Yr2<0 then goto 442
+  436   if Yi2<0 then goto 448
+  438   Ang=atan(Yi2/Yr2)
+  440   goto 454
+  442   if Yi2>0 then goto 452
+  444   Ang=Pi+atan(Yi2/Yr2)
+  446   goto 454
+  448   Ang=2*Pi-atan(Yi2/Yr2)
+  450   goto 454
+  452   Ang=Pi-atan(Yi2/Yr2)
+  454   Jr2=Rrr2*cos(Ang/2)
+  456   Ji2=Rrr2*sin(Ang/2)
+  458   goto 530
+  460   Ang=Pi/2
+  462   goto 454
+  530   Rr3=sqrt(Yr3*Yr3+Yi3*Yi3)
+  532   Rrr3=sqrt(Rr3)
+  533   if Yr3=0 then goto 574
+  534   if Yr3<0 then goto 542
+  536   if Yi3<0 then goto 548
+  538   Ang=atan(Yi3/Yr3)
+  540   goto 554
+  542   if Yi3>0 then goto 552
+  544   Ang=Pi+atan(Yi3/Yr3)
+  546   goto 554
+  548   Ang=2*Pi-atan(Yi3/Yr3)
+  550   goto 554
+  552   Ang=Pi-atan(Yi3/Yr3)
+  554   Jr3=Rrr3*cos(Ang/2)
+  556   Ji3=Rrr3*sin(Ang/2)
+  557   Prodr=Jr1*Jr2-Ji1*Ji2
+  558   Prodi=Jr1*Ji2+Jr2*Ji1
+  564   Prodr2=Jr3*Prodr-Ji3*Prodi
+  566   Prodi2=Jr3*Prodi+Ji3*Prodr
+  568   print "prodr2",Prodr2
+  570   print "prodi2",Prodi2
+  571   print "q",Q
+  572   goto 600
+  574   Ang=Pi/2
+  576   goto 554
+  600   if abs(Prodr2+B)<0.000000001 then goto 605
+  602   Jr1=Jr1*(-1)
+  604   Ji1=Ji1*(-1)
+  605   Ccom=1#i
+  606   T1=(Jr1+Jr2+Jr3)/2+(Ji1+Ji2+Ji3)/2*Ccom
+  608   T2=(Jr1-Jr2-Jr3)/2+(Ji1-Ji2-Ji3)/2*Ccom
+  610   T3=(Jr1*(-1)+Jr2-Jr3)/2+(Ji1*(-1)+Ji2-Ji3)/2*Ccom
+  612   T4=(Jr1*(-1)-Jr2+Jr3)/2+(Ji1*(-1)-Ji2+Ji3)/2*Ccom
+  614   Prodt=T1*T2*T3*T4
+  616   print Prodt
+  618   print "pqr",P,Q,R

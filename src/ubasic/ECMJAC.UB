@@ -1,0 +1,205 @@
+   10   'Lenstra Elliptic Curve Method
+   20   '  programed by Hiromi Suyama, 21 Nov. 1988
+   30   '  written in UBASIC86 version 6.20 (produced by Y.Kida for Multiple-            Precision Arithmetic & Number Theory)
+   40   '
+   50   'References
+   60   '[1]D.V.Chudnovsky and G.V.Chudnovsky, Sequences of numbers generated            by addition in formal groups and new primality and factorization tests,         Advances in Applied Math. 7(1986),385-434.
+   70   '[2]H.W.Lenstra,Jr., Factoring integers with elliptic curves, Ann. of            Math. 126(1987),649-673.
+   80   '[3]P.L.Montgomery, Speeding the Pollard and Elliptic Curve Methods of           factorization, Math. Comp. 48(1987),243-264.
+   90   '[4]T.Ono, On the relative Mordell-Weil rank of elliptic quartic curves,         J. Math. Soc. Japan 32(1980),665-670.
+  100   '[5]Section 4.6.3(Evaluation of Powers) in D.E.Knuth, The Art of Computer        Programming, Vol.2, second ed., Addison-Wesley, 1981.
+  110   '
+  120   word 65:BT%=9:I%=2^(BT%-1)-1:dim S(I%),T(I%),C(I%),D(I%),ST(I%),CD(I%)
+  130   '
+  140   input "ecmjac22        N=";N:if or{N<5,gcd(N,6)>1} then end
+  150   input "ECM with limit Q1=";Q1
+  160   input "               Q2=";Q2
+  170   input "J.Curve No.(JC%)=";JC%:clr time:if JC%=0 then end
+  180   '
+  190   SZ%=2*3*5*7*11:if Q1<3*SZ% then SZ%=2*3*5*7
+  200   DS%=2*SZ%:TS%=eul(SZ%)-1:dim X(TS%):Q1=max(Q1,3*SZ%)
+  210   Q1=nxtprm(Q1-1):Q=max(2^16,Q1):P=1:M%=-1:dim M#(Q\6000),P(Q\6000)
+  220   repeat
+  230   M#=1
+  240   repeat
+  250     P=nxtprm(P):W1=P:repeat:W2=W1:W1=W1*P:until W1>Q:M#=M#*W2
+  260   until or{P=Q1,len(M#)>8590} '8590=540*16-50
+  270   inc M%:M#(M%)=M#:P(M%)=P:print P;len(M#)
+  280   until P=Q1:print "Q1=";Q1;time
+  290   '
+  300   *J_CURVE:clr time:print "J.Curve";JC%:NN=N
+  310   '
+  320   '  The parametrization of elliptic curves                                       '                                                                               '      E(KK)={(S:T:C:D) : S^2+C^2=T^2 , KK*S^2+D^2=T^2}-{(0:0:0:0)}
+  330   '                                                                               'lets first step of ECM compute [M]P from P in                                  '
+  340   '            {7+O(1/loglog M)}*(log M)/log 2                                    '
+  350   'multiplications(4 of the 7(multiplications) are squarings) for arbitrary       'point P on the curve E(KK).                                                    '
+  360   if JC%<0 then
+  370   :T%=JC%-1:W=modinv(T%^2-1,N)
+  380   :while W=0:GD=gcd(T%^2-1,N):gosub *PRINT_GCD:W=modinv(T%^2-1,N):wend
+  390   :B=2*(T%^2-T%+1)*W@N:W1=B^2@N:A=W1-2:W=modinv(A*(W1+1),N)
+  400   :while W=0:GD=gcd(A*(W1+1),N):gosub *PRINT_GCD:W=modinv(A*(W1+1),N):wend
+  410   :SA=2*A*B@N:TA=(A^2+W1)@N:CA=(TA-2*W1)@N:K=TA*W@N:DA=K*(W1-1)@N*A@N
+  420   :KK=K^2@N
+  430   '
+  440   if JC%>0 then
+  450   :SA=4*JC%:TA=SA*JC%+1:CA=TA-2:DA=SA:W=modinv(SA,N)
+  460   :while W=0:GD=gcd(SA,N):gosub *PRINT_GCD:W=modinv(SA,N):wend
+  470   :K=CA*W@N:KK=K^2@N
+  480   '
+  490   GD=gcd(KK*(KK-1),N):while GD>1:gosub *REDUCE:GD=gcd(KK*(KK-1),N):wend
+  500   '
+  510   '  The above selection of curves and initial points implies that Np, the        'order of the group of the elliptic curve E(KK)(mod p), is divisible by 8
+  520   '(and Np is divisible by 16 when JC%<0 and (-1/p)=1), where p is a prime        'factor of the current N.                                                       '
+  530   for I%=0 to M%
+  540   M#=M#(I%):P=P(I%):gosub *JACPW8:GD=gcd(SA,N)
+  550   while GD>1:print "Q1=";P:gosub *REDUCE:GD=gcd(SA,N):wend
+  560   next
+  570   '
+  580   print "Q1=";P;time:clr time
+  590   '
+  600   XA=(TA*modinv(SA,N)@N)^2@N:ZA=1
+  610   '
+  620   M#=DS%:gosub *JACPW3:W=modinv(SA,N)
+  630   while W=0:GD=gcd(SA,N):gosub *REDUCE:W=modinv(SA,N):wend
+  640   SA=1:TA=TA*W@N:CA=CA*W@N:DA=DA*W@N:X1=TA^2@N:Y1=TA*CA@N*DA@N
+  650   '
+  660   M#=(Q1-SZ%)\DS%:Q=M#*DS%+SZ%
+  670   inc M#:gosub *JACPW4:W=modinv(SA,N)
+  680   while W=0:GD=gcd(SA,N):gosub *REDUCE:W=modinv(SA,N):wend
+  690   SA=1:TA=TA*W@N:CA=CA*W@N:DA=DA*W@N:X2=TA^2@N:Y2=TA*CA@N*DA@N
+  700   '
+  710   clr J%:X(0)=XA
+  720   W=XA^2@N:XC=(W-KK)^2@N:ZC=(XC-(W-2*XA+KK)^2)@N:W=modinv(XC,N)
+  730   while W=0:GD=gcd(XC,N):gosub *REDUCE:W=modinv(XC,N):wend
+  740   W1=ZC*W@N:W2=W1*KK@N
+  750   XB=XA:ZB=1
+  760   for I%=3 to SZ%-1 step 2
+  770   W3=(ZB*W2@N-XB)^2@N*ZA@N:ZA=ZB:ZB=(XB*W1@N-ZB)^2@N*XA@N:XA=XB:XB=W3
+  780   if gcd(I%,SZ%)=1 then
+  790     :W=modinv(ZB,N)
+  800     :while W=0:print I%:GD=gcd(ZB,N):gosub *REDUCE:W=modinv(ZB,N):wend
+  810     :inc J%:X(J%)=XB*W@N
+  820   next
+  830   for I%=0 to TS% step 4
+  840   W1=X(I%)+X(I%+1):W2=X(I%)*X(I%+1)@N
+  850   W3=X(I%+2)+X(I%+3):W4=X(I%+2)*X(I%+3)@N
+  860   B3=(W1+W3-1)@N:B3=sft(B3+odd(B3)*N,-1)
+  870   X(I%)=sft(B3+odd(B3)*N,-1):B2=X(I%)^2@N
+  880   B1=(6*B2+B3-W1*W3-W2-W4)@N
+  890   X(I%+1)=((B2+B2-B1)*B3+B2-W2*W3-W1*W4)@N
+  900   X(I%+2)=(B1-X(I%+1))@N
+  910   X(I%+3)=((B2-B1)*B2+X(I%+1)*X(I%+2)-W2*W4)@N
+  920   next
+  930   '
+  940   X1=X1@N:Y1=Y1@N:X2=X2@N:Y2=Y2@N:print time:clr time
+  950   '
+  960   repeat
+  970   for J%=0 to TS% step 4
+  980     W=(X2-X(J%))^2@N:GD=((W-X(J%+1))*(W-X2-X(J%+2))-X(J%+3))@N*GD@N
+  990   next
+ 1000   W=modinv((X2-X1)*GD,N):Q=Q+DS%
+ 1010   while W=0
+ 1020     GD=gcd((X2-X1)*GD,N):print "Q2=";Q:gosub *REDUCE
+ 1030     X1=X1@N:Y1=Y1@N:X2=X2@N:Y2=Y2@N:for J%=0 to TS%:X(J%)=X(J%)@N:next
+ 1040     W=modinv(X2-X1,N)
+ 1050   wend
+ 1060   W=(Y2-Y1)*GD@N*W@N:X2=(W^2-X2-X1+KK+1)@N:Y2=((X1-X2)*W-Y1)@N
+ 1070   until Q>=Q2
+ 1080   '
+ 1090   print "Q2=";Q;time:if N<NN then stop:endif:JC%=JC%+sgn(JC%):goto *J_CURVE
+ 1100   '
+ 1110   '
+ 1120   *JACPW8
+ 1130      local I%
+ 1140   BT%=max(len(len(M#))*9\10-4,1):L%=BT%-1:if L%=0 then *JACPW4
+ 1150   '
+ 1160   S1=SA:T1=TA:C1=CA:D1=DA:gosub *JACSQ:W=modinv(S3,N)
+ 1170   if W=0 then GD=gcd(S3,N):gosub *REDUCE:goto 1140
+ 1180   S2=1:T2=T3*W@N:C2=C3*W@N:D2=D3*W@N:ST=T2:CD=C2*D2@N
+ 1190   '
+ 1200   S(0)=SA:T(0)=TA:C(0)=CA:D(0)=DA:ST(0)=SA*TA*2@N:CD(0)=CA*DA*2@N
+ 1210   for I%=1 to 2^L%-1
+ 1220   W1=S(I%-1)*T2@N:W3=C(I%-1)*D2@N:W4=C2*D(I%-1)@N
+ 1230   W5=W1-T(I%-1):W6=W1+T(I%-1):S(I%)=W5*W6*2@N
+ 1240   W7#=(W3+W4)*W5:W8#=(W3-W4)*W6:C(I%)=(W7#+W8#)@N:D(I%)=(W7#-W8#)@N
+ 1250   T(I%)=(ST(I%-1)*CD-ST*CD(I%-1))@N
+ 1260   ST(I%)=S(I%)*T(I%)*2@N:CD(I%)=C(I%)*D(I%)*2@N
+ 1270   next
+ 1280   '
+ 1290   I%=len(M#)-2
+ 1300   loop
+ 1310   while and{I%>=0,bit(I%,M#)=0}
+ 1320     gosub *JACSQA:dec I%
+ 1330   wend
+ 1340   if I%<0 then return
+ 1350   K%=max(0,I%-L%):while bit(K%,M#)=0:inc K%:wend
+ 1360   clr J%
+ 1370   for I%=I% to K% step -1
+ 1380     J%=2*J%+bit(I%,M#):gosub *JACSQA
+ 1390   next
+ 1400   I%=K%-1:J%=J%\2
+ 1410   W1=SA*T(J%)@N:W2=S(J%)*TA@N:W3=CA*D(J%)@N:W4=C(J%)*DA@N
+ 1420   TA=(SA*TA@N*CD(J%)-ST(J%)*CA@N*DA)@N
+ 1430   W5=W1-W2:W6=W1+W2:SA=W5*W6*2@N
+ 1440   W7#=(W3+W4)*W5:W8#=(W3-W4)*W6:CA=(W7#+W8#)@N:DA=(W7#-W8#)@N
+ 1450   endloop
+ 1460   '
+ 1470   ' *JACML
+ 1480   ' '
+ 1490   ' W1=S1*T2@N:W2=S2*T1@N:W3=C1*D2@N:W4=C2*D1@N
+ 1500   ' W5=W1-W2:W6=W1+W2:S3=W5*W6*2@N
+ 1510   ' W7#=(W3+W4)*W5:W8#=(W3-W4)*W6:C3=(W7#+W8#)@N:D3=(W7#-W8#)@N
+ 1520   ' T3=(S1*T1@N*C2@N*D2-S2*T2@N*C1@N*D1)*2@N
+ 1530   ' return
+ 1540   ' '
+ 1550   *JACSQ
+ 1560   '
+ 1570   W1=C1*T1@N:W2#=W1^2:W3=D1*S1@N:W4#=W3^2
+ 1580   C3=(W2#-W4#)@N:T3=(W2#+W4#)@N
+ 1590   S3=((W1+W3)^2-T3)@N:D3=(2*(C1*D1@N)^2-C3)@N
+ 1600   return
+ 1610   '
+ 1620   *JACSQA
+ 1630   '
+ 1640   W1=TA*CA@N:W2#=W1^2:W3=SA*DA@N:W4#=W3^2
+ 1650   W5=(W2#-W4#)@N:TA=(W2#+W4#)@N
+ 1660   SA=((W1+W3)^2-TA)@N:DA=(2*(CA*DA@N)^2-W5)@N:CA=W5
+ 1670   return
+ 1680   '
+ 1690   *JACPW4:while M#<1:stop:wend
+ 1700   '
+ 1710   if not SA=1 then
+ 1720   :W=modinv(SA,N)
+ 1730   :while W=0:GD=gcd(SA,N):gosub *REDUCE:W=modinv(SA,N):wend
+ 1740   :SA=1:TA=TA*W@N:CA=CA*W@N:DA=DA*W@N
+ 1750   C2=CA:D2=DA:T2=TA:ST=TA*2@N:CD=CA*DA*2@N
+ 1760   for I%=len(M#)-2 to 0 step -1
+ 1770   gosub *JACSQA:if bit(I%,M#)=1 then
+ 1780     :W1=SA*T2@N:W3=CA*D2@N:W4=C2*DA@N:W5=W1-TA:W6=W1+TA
+ 1790     :TA=(SA*TA@N*CD-ST*CA@N*DA)@N:SA=W5*W6*2@N
+ 1800     :W7#=(W3+W4)*W5:W8#=(W3-W4)*W6:CA=(W7#+W8#)@N:DA=(W7#-W8#)@N
+ 1810   next
+ 1820   return
+ 1830   '
+ 1840   *JACPW3:while M#<1:stop:wend
+ 1850   '
+ 1860   S2=SA:C2=CA:D2=DA:T2=TA:ST=SA*TA*2@N:CD=CA*DA*2@N
+ 1870   for I%=len(M#)-2 to 0 step -1
+ 1880   gosub *JACSQA:if bit(I%,M#)=1 then
+ 1890     :W1=SA*T2@N:W2=S2*TA@N:W3=CA*D2@N:W4=C2*DA@N
+ 1900     :TA=(SA*TA@N*CD-ST*CA@N*DA)@N
+ 1910     :W5=W1-W2:W6=W1+W2:SA=W5*W6*2@N
+ 1920     :W7#=(W3+W4)*W5:W8#=(W3-W4)*W6:CA=(W7#+W8#)@N:DA=(W7#-W8#)@N
+ 1930   next
+ 1940   return
+ 1950   '
+ 1960   *REDUCE
+ 1970   '
+ 1980   gosub *PRINT_GCD:SA=SA@N:TA=TA@N:CA=CA@N:DA=DA@N:KK=KK@N:return
+ 1990   '
+ 2000   *PRINT_GCD
+ 2010   '
+ 2020   print "GCD=";GD;alen(GD);"digits";time:clr time
+ 2030   N=N\GD:while N=1:print "Cofactor is 1.":stop:wend
+ 2040   GD=gcd(GD,N):if GD=1 then return else *PRINT_GCD
+ 2050   '

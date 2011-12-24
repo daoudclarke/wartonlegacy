@@ -1,0 +1,55 @@
+   10   'zetareal
+   20   '  zeta*theta=real valued (see the book of Edwards)
+   30   '  for searching zeros of Riemann zeta
+   40   '    1989 by Yuji Kida
+   50   '
+   60   point -2
+   70   screen 20,15,0:console 0,*,0:cls 3
+   80   screen ,3,3:gsize
+   90   gprint spc(12)+"* Modified Riemann zeta function on Re = 1/2 * ";
+  100   Xs=3.0:Xe=63.0:Xw=Xe-Xs
+  110   view (0,26)-(639,399)
+  120   window (Xs,11)-(Xe,-11)
+  130   for Y=-10 to 10 step 2
+  140     glocate mapx(Xs)+2,mapy(Y)-8:gprint str(Y)+".0";
+  150   next
+  160   screen ,2,2
+  170   view (41,43)-(639,382),0,1
+  180   window (Xs,10)-(Xe,-10)
+  190   screen ,2,3
+  200   line (Xs,0)-(Xe,0),1,,0x5555
+  210   for Y=2 to 8 step 2
+  220     line (Xs,Y)-(Xe,Y),1,,0x1111
+  230     line (Xs,-Y)-(Xe,-Y),1,,0x1111
+  240   next
+  250   screen ,2,3
+  260   gsize:gcolor 2
+  270   glocate 2,22*16-38:gprint using(4,1),cvr(Xs);
+  280   glocate 68*8,22*16-38:gprint using(4,1),cvr(Xe);
+  290   screen ,1,3:color=(1,0xff00)
+  300   open "zetareal" as file1
+  310   Sx=int(Xw)//600
+  320   X=int(Xs)
+  330   pset (X,file1(30)),1
+  340   for I=31 to 630:X+=Sx
+  350     line -(X,file1(I)),1
+  360   next
+  370   '
+  380   X2=Xe:X1=X2-Sx:X0=X1-Sx
+  390   Oldy=file1(I-1)
+  400   repeat
+  410     screen ,2,3:gcolor 2
+  420     glocate 2,22*16-38:gprint using(4,1),cvr(X+Sx-Xw);
+  430     screen ,1,3
+  440     roll,2
+  450     Newy=file1(I)
+  460     line (X0,Oldy)-(X1,Newy),1
+  470     Oldy=Newy:I+=1:X+=Sx
+  480     Newy=file1(I)
+  490     line (X1,Oldy)-(X2,Newy),1
+  500     Oldy=Newy:I+=1:X+=Sx
+  510     screen ,2,3:gcolor 2
+  520     glocate 67*8,22*16-38:gprint using(5,1),cvr(X);
+  530     screen ,1,3
+  540   until X>=1000
+  550   view:end

@@ -1,0 +1,107 @@
+    2   Idb=1
+    4   input "number";N
+    5   Isw1=0
+    6   Ntemp=N
+    7   Itemp=int(Ntemp/2)
+    8   Irem=Ntemp-Itemp*2
+    9   if Irem=1 then goto 11
+   10   Ntemp=Ntemp+1
+   11   Ipow=2
+   12   goto 222
+   14   if Ipow>Qqs goto 20
+   16   Ipow=Ipow*2
+   18   goto 14
+   20   Ie=int(Ipow/2)
+   22   N1=Qqs
+   23   Iy=Xr
+   24   N1=N1-Ie
+   26   if Ie=1 then goto 100
+   28   Ie=int(Ie/2)
+   30   Iy=Iy*Iy
+   32   Itemp=int(Iy/N)
+   34   Irem1=Iy-Itemp*N
+   36   Iy=Irem1
+   38   if N1<Ie then goto 26
+   40   N1=N1-Ie
+   42   Iy=Iy*Xr
+   44   Itemp=int(Iy/N)
+   46   Irem1=Iy-Itemp*N
+   48   Iy=Irem1
+   50   goto 26
+  100   if Iy=1 then goto 700
+  102   if Iy=N-1 then goto 700
+  104   goto 614
+  222   Temp=int(N/2)
+  224   Rem1=N-Temp*2
+  226   if Rem1=1 then goto 229
+  227   print N,"is composite"
+  228   N=N+1
+  229   gosub 840
+  230   Pow=200
+  232   if N>10^Pow then goto 240
+  234   Pow=Pow-1
+  236   goto 232
+  240   Xr=1
+  242   Ind1=0
+  244   Nt=N-1
+  246   Temp=int(Nt/2)
+  248   Rem1=Nt-Temp*2
+  250   if Rem1=1 then goto 260
+  252   Ind1=Ind1+1
+  254   Nt=Temp
+  256   goto 246
+  260   Tt=Ind1
+  261   Temp=Temp*2+1
+  262   Qqs=Temp
+  264   Xr=Xr*40353607
+  266   Temp=int(Xr/(10^Pow))
+  268   Rem1=Xr-Temp*(10^Pow)
+  270   Xr=Rem1
+  272   goto 14
+  614   Bb=Iy
+  616   Ee=1
+  630   if Ee>Tt-1 then goto 660
+  632   Bb=Bb*Bb
+  634   Temp=int(Bb/N)
+  636   Rem1=Bb-Temp*N
+  638   Bb=Rem1
+  644   if Bb=N-1 then goto 700
+  646   Ee=Ee+1
+  648   goto 630
+  660   print N,"is composite"
+  661   Ntemp=Ntemp+2
+  662   N=Ntemp
+  663   Ipow=2
+  664   Isw1=0
+  665   A=A
+  667   goto 229
+  700   if Idb=20 then goto 750
+  702   Idb=Idb+1
+  704   goto 264
+  750   print N,"is very probably prime"
+  752   if Isw1=1 then goto 770
+  754   Isw1=1
+  756   Ntemp=N
+  758   N=2*N+1
+  760   Ipow=2
+  762   goto 229
+  770   end
+  840   Ab=2
+  841   if N<104 then goto 880
+  842   Prx1=nxtprm(Ab)
+  850   Temp=int(N/Prx1)
+  852   Rem1=N-Temp*Prx1
+  853   if Rem1=0 then goto 870
+  854   Ab=Prx1
+  855   if Ab=103 then goto 880
+  856   goto 842
+  870   print N,"is composite","prx1",Prx1
+  871   if Isw1=1 then goto 876
+  872   Ntemp=Ntemp+2
+  873   N=Ntemp
+  874   goto 840
+  876   Ntemp=Ntemp+2
+  877   Isw1=0
+  878   N=Ntemp
+  879   goto 840
+  880   return

@@ -1,0 +1,16 @@
+   10   'CONFRA  version 2.3
+   20   print "Continued fraction expansion of quadratic irrationals"
+   30   *MAINLOOP
+   40    input "N=";N
+   50    if N=0 then end
+   60    QN=isqrt(N)
+   70    if not res then print "is the square of";QN:goto *MAINLOOP
+   80    print QN;"[";
+   90    C=res:A=QN
+  100    A1=A:C1=C
+  110    repeat
+  120       K=(QN+A)\C:print K;
+  130       A=C*K-A:C=(N-A^2)\C
+  140    until and{A=A1,C=C1}
+  150    print "]"
+  160   goto *MAINLOOP

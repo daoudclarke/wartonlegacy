@@ -1,0 +1,160 @@
+    8   dim Bprod(4),Igg(4),Sprod(4),Iarray(5),Ibarray(5)
+    9   input "code number";N
+   10   P=N
+   12   Ngr=(41*41+1)*7
+   14   Sprod(1)=2
+   16   Sprod(2)=1
+   18   Sprod(3)=1
+   20   Sprod(4)=1
+   21   goto 1300
+   22   gosub 516
+   24   Sprod(1)=Sprod(1)+1
+   26   if Sprod(1)=P then goto 30
+   28   goto 22
+   30   Sprod(1)=1
+   32   Sprod(2)=Sprod(2)+1
+   34   if Sprod(2)=P then goto 40
+   36   goto 22
+   40   A=A
+   42   Sprod(2)=1
+   43   Sprod(3)=Sprod(3)+1
+   46   if Sprod(3)=P then goto 48
+   47   goto 22
+   48   Sprod(3)=1
+   49   Sprod(4)=Sprod(4)+1
+   52   if Sprod(4)=P then goto 56
+   54   goto 22
+   56   end
+   58   goto 22
+  516   for I=1 to 4
+  517   Bprod(I)=Sprod(I)
+  518   Igg(I)=Sprod(I)
+  520   next I
+  522   Ipow=2
+  524   if Ipow>Ngr then goto 530
+  526   Ipow=Ipow*2
+  528   goto 524
+  530   Ie=Ipow/2
+  532   N1=Ngr-Ie
+  534   if Ie=1 then goto 702
+  536   Ie=Ie/2
+  538   A0=Bprod(1)
+  540   A1=Bprod(2)
+  542   A2=Bprod(3)
+  544   A3=Bprod(4)
+  546   B0=A0
+  548   B1=A1
+  550   B2=A2
+  552   B3=A3
+  554   gosub 1000
+  556   if N1<Ie then goto 534
+  558   N1=N1-Ie
+  560   A0=Bprod(1)
+  562   A1=Bprod(2)
+  564   A2=Bprod(3)
+  566   A3=Bprod(4)
+  568   B0=Igg(1)
+  570   B1=Igg(2)
+  572   B2=Igg(3)
+  574   B3=Igg(4)
+  576   gosub 1000
+  578   goto 534
+  600   if Bprod(1)>1 then goto 700
+  601   print "igg",Igg(1),Igg(2),Igg(3),Igg(4)
+  602   print "bprod",Bprod(1),"sprod1",Sprod(1),"sprod2",Sprod(2)
+  604   print "sprod3",Sprod(3),"sprod4",Sprod(4)
+  606   print "bprods",Bprod(1),Bprod(2),Bprod(3),Bprod(4),"ngr",Ngr
+  607   stop
+  608   if Bprod(1)=0 then goto 700
+  610   if Bprod(2)>0 then goto 700
+  612   if Bprod(3)>0 then goto 700
+  614   if Bprod(4)>0 then goto 700
+  616   A=A
+  700   print "bprod",Bprod(1)
+  702   return
+  917   Big=P
+  919   Itemp=int(Big/Little)
+  922   Irem=Big-Little*Itemp
+  924   if Irem=0 then goto 940
+  926   Big=Little
+  928   Little=Irem
+  930   goto 919
+  940   Gcd2=Little
+  942   return
+ 1000   Bprod(1)=A0*B0+(A1*B3+A2*B2+A3*B1)*3
+ 1002   Itemp=int(Bprod(1)/P)
+ 1004   Bprod(1)=Bprod(1)-P*Itemp
+ 1006   Bprod(2)=A0*B1+A1*B0+(A2*B3+A3*B2)*3
+ 1008   Itemp=int(Bprod(2)/P)
+ 1010   Bprod(2)=Bprod(2)-Itemp*P
+ 1012   Bprod(3)=A0*B2+A1*B1+A2*B0+A3*B3*3
+ 1014   Itemp=int(Bprod(3)/P)
+ 1016   Bprod(3)=Bprod(3)-Itemp*P
+ 1018   Bprod(4)=A0*B3+A1*B2+A2*B1+A3*B0
+ 1020   Itemp=int(Bprod(4)/P)
+ 1022   Bprod(4)=Bprod(4)-Itemp*P
+ 1024   return
+ 1100   Ibarray(1)=1
+ 1102   Ibarray(2)=0
+ 1104   Ibarray(3)=-12
+ 1106   Ibarray(4)=0
+ 1108   Ibarray(5)=1
+ 1109   P=37
+ 1110   for I=2 to 5
+ 1112   Iarray(I)=0
+ 1114   next I
+ 1115   Tot=P^2+1
+ 1116   Iarray(1)=1
+ 1117   P=P*7
+ 1118   Kcon=4
+ 1119   if Iarray(1)=0 then goto 1126
+ 1120   Mul=Iarray(1)
+ 1121   for I=1 to 5
+ 1122   Iarray(I)=Iarray(I)-Ibarray(I)*Mul
+ 1124   next I
+ 1126   for I=1 to 4
+ 1128   Iarray(I)=Iarray(I+1)
+ 1130   next I
+ 1132   Iarray(5)=0
+ 1134   for I=1 to 5
+ 1135   Itemp=int(Iarray(I)/P)
+ 1136   Iarray(I)=Iarray(I)-Itemp*P
+ 1138   next I
+ 1140   if Kcon=Tot then goto 1200
+ 1142   Kcon=Kcon+1
+ 1144   goto 1119
+ 1200   print "array",Iarray(1),Iarray(2),Iarray(3),Iarray(4),Iarray(5)
+ 1202   Little=Iarray(2)-1
+ 1204   gosub 917
+ 1206   print "gcd2",Gcd2
+ 1208   end
+ 1300   for I=1 to 4
+ 1302   Bprod(I)=Sprod(I)
+ 1304   next I
+ 1306   Bb1=200000
+ 1308   Ab=1
+ 1310   Prm=nxtprm(Ab)
+ 1312   if Prm>Bb1 then goto 1500
+ 1314   Ab=Prm
+ 1316   Rq=Ab
+ 1318   Rq1=Ab
+ 1320   L=int(Bb1/Rq)
+ 1322   if Rq1>L then goto 1328
+ 1324   Rq1=Rq1*Rq
+ 1326   goto 1322
+ 1328   Ngr=Rq1
+ 1329   for I=1 to 4
+ 1330   Igg(I)=Bprod(I)
+ 1331   next I
+ 1332   gosub 522
+ 1333   if Bprod(1)=1 then goto 1310
+ 1334   Little=Bprod(1)-1
+ 1336   gosub 917
+ 1337   print "powered prime",Ngr,"prime",Rq
+ 1338   if Gcd2>1 then goto 1600
+ 1339   A=A
+ 1340   goto 1310
+ 1600   print "prime factor=",Gcd2
+ 1602   Itemp=int(P/Gcd2)
+ 1604   print "cofactor=",Itemp
+ 1606   end

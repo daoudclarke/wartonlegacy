@@ -1,0 +1,16 @@
+ 2300   *Primen1(N,&P(),Leng,&F)
+ 2310   ' Implements Brillhart, Lehmer, & Selfridge (1975) algorithm.
+ 2320   ' Returns F=1 for prime, F=0 for no information, & F= -1 for composite.
+ 2325   ' Assumes n is odd.  Pocklingtons theorem.
+ 2330   ' 25 May 1990
+ 2340   local I=0,J,N1,T,Te,Ub=100
+ 2350   F=0:N1=N-1
+ 2360   if Leng=0 then return endif
+ 2370   for J=1 to Leng
+ 2375   repeat
+ 2380   inc I:T=N1\P(J):Te=modpow(prm(I),T,N) until or{gcd(Te-1,N)=1,I>Ub}
+ 2385   if I>Ub then F=0:cancel for:return endif
+ 2390   Te=modpow(Te,P(J),N)
+ 2400   if Te<>1 then F=-1:cancel for:return endif
+ 2410   dec I:next J
+ 2420   F=1:return ' End of subroutine Primen1.
