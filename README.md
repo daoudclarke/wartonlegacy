@@ -2,11 +2,11 @@
 
 #The Warton Legacy
 
-This repository contains code written by my late uncle, Robert Warton. He devoted the latter part of his life to the study of prime numbers and the problem of factorisation of the products of large primes. This is the result of his many years of effort.
+This repository contains code written by my late uncle, Robert Warton. He devoted the latter part of his life to the study of prime numbers and the problem of factorization of the products of large primes. This is the result of his many years of effort. Sadly, he was never able to benefit from this work himself, although he tried many times to sell the software developed here. Instead, he entrusted his work to me as his death neared, and he told me that he wanted it to benefit his family. Since there is little hope of me succeeding in selling this, instead, I hope that by releasing it under the GPL it may benefit mankind. I only ask that if you use it, you use it for good, not evil, to liberate and not oppress, and to educate and not to spread ignorance.
 
-Unfortunately, he left behind very little documentation, and the code is poorly commented (if at all). Hopefully, with time, we can document what he has made and make it a useful resource for researchers and students.
+Unfortunately, my uncle left behind very little documentation, and the code is poorly structured and commented (if at all). Hopefully, with time, we can document what he has made and make it a useful resource for researchers and students.
 
-What follows is some of the documentation he gave me.
+What follows is a slightly edited form of some of the documentation he gave me. This is now out of date; I hope to add his notes containing updates at a later point.
 
 # Report on Cryptography System
 
