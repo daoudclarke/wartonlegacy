@@ -69,6 +69,48 @@ On FTN90 the most commonly used Elliptic Curve Techniques are BOBECM8.F90 and BO
 
 Unlike the ECM methods above these techniques consist of suites or batches of programs:
 
-**Ann Suite**. On FTN90 load and go with ANN1.F90, when completed load and go on ANN2.F90, when completed load and go on ANN3.F90, finally when this is completed load and go on ANN4.F90. This suite can be prepared as a batch so that it will only be necessary to load and go once. In either case apart from the run instruction the only input will be length of code radiz 10000 and the code itself in batches of 4 digits. This program will be used to decompose "hard" numbers of between 40 and 68 digits.
+* **Ann Suite**. On FTN90 load and go with ANN1.F90, when completed load and go on ANN2.F90, when completed load and go on ANN3.F90, finally when this is completed load and go on ANN4.F90. This suite can be prepared as a batch so that it will only be necessary to load and go once. In either case apart from the run instruction the only input will be length of code radiz 10000 and the code itself in batches of 4 digits. This program will be used to decompose "hard" numbers of between 40 and 68 digits.
 
-**Greta Suite**. As above except that 5 programs are involved - GRETA1.F90, GRETA2.F90, GRETA3.F90, GRETA4.F90, and GRETA5.F90. This suite is more powerful than the ANN suite as it employs the Double Large Prime Variant. Recommended maximum length of input code is 72 decimal digits. For longer codes (see below) a special linear dependence determiner should be used.
+* **Greta Suite**. As above except that 5 programs are involved - GRETA1.F90, GRETA2.F90, GRETA3.F90, GRETA4.F90, and GRETA5.F90. This suite is more powerful than the ANN suite as it employs the Double Large Prime Variant. Recommended maximum length of input code is 72 decimal digits. For longer codes (see below) a special linear dependence determiner should be used.
+
+Under construction is a suite yet more powerful of the MPQS genre --- in addition to the large double prime variant it uses fast polynomial multiplication techniques and truncated multiplications, and exploits the sparse nature of the matrices applying techniques which find minimum polynomials of sequences. Programs on FTN90 awaiting incorporation into suites are BBRECUR.F90, BBRECUR1.F90 and BBRECUR2.F90.
+
+### General Number Field Sieve
+
+This process involves seven steps:
+1. Determination of suitable polynomials.
+2. Finding the zeros of this polynomial modulo every prime within prime base and then using this information in a double lattice sieve rational and algebraic.
+3. Matrix preparation using congruences found in (2).
+4. The use of quadratic characters to find principle ideals.
+5. Determination of linear dependencies.
+6. Multiplication of algebraic integers.
+7. Determination of square root in a number field using polynomial factorization techniques and lifting procedures.
+Special method involves the use of the Chinese Remainder Theorem.
+
+Although the General Number Field Sieve has been exhaustively tested, it is not yet completed and in the form of a suite as ANN and GRETA above. This is because there is a fair amount of pedestrian multi-precisioning to be done. This does not affect the validity of the mathematics and it was felt, at the time, better to await knowledge of the destination configuration before embarking on the exercise.
+
+The system has been run on both non-homogeneous and homogeneous polynomials, the latter to expedite sieving. Programs used: (homogeneous polynomials) BOBGNFS7 on UBASIC to find suitable polynomial, then on FTN90 BOBMPBAK.F90, BOBST.F90, BOBMID.F90, BOBXT.F90, BOBMID2.F90 and AWGIANT.F90.
+
+For non-homogeneous polynomials first find suitable polynomial using BOBGNFS7 on UBASIC. Then in order OABMPBAK.F90, COBST.F90, COBMID.F90, COBXT.F90, COBMID2.F90 and COBGIANZ.F90.
+
+## Some of the General Purpose Routines
+
+1. BOBSQRTP on UBASIC extracts square roots modulo a prime if they exist. This program outputs real roots of real numbers.
+2. ANNSQRTP on UBASIC determines complex roots modulo p of complex numbers. It can also of course compute real roots of real numbers.
+3. BOBMCORN on UBASIC determines solutions to the Diophantine equation x^2 + d*y^2 = p where p is a prime if there are solutions.
+4. BOBCUBE2 on UBASIC: outputs real cube roots of real numbers modulo a prime.
+5. BOBCUBER on UBASIC: outputs complex roots of complex numbers modulo a prime.
+6. BOB6 on UBASIC: computes regulator and class number of real quadratic fields.
+7. BOBNEGD on UBASIC: computes class number of imaginary quadratic fields.
+8. BOBDISC2 on UBASIC: computes roots of quartics.
+9. BOBRED on UBASIC: used for lattice reduction.
+10. BOBEUC on UBASIC: this routine is mainly used in dealing with titanic numbers. The extended Euclids within UBASIC programs can already cope with titanic numbers albeit less efficiently and this routine is an adjunct which can be incorporated at a later stage.
+11. BOBFFT4 on FTN90 is a Fast Fourier Transform multiplication system for, in this case, polynomials.
+
+## Secret Sharing Software
+
+This suite has been developed with four participants in mind but it can easily be extended to more. Programs are aptly named BOBSSH1 for secret-splitting and BOBSSH2 for reconstitution of secrets.
+
+# Addendum
+
+Space limited discussion of ANNF4. It is important to mention that for numbers to factorize using this method the smooth prime must be of the form 1 mod 4.
