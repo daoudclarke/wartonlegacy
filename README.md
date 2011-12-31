@@ -148,3 +148,63 @@ In BOBTOT2 an even starting key is obviously an error. So as not to delay procee
 
 At some time rigorous validation procedures will have to be incorporated throughout.
 
+# Update of Cryptographic Software Developments Week Ending 24th July 1998
+
+All of the improvements in MPQS have been automated and combined into one suite - PATSY.BAT. These consist of, on the one hand and already mentioned, the search for and establishment of a more appropriate prime base (GRETA0), and on the other, the exploitationthe existence of large null submatrices when dealing with large numbers of special primes (GRETAN3 and GRETAN4). The programs comprising this suite in order of execution now read as GRETA0, GRETA2, GRETAN3, GRETAN4 (note the additional N) and GRETA5. The operation of the suite is as before - on the FORTRAN90 prompt type PATSY and then, when requested, code length and code. Should the code be too small to require the extra sophistication of the PATSY suite, the user will be advised of this circumstance and the greater facility of the DAOUD suite. The general purpose program for determining linear dependencies for sparse matrices using minimum polynomials of sequences alluded to earlier will be applied when we have better runtime information.
+
+## Further work on the Number Field Sieve
+
+The advantages of procedures which extract square roots in number fields without polynomial factorisation will be compared with the latter. The former can only be used in number fields whose minimum polynomial is of ODD degree. Analogous to dividing without really dividing using Newton divisions.
+
+## Summary
+
+The code breakers most commonly used on configurations similar to this one will be Elliptic Curve Methods, and the DAOUD and PATSY suites. For long and intractable numbers (not succumbing to p-1, p+1 attacks, etc), BOBECM4.F90, a fortified ECM procedure employing 20 degree polynomials to compute powers of points, is recommended.
+
+## Printout
+
+Another ECM run of a large number is appended.
+
+# Update of Cryptographic Work Week Ending 29 August 1998
+
+## That Modular j Invariant Again
+
+79 Modular j Invariants were computed with their accompanying minimal polynomials. This was a considerable accomplishment because it involved computing powers of microscopic quantities and dividing microscopic quantities by microscopic quantities (unlike the highly tractable number "pi"). These polynomials of degree one, two, three and four are permanently stored in disk file "MODJPOL" to be used for 100% certain primality testing.
+
+Modulo the given number to be tested BERN1.F90 finds solutions of the polynomials of degree 3 and 4 above. It employs Gaussian integers and so will succeed in the many cases where real only integer root extraction fails. The formulae involved are complicated but their use is justified by them being so much faster than polynomial powering and GCDing.
+
+Referring to our discussions on batching the rigorous primality algorithms we have, at least for the time being, managed to accommodate them all in one program "BOBMODJ3". All in one this program uses Miller-Rabin, a modified Cornacchia Algorithm, finds solutions modulo number to be tested, factorises recursed numbers and uses an Elliptic Curve Testing procedure. At a later stage when testing *very* large numbers we may have to look at batching again.
+
+Enclosed is a printout of a run testing a 100 digit prime. The interesting thing to report about this run, which only took a few hours, is that only polynomials of degrees one and two were needed.
+
+# Report on Prime Testing (27th September 1998)
+
+The enhancements here fall into 3 categories:
+1. Necessary increases of accuracy in computing Mod j Invariants
+2. Increasing the number of these mod j invariant equations
+3. Improved methods for solving these equations modulo the number to be tested
+
+## Category 1
+
+On trial fourth degree minimum polynomials of mod j invariants were found surprisingly not to have been computed with sufficient accuracy when 800 decimal places were used. Accordingly they were recomputed to an accuracy of 1600 decimal places. However, even with this hair-splitting accuracy, for some values the formula used is still *ill-conditioned*. These values will have to be recomputed using a new formula. Of the 15 4th degree polynomials which survived the rigorous tests the four with the largest coefficients were examined to see that they yielded the correct number of points on the elliptic curve under consideration. In all four cases they did. We think it extremely likely that the remaining 11 are perfectly correct and these will be recomputed and stored permanently on a file labelled "MODJPOL3".
+
+## Category 2
+
+Six equations for discriminant -3 and four equations for discriminant -4 were added.
+
+In terms of factorising facility we now have
+* Discriminant -3: 6 tries
+* Discriminant -4: 4 tries
+* 1st degree polynomials excluding above: 12 tries
+* 2nd degree polynomials: 20 tries
+* 3rd degree polynomials: 2 tries
+* 4th degree polynomials (when ready): 30 tries
+
+## Category 3 improvements
+
+Instead of using Gaussian integers as described earlier for solving third and fourth degree equations, we now take a root field involving the first 2nd degree discriminant encountered, employ that field throughout exploiting the important fact that by the end of the computation the irrational parts for the cases we are interested in will have cancelled each other out leaving the desired integer result.
+
+All three categories of improvements have been incorporated into BOBMODJ6.F90. When either memory has been increased or by batching we can include fourth degree equations the routing "BERN3.F90" will be suitably modified and incorporated into the suite.
+
+# Our Discrete Logarithm Algorithms (date unknown)
+
+The operation of exponent extraction over a finite group can in certain respects be regarded as the dual of the integer factorisation problem and in our algorithm development we have exploited this parallelism.
