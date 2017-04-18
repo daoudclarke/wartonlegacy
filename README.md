@@ -1,6 +1,6 @@
 *In the name of God, the Merciful, the Compassionate.*
 
-#The Warton Legacy
+# The Warton Legacy
 
 This repository contains code written by my late uncle, Robert Warton. He devoted the latter part of his life to the study of prime numbers and the problem of factorization of the products of large primes. This is the result of his many years of effort. Sadly, he was never able to benefit from this work himself, although he tried many times to sell the software developed here. Instead, he entrusted his work to me as his death neared, and he told me that he wanted it to benefit his family. Since there is little hope of me succeeding in selling this, instead, I hope that by releasing it under the GPL it may benefit mankind. I only ask that if you use it, you use it for good, not evil, to liberate and not oppress, and to educate and not to spread ignorance.
 
@@ -65,7 +65,7 @@ On UBASIC's BOBONEC7 provision is made for restarting incomplete jobs. The usual
 
 On FTN90 the most commonly used Elliptic Curve Techniques are BOBECM8.F90 and BOBECM4 which potentiates this approach by employing special polynomials to compute powers of points. The information requested in both cases is the same as in the UBASIC counterpoint except that information is expected in batches of 4 digits. 
 
-###Multiple Polynomial Quadratic Sieve Techniques
+### Multiple Polynomial Quadratic Sieve Techniques
 
 Unlike the ECM methods above these techniques consist of suites or batches of programs:
 
