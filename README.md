@@ -65,7 +65,7 @@ On UBASIC's BOBONEC7 provision is made for restarting incomplete jobs. The usual
 
 On FTN90 the most commonly used Elliptic Curve Techniques are BOBECM8.F90 and BOBECM4 which potentiates this approach by employing special polynomials to compute powers of points. The information requested in both cases is the same as in the UBASIC counterpoint except that information is expected in batches of 4 digits. 
 
-###Multiple Polynomial Quadratic Sieve Techniques
+### Multiple Polynomial Quadratic Sieve Techniques
 
 Unlike the ECM methods above these techniques consist of suites or batches of programs:
 
